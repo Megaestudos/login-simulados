@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Simulados de Concursos</title>
+
+<style>
+:root{
+  --primary:#2563eb;
+  --primary-dark:#1e40af;
+  --card:#ffffff;
+  --text:#0f172a;
+  --muted:#cbd5f5;
+  --border:#e2e8f0;
+  --success:#16a34a;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family: Inter, system-ui, -apple-system, Arial, sans-serif;
+  min-height:100vh;
+  color:#fff;
+
+  /* IMAGEM DE FUNDO + OVERLAY */
+  background:
+    linear-gradient(
+      rgba(15,23,42,0.70),
+      rgba(15,23,42,0.70)
+    ),
+    url("https://images.pexels.com/photos/990432/pexels-photo-990432.jpeg");
+
+  background-size:cover;
+  background-position:center;
+  background-attachment:fixed;
+}
+
+.page{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+  position:relative;
+  z-index:1;
+}
+
+.container{
+  width:100%;
+  max-width:980px;
+  display:grid;
+  grid-template-columns:1.2fr 1fr;
+  gap:40px;
+}
+
+@media(max-width:900px){
+  .container{grid-template-columns:1fr}
+}
+
+/* HERO */
+.hero h1{
+  font-size:38px;
+  line-height:1.2;
+  margin:0 0 12px;
+}
+.hero p{
+  font-size:18px;
+  color:#e5e7eb;
+  margin:0 0 24px;
+}
+.hero ul{
+  padding:0;
+  margin:0;
+  list-style:none;
+}
+.hero li{
+  margin:10px 0;
+  font-size:16px;
+}
+.hero li::before{
+  content:"✓ ";
+  color:#22c55e;
+  font-weight:bold;
+}
+
+/* CARD */
+.card{
+  background:var(--card);
+  color:var(--text);
+  border-radius:20px;
+  padding:32px;
+  box-shadow:0 40px 80px rgba(0,0,0,.35);
+}
+
+/* FORM */
+label{
+  font-size:14px;
+  color:#475569;
+}
+input{
+  width:100%;
+  padding:14px;
+  margin:6px 0 16px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  font-size:15px;
+}
+input:focus{
+  outline:none;
+  border-color:var(--primary);
+}
+
+button{
+  width:100%;
+  padding:14px;
+  border-radius:12px;
+  border:0;
+  font-size:15px;
+  cursor:pointer;
+}
+.btn-primary{
+  background:var(--primary);
+  color:#fff;
+}
+.btn-primary:hover{background:var(--primary-dark)}
+
+.btn-sec{
+  background:#f1f5f9;
+  margin-top:10px;
+}
+
+.msg{
+  margin-top:14px;
+  font-size:14px;
+  text-align:center;
+  color:#dc2626;
+}
+
+.hide{display:none}
+
+/* APP */
+.top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.badge{
+  background:#e0e7ff;
+  color:#1e40af;
+  padding:6px 10px;
+  border-radius:999px;
+  font-size:13px;
+}
+</style>
+</head>
+
+<body>
+<div class="page">
+
+<div class="container">
+
+<!-- HERO -->
+<div class="hero">
+  <h1>Prepare-se para concursos<br>com foco total em aprovação</h1>
+  <p>Simulados atualizados, estudo direto ao ponto e acesso imediato.</p>
+  <ul>
+    <li>Questões comentadas</li>
+    <li>Simulados realistas</li>
+    <li>Conteúdo focado em prova</li>
+    <li>Teste gratuito por 48 horas</li>
+  </ul>
+</div>
+
+<!-- LOGIN -->
+<div id="login" class="card hide">
+  <h2>Acesso à plataforma</h2>
+  <p style="color:#64748b">Crie sua conta ou entre para começar o teste.</p>
+
+  <label>Email</label>
+  <input id="email" placeholder="seu@email.com">
+
+  <label>Senha</label>
+  <input id="senha" type="password" placeholder="••••••••">
+
+  <button class="btn-primary" onclick="entrar()">Entrar</button>
+  <button class="btn-sec" onclick="criarConta()">Criar conta gratuita</button>
+
+  <div id="msgLogin" class="msg"></div>
+</div>
+
+<!-- APP -->
+<div id="app" class="card hide">
+  <div class="top">
+    <h2>Área do aluno</h2>
+    <span class="badge" id="status"></span>
+  </div>
+
+  <hr>
+
+  <p>👉 Aqui entra seu simulado real</p>
+
+  <button class="btn-sec" onclick="sair()">Sair</button>
+</div>
+
+<!-- BLOQUEIO -->
+<div id="bloqueio" class="card hide">
+  <h2>Seu teste terminou</h2>
+  <p id="msgBloqueio" style="color:#64748b"></p>
+
+  <button class="btn-primary" onclick="comprar()">Desbloquear acesso</button>
+  <button class="btn-sec" onclick="sair()">Trocar conta</button>
+</div>
+
+</div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import {
+  getAuth,onAuthStateChanged,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,sendEmailVerification
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import {
+  getFirestore,doc,getDoc,setDoc,serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+const firebaseConfig={
+  apiKey:"AIzaSyB36ZszS8v_DeOn3at7zEo_tFq86WU0sI4",
+  authDomain:"simulados-concursos-22c91.firebaseapp.com",
+  projectId:"simulados-concursos-22c91"
+};
+
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+const db=getFirestore(app);
+
+const HORAS_TRIAL=48;
+const $=id=>document.getElementById(id);
+const show=t=>["login","app","bloqueio"].forEach(x=>$(x).classList.toggle("hide",x!==t));
+
+async function ensure(uid,email){
+  const r=doc(db,"users",uid);
+  const s=await getDoc(r);
+  if(!s.exists()){
+    await setDoc(r,{
+      email,
+      criadoEm:serverTimestamp(),
+      trialAte:new Date(Date.now()+HORAS_TRIAL*3600000),
+      pagoAte:null
+    });
+  }
+}
+
+async function acesso(uid){
+  const s=await getDoc(doc(db,"users",uid));
+  if(!s.exists())return{ok:false};
+  const d=s.data(),n=new Date();
+  if(d.pagoAte&&n<d.pagoAte.toDate())return{ok:true,pago:true};
+  if(d.trialAte&&n<d.trialAte.toDate())return{ok:true,trial:true,fim:d.trialAte.toDate()};
+  return{ok:false,fim:d.trialAte?.toDate()};
+}
+
+window.criarConta=async()=>{
+  try{
+    const c=await createUserWithEmailAndPassword(auth,$("email").value,$("senha").value);
+    await sendEmailVerification(c.user);
+    $("msgLogin").innerText="Conta criada. Confirme seu e-mail.";
+  }catch(e){$("msgLogin").innerText=e.message}
+};
+
+window.entrar=async()=>{
+  try{await signInWithEmailAndPassword(auth,$("email").value,$("senha").value)}
+  catch(e){$("msgLogin").innerText=e.message}
+};
+
+window.sair=()=>signOut(auth);
+window.comprar=()=>alert("Integração PIX entra no próximo passo");
+
+onAuthStateChanged(auth,async(u)=>{
+  if(!u){show("login");return}
+  if(!u.emailVerified){show("login");$("msgLogin").innerText="Confirme seu e-mail.";return}
+  await ensure(u.uid,u.email);
+  const a=await acesso(u.uid);
+  if(a.ok){
+    show("app");
+    $("status").innerText=a.trial
+      ? "Teste até "+a.fim.toLocaleString()
+      : "Premium ativo";
+  }else{
+    show("bloqueio");
+    $("msgBloqueio").innerText="Seu teste expirou em "+a.fim.toLocaleString();
+  }
+});
+</script>
+</body>
+</html>
