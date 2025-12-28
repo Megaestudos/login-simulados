@@ -13,9 +13,10 @@
   --text:#0f172a;
   --muted:#cbd5f5;
   --border:#e2e8f0;
-  --success:#16a34a;
 }
+
 *{box-sizing:border-box}
+
 body{
   margin:0;
   font-family: Inter, system-ui, -apple-system, Arial, sans-serif;
@@ -28,6 +29,7 @@ body{
   background-position:center;
   background-attachment:fixed;
 }
+
 .page{
   min-height:100vh;
   display:flex;
@@ -35,6 +37,7 @@ body{
   justify-content:center;
   padding:24px;
 }
+
 .container{
   width:100%;
   max-width:980px;
@@ -42,14 +45,17 @@ body{
   grid-template-columns:1.2fr 1fr;
   gap:40px;
 }
+
 @media(max-width:900px){
   .container{grid-template-columns:1fr}
 }
+
 .hero h1{font-size:38px;margin:0 0 12px}
 .hero p{font-size:18px;color:#e5e7eb}
 .hero ul{list-style:none;padding:0}
 .hero li{margin:10px 0}
 .hero li::before{content:"✓ ";color:#22c55e}
+
 .card{
   background:var(--card);
   color:var(--text);
@@ -57,6 +63,7 @@ body{
   padding:32px;
   box-shadow:0 40px 80px rgba(0,0,0,.35);
 }
+
 label{font-size:14px;color:#475569}
 input{
   width:100%;
@@ -66,6 +73,7 @@ input{
   border:1px solid var(--border);
   font-size:15px;
 }
+
 button{
   width:100%;
   padding:14px;
@@ -74,9 +82,11 @@ button{
   font-size:15px;
   cursor:pointer;
 }
+
 .btn-primary{background:var(--primary);color:#fff}
 .btn-primary:hover{background:var(--primary-dark)}
 .btn-sec{background:#f1f5f9;margin-top:10px}
+
 .msg{
   margin-top:14px;
   font-size:14px;
@@ -103,7 +113,7 @@ button{
 
     <div class="card">
       <h2>Acesso à plataforma</h2>
-      <p style="color:#64748b">Crie sua conta ou entre para começar o teste.</p>
+      <p style="color:#64748b">Entre com seu e-mail e senha.</p>
 
       <label>Email</label>
       <input id="email" type="email" placeholder="seu@email.com">
@@ -124,7 +134,7 @@ button{
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 import {
   getAuth,
-  onAuthStateChanged,
+  signOut,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   sendEmailVerification
@@ -137,6 +147,7 @@ import {
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
+/* ===== CONFIG ===== */
 const FRONT_URL = "https://megaestudos.github.io/Quiz-Guarda-Civil-Premium/";
 const HORAS_TRIAL = 48;
 
@@ -151,6 +162,10 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const $ = id => document.getElementById(id);
 
+/* 🔒 FORÇA LOGOUT AO ABRIR A PÁGINA */
+signOut(auth);
+
+/* ===== HELPERS ===== */
 async function ensureUser(uid, email){
   const ref = doc(db, "users", uid);
   const snap = await getDoc(ref);
@@ -164,13 +179,15 @@ async function ensureUser(uid, email){
   }
 }
 
+/* ===== AÇÕES ===== */
 window.criarConta = async () => {
   try{
     const cred = await createUserWithEmailAndPassword(
       auth, $("email").value, $("senha").value
     );
     await sendEmailVerification(cred.user);
-    $("msgLogin").innerText = "Conta criada. Confirme seu e-mail.";
+    $("msgLogin").innerText =
+      "Conta criada. Verifique seu e-mail e depois faça login.";
   }catch(e){
     $("msgLogin").innerText = e.message;
   }
@@ -178,45 +195,25 @@ window.criarConta = async () => {
 
 window.entrar = async () => {
   try{
-    await signInWithEmailAndPassword(
+    const cred = await signInWithEmailAndPassword(
       auth, $("email").value, $("senha").value
     );
+
+    if (!cred.user.emailVerified){
+      $("msgLogin").innerText =
+        "Confirme seu e-mail antes de continuar.";
+      await signOut(auth);
+      return;
+    }
+
+    await ensureUser(cred.user.uid, cred.user.email);
+
+    window.location.replace(FRONT_URL);
+
   }catch(e){
     $("msgLogin").innerText = e.message;
   }
 };
-
-window.continuar = () => {
-  window.location.replace(FRONT_URL);
-};
-
-onAuthStateChanged(auth, async (user) => {
-  if (!user) return;
-
-  if (!user.emailVerified){
-    $("msgLogin").innerText = "Confirme seu e-mail antes de continuar.";
-    return;
-  }
-
-  await ensureUser(user.uid, user.email);
-
-  $("msgLogin").innerHTML = `
-    <span style="color:#16a34a">
-      Sessão ativa detectada.<br>
-      <button onclick="continuar()" style="
-        margin-top:10px;
-        padding:10px 16px;
-        border-radius:10px;
-        border:none;
-        background:#16a34a;
-        color:#fff;
-        font-weight:600;
-        cursor:pointer">
-        Continuar para o simulado
-      </button>
-    </span>
-  `;
-});
 </script>
 </body>
 </html>
