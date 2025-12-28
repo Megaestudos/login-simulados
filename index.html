@@ -23,15 +23,9 @@ body{
   font-family: Inter, system-ui, -apple-system, Arial, sans-serif;
   min-height:100vh;
   color:#fff;
-
-  /* IMAGEM DE FUNDO + OVERLAY */
   background:
-    linear-gradient(
-      rgba(15,23,42,0.70),
-      rgba(15,23,42,0.70)
-    ),
+    linear-gradient(rgba(15,23,42,0.70), rgba(15,23,42,0.70)),
     url("https://images.pexels.com/photos/990432/pexels-photo-990432.jpeg");
-
   background-size:cover;
   background-position:center;
   background-attachment:fixed;
@@ -43,8 +37,6 @@ body{
   align-items:center;
   justify-content:center;
   padding:24px;
-  position:relative;
-  z-index:1;
 }
 
 .container{
@@ -59,33 +51,26 @@ body{
   .container{grid-template-columns:1fr}
 }
 
-/* HERO */
 .hero h1{
   font-size:38px;
-  line-height:1.2;
   margin:0 0 12px;
 }
 .hero p{
   font-size:18px;
   color:#e5e7eb;
-  margin:0 0 24px;
 }
 .hero ul{
-  padding:0;
-  margin:0;
   list-style:none;
+  padding:0;
 }
 .hero li{
   margin:10px 0;
-  font-size:16px;
 }
 .hero li::before{
   content:"✓ ";
   color:#22c55e;
-  font-weight:bold;
 }
 
-/* CARD */
 .card{
   background:var(--card);
   color:var(--text);
@@ -94,7 +79,6 @@ body{
   box-shadow:0 40px 80px rgba(0,0,0,.35);
 }
 
-/* FORM */
 label{
   font-size:14px;
   color:#475569;
@@ -107,10 +91,6 @@ input{
   border:1px solid var(--border);
   font-size:15px;
 }
-input:focus{
-  outline:none;
-  border-color:var(--primary);
-}
 
 button{
   width:100%;
@@ -120,6 +100,7 @@ button{
   font-size:15px;
   cursor:pointer;
 }
+
 .btn-primary{
   background:var(--primary);
   color:#fff;
@@ -139,161 +120,133 @@ button{
 }
 
 .hide{display:none}
-
-/* APP */
-.top{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-.badge{
-  background:#e0e7ff;
-  color:#1e40af;
-  padding:6px 10px;
-  border-radius:999px;
-  font-size:13px;
-}
 </style>
 </head>
 
 <body>
 <div class="page">
+  <div class="container">
 
-<div class="container">
+    <!-- HERO -->
+    <div class="hero">
+      <h1>Prepare-se para concursos<br>com foco total em aprovação</h1>
+      <p>Simulados atualizados, estudo direto ao ponto e acesso imediato.</p>
+      <ul>
+        <li>Questões comentadas</li>
+        <li>Simulados realistas</li>
+        <li>Conteúdo focado em prova</li>
+        <li>Teste gratuito por 48 horas</li>
+      </ul>
+    </div>
 
-<!-- HERO -->
-<div class="hero">
-  <h1>Prepare-se para concursos<br>com foco total em aprovação</h1>
-  <p>Simulados atualizados, estudo direto ao ponto e acesso imediato.</p>
-  <ul>
-    <li>Questões comentadas</li>
-    <li>Simulados realistas</li>
-    <li>Conteúdo focado em prova</li>
-    <li>Teste gratuito por 48 horas</li>
-  </ul>
-</div>
+    <!-- LOGIN -->
+    <div id="login" class="card">
+      <h2>Acesso à plataforma</h2>
+      <p style="color:#64748b">Crie sua conta ou entre para começar o teste.</p>
 
-<!-- LOGIN -->
-<div id="login" class="card hide">
-  <h2>Acesso à plataforma</h2>
-  <p style="color:#64748b">Crie sua conta ou entre para começar o teste.</p>
+      <label>Email</label>
+      <input id="email" type="email" placeholder="seu@email.com">
 
-  <label>Email</label>
-  <input id="email" placeholder="seu@email.com">
+      <label>Senha</label>
+      <input id="senha" type="password" placeholder="••••••••">
 
-  <label>Senha</label>
-  <input id="senha" type="password" placeholder="••••••••">
+      <button class="btn-primary" onclick="entrar()">Entrar</button>
+      <button class="btn-sec" onclick="criarConta()">Criar conta gratuita</button>
 
-  <button class="btn-primary" onclick="entrar()">Entrar</button>
-  <button class="btn-sec" onclick="criarConta()">Criar conta gratuita</button>
+      <div id="msgLogin" class="msg"></div>
+    </div>
 
-  <div id="msgLogin" class="msg"></div>
-</div>
-
-<!-- APP -->
-<div id="app" class="card hide">
-  <div class="top">
-    <h2>Área do aluno</h2>
-    <span class="badge" id="status"></span>
   </div>
-
-  <hr>
-
-  <p>👉 Aqui entra seu simulado real</p>
-
-  <button class="btn-sec" onclick="sair()">Sair</button>
-</div>
-
-<!-- BLOQUEIO -->
-<div id="bloqueio" class="card hide">
-  <h2>Seu teste terminou</h2>
-  <p id="msgBloqueio" style="color:#64748b"></p>
-
-  <button class="btn-primary" onclick="comprar()">Desbloquear acesso</button>
-  <button class="btn-sec" onclick="sair()">Trocar conta</button>
-</div>
-
-</div>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 import {
-  getAuth,onAuthStateChanged,
+  getAuth,
+  onAuthStateChanged,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  signOut,sendEmailVerification
+  sendEmailVerification
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 import {
-  getFirestore,doc,getDoc,setDoc,serverTimestamp
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
-const firebaseConfig={
-  apiKey:"AIzaSyB36ZszS8v_DeOn3at7zEo_tFq86WU0sI4",
-  authDomain:"simulados-concursos-22c91.firebaseapp.com",
-  projectId:"simulados-concursos-22c91"
+/* ===== CONFIG ===== */
+const FRONT_URL = "https://megaestudos.github.io/Quiz-Guarda-Civil-Premium/";
+const HORAS_TRIAL = 48;
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB36ZszS8v_DeOn3at7zEo_tFq86WU0sI4",
+  authDomain: "simulados-concursos-22c91.firebaseapp.com",
+  projectId: "simulados-concursos-22c91"
 };
 
-const app=initializeApp(firebaseConfig);
-const auth=getAuth(app);
-const db=getFirestore(app);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-const HORAS_TRIAL=48;
-const $=id=>document.getElementById(id);
-const show=t=>["login","app","bloqueio"].forEach(x=>$(x).classList.toggle("hide",x!==t));
+const $ = id => document.getElementById(id);
 
-async function ensure(uid,email){
-  const r=doc(db,"users",uid);
-  const s=await getDoc(r);
-  if(!s.exists()){
-    await setDoc(r,{
+/* ===== HELPERS ===== */
+async function ensureUser(uid, email){
+  const ref = doc(db, "users", uid);
+  const snap = await getDoc(ref);
+
+  if (!snap.exists()){
+    await setDoc(ref, {
       email,
-      criadoEm:serverTimestamp(),
-      trialAte:new Date(Date.now()+HORAS_TRIAL*3600000),
-      pagoAte:null
+      criadoEm: serverTimestamp(),
+      trialAte: new Date(Date.now() + HORAS_TRIAL * 3600000),
+      pagoAte: null
     });
   }
 }
 
-async function acesso(uid){
-  const s=await getDoc(doc(db,"users",uid));
-  if(!s.exists())return{ok:false};
-  const d=s.data(),n=new Date();
-  if(d.pagoAte&&n<d.pagoAte.toDate())return{ok:true,pago:true};
-  if(d.trialAte&&n<d.trialAte.toDate())return{ok:true,trial:true,fim:d.trialAte.toDate()};
-  return{ok:false,fim:d.trialAte?.toDate()};
-}
-
-window.criarConta=async()=>{
+/* ===== AÇÕES ===== */
+window.criarConta = async () => {
   try{
-    const c=await createUserWithEmailAndPassword(auth,$("email").value,$("senha").value);
-    await sendEmailVerification(c.user);
-    $("msgLogin").innerText="Conta criada. Confirme seu e-mail.";
-  }catch(e){$("msgLogin").innerText=e.message}
-};
-
-window.entrar=async()=>{
-  try{await signInWithEmailAndPassword(auth,$("email").value,$("senha").value)}
-  catch(e){$("msgLogin").innerText=e.message}
-};
-
-window.sair=()=>signOut(auth);
-window.comprar=()=>alert("Integração PIX entra no próximo passo");
-
-onAuthStateChanged(auth,async(u)=>{
-  if(!u){show("login");return}
-  if(!u.emailVerified){show("login");$("msgLogin").innerText="Confirme seu e-mail.";return}
-  await ensure(u.uid,u.email);
-  const a=await acesso(u.uid);
-  if(a.ok){
-    show("app");
-    $("status").innerText=a.trial
-      ? "Teste até "+a.fim.toLocaleString()
-      : "Premium ativo";
-  }else{
-    show("bloqueio");
-    $("msgBloqueio").innerText="Seu teste expirou em "+a.fim.toLocaleString();
+    const cred = await createUserWithEmailAndPassword(
+      auth,
+      $("email").value,
+      $("senha").value
+    );
+    await sendEmailVerification(cred.user);
+    $("msgLogin").innerText = "Conta criada. Confirme seu e-mail.";
+  }catch(e){
+    $("msgLogin").innerText = e.message;
   }
+};
+
+window.entrar = async () => {
+  try{
+    await signInWithEmailAndPassword(
+      auth,
+      $("email").value,
+      $("senha").value
+    );
+  }catch(e){
+    $("msgLogin").innerText = e.message;
+  }
+};
+
+/* ===== AUTH STATE ===== */
+onAuthStateChanged(auth, async (user) => {
+  if (!user) return;
+
+  if (!user.emailVerified){
+    $("msgLogin").innerText = "Confirme seu e-mail antes de continuar.";
+    return;
+  }
+
+  await ensureUser(user.uid, user.email);
+
+  // 🔥 REDIRECIONAMENTO FINAL
+  window.location.replace(FRONT_URL);
 });
 </script>
 </body>
