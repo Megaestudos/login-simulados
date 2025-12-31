@@ -7,43 +7,43 @@
 
 <style>
 :root{
-  --primary:#2563eb;
-  --primary-dark:#1e40af;
-  --card:#ffffff;
-  --text:#0f172a;
-  --muted:#cbd5f5;
-  --border:#e2e8f0;
-  --success:#16a34a;
+--primary:#2563eb;
+--primary-dark:#1e40af;
+--card:#ffffff;
+--text:#0f172a;
+--muted:#cbd5f5;
+--border:#e2e8f0;
+--success:#16a34a;
 }
 *{box-sizing:border-box}
 body{
-  margin:0;
-  font-family: Inter, system-ui, -apple-system, Arial, sans-serif;
-  min-height:100vh;
-  color:#fff;
-  background:
-    linear-gradient(rgba(15,23,42,0.70), rgba(15,23,42,0.70)),
-    url("https://images.pexels.com/photos/990432/pexels-photo-990432.jpeg");
-  background-size:cover;
-  background-position:center;
-  background-attachment:fixed;
+margin:0;
+font-family: Inter, system-ui, -apple-system, Arial, sans-serif;
+min-height:100vh;
+color:#fff;
+background:
+linear-gradient(rgba(15,23,42,0.70), rgba(15,23,42,0.70)),
+url("https://images.pexels.com/photos/990432/pexels-photo-990432.jpeg");
+background-size:cover;
+background-position:center;
+background-attachment:fixed;
 }
 .page{
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:24px;
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:24px;
 }
 .container{
-  width:100%;
-  max-width:980px;
-  display:grid;
-  grid-template-columns:1.2fr 1fr;
-  gap:40px;
+width:100%;
+max-width:980px;
+display:grid;
+grid-template-columns:1.2fr 1fr;
+gap:40px;
 }
 @media(max-width:900px){
-  .container{grid-template-columns:1fr}
+.container{grid-template-columns:1fr}
 }
 .hero h1{font-size:38px;margin:0 0 12px}
 .hero p{font-size:18px;color:#e5e7eb}
@@ -52,28 +52,28 @@ body{
 .hero li::before{content:"✓ ";color:#22c55e}
 
 .card{
-  background:var(--card);
-  color:var(--text);
-  border-radius:20px;
-  padding:32px;
-  box-shadow:0 40px 80px rgba(0,0,0,.35);
+background:var(--card);
+color:var(--text);
+border-radius:20px;
+padding:32px;
+box-shadow:0 40px 80px rgba(0,0,0,.35);
 }
 label{font-size:14px;color:#475569}
 input{
-  width:100%;
-  padding:14px;
-  margin:6px 0 16px;
-  border-radius:12px;
-  border:1px solid var(--border);
-  font-size:15px;
+width:100%;
+padding:14px;
+margin:6px 0 16px;
+border-radius:12px;
+border:1px solid var(--border);
+font-size:15px;
 }
 button{
-  width:100%;
-  padding:14px;
-  border-radius:12px;
-  border:0;
-  font-size:15px;
-  cursor:pointer;
+width:100%;
+padding:14px;
+border-radius:12px;
+border:0;
+font-size:15px;
+cursor:pointer;
 }
 .btn-primary{background:var(--primary);color:#fff}
 .btn-primary:hover{background:var(--primary-dark)}
@@ -86,23 +86,23 @@ button{
 
 .plan-grid{display:grid;grid-template-columns:1fr;gap:10px;margin-top:10px}
 .plan{
-  border:1px solid #e2e8f0;
-  border-radius:14px;
-  padding:14px;
-  background:#fff;
+border:1px solid #e2e8f0;
+border-radius:14px;
+padding:14px;
+background:#fff;
 }
 .plan .top{display:flex;justify-content:space-between;align-items:center;gap:10px}
 .badge{
-  background:#e0e7ff;
-  color:#1e40af;
-  padding:6px 10px;
-  border-radius:999px;
-  font-size:13px;
-  font-weight:700;
+background:#e0e7ff;
+color:#1e40af;
+padding:6px 10px;
+border-radius:999px;
+font-size:13px;
+font-weight:700;
 }
 .reco{
-  border:2px solid #2563eb;
-  box-shadow:0 10px 24px rgba(37,99,235,.15);
+border:2px solid #2563eb;
+box-shadow:0 10px 24px rgba(37,99,235,.15);
 }
 .price{font-size:22px;font-weight:900;color:#0f172a;margin:8px 0 0}
 .plan button{margin-top:10px}
@@ -118,127 +118,130 @@ button{
 
 <body>
 <div class="page">
-  <div class="container">
+<div class="container">
 
-    <div class="hero">
-      <h1>Prepare-se para concursos<br>com foco total em aprovação</h1>
-      <p>Simulados atualizados, estudo direto ao ponto e acesso imediato.</p>
-      <ul>
-        <li>Questões comentadas</li>
-        <li>Simulados realistas</li>
-        <li>Conteúdo focado em prova</li>
-        <li>Teste gratuito por 48 horas</li>
-      </ul>
-    </div>
+<div class="hero">
+<h1>Prepare-se para concursos<br>com foco total em aprovação</h1>
+<p>Simulados atualizados, estudo direto ao ponto e acesso imediato.</p>
+<ul>
+<li>Questões comentadas</li>
+<li>Simulados realistas</li>
+<li>Conteúdo focado em prova</li>
+<li>Teste gratuito por 48 horas</li>
+</ul>
+</div>
 
-    <div class="card">
-      <h2>Acesso à plataforma</h2>
-      <p class="small">Entre com sua conta.</p>
+<div class="card">
+<h2>Acesso à plataforma</h2>
+<p class="small">Entre com sua conta.</p>
 
-      <div id="loginBox">
-        <label>Email</label>
-        <input id="email" type="email">
+<div id="loginBox">
+<label>Email</label>
+<input id="email" type="email">
+<label>Senha</label>
+<input id="senha" type="password">
+<button class="btn-primary" id="btnEntrar">Entrar</button>
+<button class="btn-sec" id="btnCriar">Criar conta gratuita</button>
+<div id="msgLogin" class="msg"></div>
+</div>
 
-        <label>Senha</label>
-        <input id="senha" type="password">
+<div id="statusBox" class="hide">
+<div class="hr"></div>
+<div id="statusText" style="font-weight:900"></div>
+<div id="statusSub" class="small" style="margin-top:6px"></div>
+<button class="btn-sec" id="btnAcessarApp" style="margin-top:12px">Acessar o App</button>
+<button class="btn-sec" id="btnSair" style="margin-top:10px">Sair</button>
+</div>
 
-        <button class="btn-primary" id="btnEntrar">Entrar</button>
-        <button class="btn-sec" id="btnCriar">Criar conta gratuita</button>
+<div id="payBox" class="hide">
+<div class="hr"></div>
+<div style="font-weight:900">Seu acesso expirou</div>
+</div>
 
-        <div id="msgLogin" class="msg"></div>
-      </div>
-
-      <div id="statusBox" class="hide">
-        <div class="hr"></div>
-        <div id="statusText" style="font-weight:900"></div>
-        <div id="statusSub" class="small" style="margin-top:6px"></div>
-
-        <button class="btn-sec" id="btnAcessarApp" style="margin-top:12px">Acessar o App</button>
-        <button class="btn-sec" id="btnSair" style="margin-top:10px">Sair</button>
-      </div>
-
-      <div id="payBox" class="hide">
-        <div class="hr"></div>
-        <div style="font-weight:900">Seu acesso expirou</div>
-      </div>
-    </div>
-
-  </div>
+</div>
+</div>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 import {
-  getAuth,
-  setPersistence,
-  browserSessionPersistence,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  signOut
+getAuth,
+setPersistence,
+browserSessionPersistence,
+signInWithEmailAndPassword,
+createUserWithEmailAndPassword,
+signOut
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
 const FRONT_URL = "https://megaestudos.github.io/Quiz-Guarda-Civil-Premium/";
 const ME_ENDPOINT = "https://us-central1-simulados-concursos-22c91.cloudfunctions.net/me";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyB36ZszS8v_DeOn3at7zEo_tFq86WU0sI4",
-  authDomain: "simulados-concursos-22c91.firebaseapp.com",
-  projectId: "simulados-concursos-22c91"
+apiKey: "AIzaSyB36ZszS8v_DeOn3at7zEo_tFq86WU0sI4",
+authDomain: "simulados-concursos-22c91.firebaseapp.com",
+projectId: "simulados-concursos-22c91"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 await setPersistence(auth, browserSessionPersistence);
 
-const $ = (id)=>document.getElementById(id);
-const show = (box)=>["loginBox","statusBox","payBox"].forEach(x=>$(x).classList.toggle("hide", x!==box));
-
-function setMsg(t){ $("msgLogin").innerText = t || ""; }
+const $ = id => document.getElementById(id);
+const show = box => ["loginBox","statusBox","payBox"].forEach(x=>$(x).classList.toggle("hide", x!==box));
+const setMsg = t => $("msgLogin").innerText = t || "";
 
 $("btnEntrar").onclick = entrar;
 $("btnCriar").onclick = criarConta;
 $("btnSair").onclick = async ()=>{ await signOut(auth); show("loginBox"); };
-$("btnAcessarApp").onclick = ()=>location.href = FRONT_URL;
+$("btnAcessarApp").onclick = ()=> location.href = FRONT_URL;
 
 async function entrar(){
-  setMsg("");
-  await signInWithEmailAndPassword(auth, $("email").value, $("senha").value);
-  await carregarStatus();
+try{
+setMsg("");
+await signInWithEmailAndPassword(auth,$("email").value,$("senha").value);
+await carregarStatus();
+}catch(e){
+setMsg(e.message);
+}
 }
 
 async function criarConta(){
-  setMsg("");
-  await createUserWithEmailAndPassword(auth, $("email").value, $("senha").value);
-  await carregarStatus();
+try{
+setMsg("");
+await createUserWithEmailAndPassword(auth,$("email").value,$("senha").value);
+await carregarStatus();
+}catch(e){
+setMsg(e.message);
+}
 }
 
 async function carregarStatus(){
-  const user = auth.currentUser;
-  if(!user){ show("loginBox"); return; }
+const user = auth.currentUser;
+if(!user){ show("loginBox"); return; }
 
-  const token = await user.getIdToken(true);
-  const r = await fetch(ME_ENDPOINT, { headers:{ Authorization:"Bearer "+token }});
-  const data = await r.json();
+const token = await user.getIdToken(true);
+const r = await fetch(ME_ENDPOINT,{headers:{Authorization:"Bearer "+token}});
+const data = await r.json();
 
-  if(!data.authenticated){ show("loginBox"); return; }
+if(!data.authenticated){ show("loginBox"); return; }
 
-  const status = data.access?.status;
-  const fim = data.access?.expiresAt ? new Date(data.access.expiresAt).toLocaleString() : "";
+const status = data.access?.status;
+const fim = data.access?.expiresAt ? new Date(data.access.expiresAt).toLocaleString() : "";
 
-  if(status === "active" || status === "trial_active"){
-    show("statusBox");
-    $("statusText").innerText = status==="trial_active" ? "Teste grátis ativo" : "Acesso Premium ativo";
-    $("statusSub").innerText = fim ? "Válido até: "+fim : "";
-    return;
-  }
+if(status==="active"||status==="trial_active"){
+show("statusBox");
+$("statusText").innerText = status==="trial_active" ? "Teste grátis ativo" : "Acesso Premium ativo";
+$("statusSub").innerText = fim ? "Válido até: "+fim : "";
+return;
+}
 
-  show("payBox");
+show("payBox");
 }
 
 if(auth.currentUser){
-  carregarStatus();
+carregarStatus();
 }else{
-  show("loginBox");
+show("loginBox");
 }
 </script>
 </body>
