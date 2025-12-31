@@ -291,17 +291,8 @@ const r = await fetch(
   }
 );
 
-const data = await r.json();
-
-// ❌ NÃO TEM MAIS ACESSO
-if (!data.entitled) {
-  // Agora SIM pode ir para pagamento
-  window.location.href = "/pagamento.html";
-  return;
-}
-
-// ✅ TEM ACESSO → ENTRA NO APP
-window.location.href = "https://megaestudos.github.io/Quiz-Guarda-Civil-Premium/";
+// Após login, apenas carrega o status
+await carregarStatus();
 
     await carregarStatus();
   }catch(e){
@@ -445,5 +436,6 @@ if(auth.currentUser){
 </script>
 </body>
 </html>
+
 
 
