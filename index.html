@@ -275,6 +275,35 @@ async function entrar(){
     if(!email || !senha){ setMsg("Preencha email e senha."); return; }
 
     await signInWithEmailAndPassword(auth, email, senha);
+    // ============================
+// VERIFICA ACESSO APÓS LOGIN
+// ============================
+
+const user = auth.currentUser;
+const token = await user.getIdToken(true);
+
+const r = await fetch(
+  "https://us-central1-simulados-concursos-22c91.cloudfunctions.net/me",
+  {
+    headers: {
+      Authorization: "Bearer " + token
+    }
+  }
+);
+
+const data = await r.json();
+
+// ❌ NÃO TEM MAIS ACESSO
+if (!data.entitled) {
+  // Agora SIM pode ir para pagamento
+  window.location.href = "/pagamento.html";
+  return;
+}
+
+// ✅ TEM ACESSO → ENTRA NO APP
+window.location.href =
+  "https://megaestudos.github.io/Quiz-Guarda-Civil-Premium/";
+
     await carregarStatus();
   }catch(e){
     setMsg(e?.message || "Erro ao entrar");
@@ -417,3 +446,4 @@ if(auth.currentUser){
 </script>
 </body>
 </html>
+
