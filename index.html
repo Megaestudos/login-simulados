@@ -120,6 +120,7 @@ box-shadow:0 10px 24px rgba(37,99,235,.15);
 <div class="page">
 <div class="container">
 
+<!-- HERO -->
 <div class="hero">
 <h1>Prepare-se para concursos<br>com foco total em aprovação</h1>
 <p>Simulados atualizados, estudo direto ao ponto e acesso imediato.</p>
@@ -131,34 +132,82 @@ box-shadow:0 10px 24px rgba(37,99,235,.15);
 </ul>
 </div>
 
+<!-- CARD -->
 <div class="card">
 <h2>Acesso à plataforma</h2>
-<p class="small">Entre com sua conta.</p>
+<p class="small">Entre com sua conta. Se estiver no teste, você verá o tempo restante. Se expirou, você pode assinar.</p>
 
+<!-- LOGIN FORM -->
 <div id="loginBox">
 <label>Email</label>
-<input id="email" type="email">
+<input id="email" type="email" placeholder="seu@email.com">
+
 <label>Senha</label>
-<input id="senha" type="password">
+<input id="senha" type="password" placeholder="••••••••">
+
 <button class="btn-primary" id="btnEntrar">Entrar</button>
 <button class="btn-sec" id="btnCriar">Criar conta gratuita</button>
+
 <div id="msgLogin" class="msg"></div>
 </div>
 
+<!-- STATUS -->
 <div id="statusBox" class="hide">
 <div class="hr"></div>
 <div id="statusText" style="font-weight:900"></div>
 <div id="statusSub" class="small" style="margin-top:6px"></div>
+
 <button class="btn-sec" id="btnAcessarApp" style="margin-top:12px">Acessar o App</button>
 <button class="btn-sec" id="btnSair" style="margin-top:10px">Sair</button>
 </div>
 
+<!-- PAYWALL -->
 <div id="payBox" class="hide">
 <div class="hr"></div>
 <div style="font-weight:900">Seu acesso expirou</div>
+<div class="small" style="margin-top:6px">Escolha um plano. O de 6 meses fica em destaque (recomendado).</div>
+
+<div class="plan-grid">
+<div class="plan reco">
+<div class="top">
+<div style="font-weight:900">Plano 6 meses</div>
+<span class="badge">Recomendado</span>
+</div>
+<div class="price">R$ 29,90</div>
+<div class="small">Acesso completo por 6 meses (ideal para começar).</div>
+<button class="btn-primary" id="btnPlano6">Gerar PIX (6 meses)</button>
+</div>
+
+<div class="plan">
+<div class="top">
+<div style="font-weight:900">Plano 1 ano</div>
+<span class="badge">Economia</span>
+</div>
+<div class="price">R$ 49,90</div>
+<div class="small">Acesso completo por 12 meses (melhor custo-benefício).</div>
+<button class="btn-primary" id="btnPlano12">Gerar PIX (1 ano)</button>
+</div>
+</div>
+
+<!-- QR -->
+<div id="qrBox" class="qrWrap hide">
+<div class="hr"></div>
+<div style="font-weight:900">Pague com PIX</div>
+<div class="small" id="qrSub" style="margin-top:6px"></div>
+
+<img id="qrImg" class="qrImg" alt="QR Code PIX">
+
+<div class="copyRow">
+<input id="pixCopia" readonly>
+<button id="btnCopiar">Copiar</button>
+</div>
+
+<div id="payMsg" class="small" style="margin-top:10px"></div>
 </div>
 
 </div>
+</div>
+
 </div>
 </div>
 
@@ -173,45 +222,80 @@ createUserWithEmailAndPassword,
 signOut
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
+/* ===== CONFIG ===== */
 const FRONT_URL = "https://megaestudos.github.io/Quiz-Guarda-Civil-Premium/";
-const ME_ENDPOINT = "https://us-central1-simulados-concursos-22c91.cloudfunctions.net/me";
-
 const firebaseConfig = {
 apiKey: "AIzaSyB36ZszS8v_DeOn3at7zEo_tFq86WU0sI4",
 authDomain: "simulados-concursos-22c91.firebaseapp.com",
 projectId: "simulados-concursos-22c91"
 };
 
+// Seus endpoints functions:
+const ME_ENDPOINT = "https://us-central1-simulados-concursos-22c91.cloudfunctions.net/me";
+const CREATE_CHARGE_ENDPOINT = "https://us-central1-simulados-concursos-22c91.cloudfunctions.net/createPixCharge";
+const PIX_STATUS_ENDPOINT = "https://us-central1-simulados-concursos-22c91.cloudfunctions.net/pixStatus";
+
+/* ===== INIT ===== */
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+
+// IMPORTANTE: garante que não “loga sozinho” para sempre
 await setPersistence(auth, browserSessionPersistence);
 
-const $ = id => document.getElementById(id);
-const show = box => ["loginBox","statusBox","payBox"].forEach(x=>$(x).classList.toggle("hide", x!==box));
-const setMsg = t => $("msgLogin").innerText = t || "";
+const $ = (id)=>document.getElementById(id);
+const show = (boxId)=>{
+["loginBox","statusBox","payBox"].forEach(x=>$(x).classList.toggle("hide", x!==boxId));
+};
 
-$("btnEntrar").onclick = entrar;
-$("btnCriar").onclick = criarConta;
-$("btnSair").onclick = async ()=>{ await signOut(auth); show("loginBox"); };
-$("btnAcessarApp").onclick = ()=> location.href = FRONT_URL;
+function setMsg(t){ $("msgLogin").innerText = t || ""; }
+
+$("btnEntrar").addEventListener("click", entrar);
+$("btnCriar").addEventListener("click", criarConta);
+$("btnSair").addEventListener("click", async ()=>{ await signOut(auth); show("loginBox"); setMsg(""); });
+
+$("btnAcessarApp").addEventListener("click", ()=> location.href = FRONT_URL);
+
+$("btnPlano6").addEventListener("click", ()=> gerarPix("6m"));
+$("btnPlano12").addEventListener("click", ()=> gerarPix("12m"));
+
+$("btnCopiar").addEventListener("click", async ()=>{
+try{
+await navigator.clipboard.writeText($("pixCopia").value);
+$("payMsg").innerHTML = "<span class='ok'>Copiado. Agora pague no app do banco.</span>";
+}catch{
+$("payMsg").innerText = "Não consegui copiar automaticamente. Selecione e copie manualmente.";
+}
+});
 
 async function entrar(){
 try{
 setMsg("");
-await signInWithEmailAndPassword(auth,$("email").value,$("senha").value);
+const email = $("email").value.trim();
+const senha = $("senha").value;
+if(!email || !senha){ setMsg("Preencha email e senha."); return; }
+
+await signInWithEmailAndPassword(auth, email, senha);
+
+// ✅ Após login: NÃO redireciona. Só atualiza a tela.
 await carregarStatus();
+
 }catch(e){
-setMsg(e.message);
+setMsg(e?.message || "Erro ao entrar");
 }
 }
 
 async function criarConta(){
 try{
 setMsg("");
-await createUserWithEmailAndPassword(auth,$("email").value,$("senha").value);
+const email = $("email").value.trim();
+const senha = $("senha").value;
+if(!email || !senha){ setMsg("Preencha email e senha."); return; }
+
+await createUserWithEmailAndPassword(auth, email, senha);
+// cria conta e já entra (normal)
 await carregarStatus();
 }catch(e){
-setMsg(e.message);
+setMsg(e?.message || "Erro ao criar conta");
 }
 }
 
@@ -220,27 +304,118 @@ const user = auth.currentUser;
 if(!user){ show("loginBox"); return; }
 
 const token = await user.getIdToken(true);
-const r = await fetch(ME_ENDPOINT,{headers:{Authorization:"Bearer "+token}});
+const r = await fetch(ME_ENDPOINT, { headers: { Authorization: "Bearer " + token }});
 const data = await r.json();
 
-if(!data.authenticated){ show("loginBox"); return; }
-
-const status = data.access?.status;
-const fim = data.access?.expiresAt ? new Date(data.access.expiresAt).toLocaleString() : "";
-
-if(status==="active"||status==="trial_active"){
-show("statusBox");
-$("statusText").innerText = status==="trial_active" ? "Teste grátis ativo" : "Acesso Premium ativo";
-$("statusSub").innerText = fim ? "Válido até: "+fim : "";
+if(!data.authenticated){
+show("loginBox");
+setMsg("Sessão inválida. Faça login novamente.");
 return;
 }
 
+const status = data.access?.status || "none";
+const expiresIso = data.access?.expiresAt || null;
+const fim = expiresIso ? new Date(expiresIso) : null;
+
+// ✅ Acesso liberado: premium ou trial ativo
+if(status === "active" || status === "trial_active"){
+show("statusBox");
+
+if(status === "trial_active"){
+$("statusText").innerText = "Teste grátis ativo";
+$("statusSub").innerText = fim ? ("Válido até: " + fim.toLocaleString()) : "";
+}else{
+$("statusText").innerText = "Acesso Premium ativo";
+$("statusSub").innerText = fim ? ("Válido até: " + fim.toLocaleString()) : "";
+}
+
+return;
+}
+
+// ❌ Sem acesso: paywall
 show("payBox");
+$("statusText").innerText = "";
+$("statusSub").innerText = "";
+}
+
+let pollingTimer = null;
+
+async function gerarPix(plan){
+try{
+const user = auth.currentUser;
+if(!user){ show("loginBox"); setMsg("Faça login."); return; }
+
+$("qrBox").classList.add("hide");
+$("payMsg").innerText = "";
+$("qrSub").innerText = "Gerando cobrança PIX...";
+
+const token = await user.getIdToken(true);
+const r = await fetch(CREATE_CHARGE_ENDPOINT, {
+method: "POST",
+headers: {
+"Content-Type":"application/json",
+Authorization: "Bearer " + token
+},
+body: JSON.stringify({ plan })
+});
+const data = await r.json();
+
+// Caso já esteja premium:
+if(data.alreadyEntitled){
+$("qrSub").innerText = "Seu acesso já está ativo. Abrindo o app...";
+setTimeout(()=>location.href = FRONT_URL, 700);
+return;
+}
+
+if(!data.ok) throw new Error(data.error || "Falha ao gerar cobrança");
+
+$("qrBox").classList.remove("hide");
+// label pode vir vazio (seu backend não manda label)
+$("qrSub").innerText = `Plano: ${plan} — Valor: R$ ${String(data.price).replace(".", ",")}`;
+
+$("qrImg").src = "data:image/png;base64," + data.qrcodeImage;
+$("pixCopia").value = data.copiaecola;
+
+$("payMsg").innerText = "Aguardando pagamento... (deixe esta tela aberta)";
+
+// polling a cada 5s
+if(pollingTimer) clearInterval(pollingTimer);
+pollingTimer = setInterval(()=> checarPagamento(data.txid), 5000);
+
+// checa já
+await checarPagamento(data.txid);
+
+}catch(e){
+$("payMsg").innerText = e?.message || "Erro no pagamento";
+}
+}
+
+async function checarPagamento(txid){
+try{
+const user = auth.currentUser;
+if(!user) return;
+
+const token = await user.getIdToken(true);
+const url = PIX_STATUS_ENDPOINT + "?txid=" + encodeURIComponent(txid);
+const r = await fetch(url, { headers: { Authorization: "Bearer " + token }});
+const data = await r.json();
+
+if(data.ok && data.paid){
+if(pollingTimer) clearInterval(pollingTimer);
+$("payMsg").innerHTML = "<span class='ok'>Pagamento confirmado. Liberando acesso...</span>";
+setTimeout(()=> location.href = FRONT_URL, 900);
+return;
+}
+
+$("payMsg").innerText = "Aguardando pagamento... (atualiza automaticamente)";
+}catch{
+// não quebra a tela, só continua tentando
+}
 }
 
 if(auth.currentUser){
 carregarStatus();
-}else{
+} else {
 show("loginBox");
 }
 </script>
