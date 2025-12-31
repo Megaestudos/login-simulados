@@ -330,17 +330,27 @@ async function carregarStatus(){
   }
 
   // Se liberado: trial ou premium
-  if(data.entitled){
-    show("statusBox");
+  const status = data.access?.status;
 
-    const fim = data.expiresAt ? new Date(data.expiresAt) : null;
-    if(data.type === "trial"){
-      $("statusText").innerText = "Teste grátis ativo";
-      $("statusSub").innerText = fim ? ("Válido até: " + fim.toLocaleString()) : "";
-    }else{
-      $("statusText").innerText = "Acesso Premium ativo";
-      $("statusSub").innerText = fim ? ("Válido até: " + fim.toLocaleString()) : "";
-    }
+// ✅ Pode entrar no app
+if (status === "active" || status === "trial_active") {
+  show("statusBox");
+
+  const fim = data.access.expiresAt ? new Date(data.access.expiresAt) : null;
+
+  if (status === "trial_active") {
+    $("statusText").innerText = "Teste grátis ativo";
+  } else {
+    $("statusText").innerText = "Acesso Premium ativo";
+  }
+
+  $("statusSub").innerText = fim ? ("Válido até: " + fim.toLocaleString()) : "";
+  return;
+}
+
+// ❌ Sem acesso → mostra pagamento
+show("payBox");
+
 
     return;
   }
@@ -436,6 +446,7 @@ if(auth.currentUser){
 </script>
 </body>
 </html>
+
 
 
 
