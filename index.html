@@ -247,6 +247,15 @@ const show = (boxId)=>{
 ["loginBox","statusBox","payBox"].forEach(x=>$(x).classList.toggle("hide", x!==boxId));
 };
 
+  function hideLogin(){
+  $("loginBox").classList.add("hide");
+}
+
+function showLogin(){
+  $("loginBox").classList.remove("hide");
+}
+
+  
 function setMsg(t){ $("msgLogin").innerText = t || ""; }
 
 $("btnEntrar").addEventListener("click", entrar);
@@ -454,6 +463,7 @@ show("loginBox");
 </script>
 </body>
 </html>
+
 
 
 
