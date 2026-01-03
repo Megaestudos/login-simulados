@@ -260,7 +260,12 @@ function setMsg(t){ $("msgLogin").innerText = t || ""; }
 
 $("btnEntrar").addEventListener("click", entrar);
 $("btnCriar").addEventListener("click", criarConta);
-$("btnSair").addEventListener("click", async ()=>{ await signOut(auth); show("loginBox"); setMsg(""); });
+$("btnSair").addEventListener("click", async ()=>{
+  await signOut(auth);
+  showLogin();
+  show("loginBox");
+  setMsg("");
+});
 
 $("btnAcessarApp").addEventListener("click", ()=> location.href = FRONT_URL);
 
@@ -306,7 +311,7 @@ async function entrar(){
 
     // 4) Se NÃO tem direito (expirou) => NÃO redireciona.
     //    Apenas mostra a área de pagamento (payBox) nesta mesma página.
-   if(!data.entitled){
+  if(!data.entitled){
   hideLogin();
   show("payBox");
 
@@ -473,6 +478,7 @@ show("loginBox");
 </script>
 </body>
 </html>
+
 
 
 
