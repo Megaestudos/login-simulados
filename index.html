@@ -11,108 +11,36 @@
 --primary-dark:#1e40af;
 --card:#ffffff;
 --text:#0f172a;
---muted:#cbd5f5;
 --border:#e2e8f0;
---success:#16a34a;
 }
 *{box-sizing:border-box}
 body{
 margin:0;
-font-family: Inter, system-ui, -apple-system, Arial, sans-serif;
+font-family:Inter,system-ui,Arial,sans-serif;
 min-height:100vh;
-color:#fff;
-background:
-linear-gradient(rgba(15,23,42,0.70), rgba(15,23,42,0.70)),
+background:linear-gradient(rgba(15,23,42,.7),rgba(15,23,42,.7)),
 url("https://images.pexels.com/photos/990432/pexels-photo-990432.jpeg");
 background-size:cover;
 background-position:center;
-background-attachment:fixed;
+color:#fff;
 }
-.page{
-min-height:100vh;
-display:flex;
-align-items:center;
-justify-content:center;
-padding:24px;
-}
-.container{
-width:100%;
-max-width:980px;
-display:grid;
-grid-template-columns:1.2fr 1fr;
-gap:40px;
-}
-@media(max-width:900px){
-.container{grid-template-columns:1fr}
-}
-.hero h1{font-size:38px;margin:0 0 12px}
-.hero p{font-size:18px;color:#e5e7eb}
-.hero ul{list-style:none;padding:0}
-.hero li{margin:10px 0}
-.hero li::before{content:"✓ ";color:#22c55e}
-
+.page{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+.container{width:100%;max-width:980px;display:grid;grid-template-columns:1.2fr 1fr;gap:40px}
+@media(max-width:900px){.container{grid-template-columns:1fr}}
 .card{
-background:var(--card);
-color:var(--text);
-border-radius:20px;
-padding:32px;
-box-shadow:0 40px 80px rgba(0,0,0,.35);
+background:#fff;color:#0f172a;border-radius:20px;
+padding:32px;box-shadow:0 40px 80px rgba(0,0,0,.35)
 }
-label{font-size:14px;color:#475569}
-input{
-width:100%;
-padding:14px;
-margin:6px 0 16px;
-border-radius:12px;
-border:1px solid var(--border);
-font-size:15px;
-}
-button{
-width:100%;
-padding:14px;
-border-radius:12px;
-border:0;
-font-size:15px;
-cursor:pointer;
-}
+input,button{width:100%;padding:14px;border-radius:12px;font-size:15px}
+input{border:1px solid var(--border);margin:6px 0 16px}
+button{border:0;cursor:pointer}
 .btn-primary{background:var(--primary);color:#fff}
-.btn-primary:hover{background:var(--primary-dark)}
 .btn-sec{background:#f1f5f9;margin-top:10px}
-.msg{margin-top:14px;font-size:14px;text-align:center;color:#dc2626}
 .hide{display:none}
-
+.msg{margin-top:14px;font-size:14px;color:#dc2626;text-align:center}
 .hr{height:1px;background:#e2e8f0;margin:18px 0}
-.small{font-size:13px;color:#64748b;line-height:1.35}
-
-.plan-grid{display:grid;grid-template-columns:1fr;gap:10px;margin-top:10px}
-.plan{
-border:1px solid #e2e8f0;
-border-radius:14px;
-padding:14px;
-background:#fff;
-}
-.plan .top{display:flex;justify-content:space-between;align-items:center;gap:10px}
-.badge{
-background:#e0e7ff;
-color:#1e40af;
-padding:6px 10px;
-border-radius:999px;
-font-size:13px;
-font-weight:700;
-}
-.reco{
-border:2px solid #2563eb;
-box-shadow:0 10px 24px rgba(37,99,235,.15);
-}
-.price{font-size:22px;font-weight:900;color:#0f172a;margin:8px 0 0}
-.plan button{margin-top:10px}
-
-.qrWrap{margin-top:10px}
-.qrImg{width:100%;max-width:260px;border:1px solid #e2e8f0;border-radius:12px;padding:10px;background:#fff}
-.copyRow{display:flex;gap:8px;margin-top:10px}
-.copyRow input{margin:0;flex:1}
-.copyRow button{width:auto;padding:12px 14px;border-radius:12px;background:#0f172a;color:#fff}
-.ok{color:#16a34a}
+.plan{border:1px solid #e2e8f0;border-radius:14px;padding:14px;margin-top:10px}
+.qrImg{width:100%;max-width:260px}
 </style>
 </head>
 
@@ -120,441 +48,130 @@ box-shadow:0 10px 24px rgba(37,99,235,.15);
 <div class="page">
 <div class="container">
 
-<!-- HERO -->
-<div class="hero">
-<h1>Prepare-se para concursos<br>com foco total em aprovação</h1>
-<p>Simulados atualizados, estudo direto ao ponto e acesso imediato.</p>
-<ul>
-<li>Questões comentadas</li>
-<li>Simulados realistas</li>
-<li>Conteúdo focado em prova</li>
-<li>Teste gratuito por 48 horas</li>
-</ul>
+<div>
+<h1>Prepare-se para concursos</h1>
+<p>Teste grátis por 48 horas</p>
 </div>
 
-<!-- CARD -->
 <div class="card">
-<h2>Acesso à plataforma</h2>
-<p class="small">Entre com sua conta. Se estiver no teste, você verá o tempo restante. Se expirou, você pode assinar.</p>
 
-<!-- LOGIN FORM -->
 <div id="loginBox">
-<label>Email</label>
-<input id="email" type="email" placeholder="seu@email.com">
-
-<label>Senha</label>
-<input id="senha" type="password" placeholder="••••••••">
-
+<input id="email" type="email" placeholder="Email">
+<input id="senha" type="password" placeholder="Senha">
 <button class="btn-primary" id="btnEntrar">Entrar</button>
 <button class="btn-sec" id="btnCriar">Criar conta gratuita</button>
-
 <div id="msgLogin" class="msg"></div>
 </div>
 
-<!-- STATUS -->
-<div id="statusBox" class="hide">
-<div class="hr"></div>
-<div id="statusText" style="font-weight:900"></div>
-<div id="statusSub" class="small" style="margin-top:6px"></div>
-
-<button class="btn-sec" id="btnAcessarApp" style="margin-top:12px">Acessar o App</button>
-<button class="btn-sec" id="btnSair" style="margin-top:10px">Sair</button>
-</div>
-
-<!-- PAYWALL -->
 <div id="payBox" class="hide">
 <div class="hr"></div>
-<div style="font-weight:900">Seu acesso expirou</div>
-<div class="small" style="margin-top:6px">Escolha um plano. O de 6 meses fica em destaque (recomendado).</div>
-
-<div class="plan-grid">
-<div class="plan reco">
-<div class="top">
-<div style="font-weight:900">Plano 6 meses</div>
-<span class="badge">Recomendado</span>
-</div>
-<div class="price">R$ 29,90</div>
-<div class="small">Acesso completo por 6 meses (ideal para começar).</div>
-<button class="btn-primary" id="btnPlano6">Gerar PIX (6 meses)</button>
-</div>
+<div id="payMsg"></div>
 
 <div class="plan">
-<div class="top">
-<div style="font-weight:900">Plano 1 ano</div>
-<span class="badge">Economia</span>
-</div>
-<div class="price">R$ 49,90</div>
-<div class="small">Acesso completo por 12 meses (melhor custo-benefício).</div>
-<button class="btn-primary" id="btnPlano12">Gerar PIX (1 ano)</button>
-</div>
+<strong>Plano 6 meses</strong>
+<button class="btn-primary" id="btnPlano6">Gerar PIX</button>
 </div>
 
-<!-- QR -->
-<div id="qrBox" class="qrWrap hide">
-<div class="hr"></div>
-<div style="font-weight:900">Pague com PIX</div>
-<div class="small" id="qrSub" style="margin-top:6px"></div>
-
-<img id="qrImg" class="qrImg" alt="QR Code PIX">
-
-<div class="copyRow">
+<div id="qrBox" class="hide">
+<img id="qrImg" class="qrImg">
 <input id="pixCopia" readonly>
 <button id="btnCopiar">Copiar</button>
 </div>
-
-<div id="payMsg" class="small" style="margin-top:10px"></div>
 </div>
 
 </div>
-</div>
-
 </div>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 import {
-  getAuth,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  signOut,
-  sendEmailVerification,
-  setPersistence,
-  browserSessionPersistence
+getAuth,signInWithEmailAndPassword,
+createUserWithEmailAndPassword,
+sendEmailVerification,signOut,
+setPersistence,browserSessionPersistence
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import { getFunctions, httpsCallable }
+from "https://www.gstatic.com/firebasejs/10.12.5/firebase-functions.js";
 
-
-import {
-  getFunctions,
-  httpsCallable
-} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-functions.js";
-
-/* ===== CONFIG ===== */
-const FRONT_URL = "https://megaestudos.github.io/Quiz-Guarda-Civil-Premium/";
-const firebaseConfig = {
-apiKey: "AIzaSyB36ZszS8v_DeOn3at7zEo_tFq86WU0sI4",
-authDomain: "simulados-concursos-22c91.firebaseapp.com",
-projectId: "simulados-concursos-22c91"
+const firebaseConfig={
+apiKey:"AIzaSyB36ZszS8v_DeOn3at7zEo_tFq86WU0sI4",
+authDomain:"simulados-concursos-22c91.firebaseapp.com",
+projectId:"simulados-concursos-22c91"
 };
 
-// Seus endpoints functions:
-const ME_ENDPOINT = "https://us-central1-simulados-concursos-22c91.cloudfunctions.net/me";
-const CREATE_CHARGE_ENDPOINT = "https://us-central1-simulados-concursos-22c91.cloudfunctions.net/createPixCharge";
-const PIX_STATUS_ENDPOINT = "https://us-central1-simulados-concursos-22c91.cloudfunctions.net/pixStatus";
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+await setPersistence(auth,browserSessionPersistence);
+const functions=getFunctions(app,"us-central1");
 
-/* ===== INIT ===== */
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const functions = getFunctions(app, "us-central1");
+const me= httpsCallable(functions,"me");
+const createPix= httpsCallable(functions,"createPixCharge");
+const pixStatus= httpsCallable(functions,"pixStatus");
 
-// IMPORTANTE: garante que não “loga sozinho” para sempre
-await setPersistence(auth, browserSessionPersistence);
+const $=id=>document.getElementById(id);
 
-const $ = (id)=>document.getElementById(id);
-const show = (boxId)=>{
-["loginBox","statusBox","payBox"].forEach(x=>$(x).classList.toggle("hide", x!==boxId));
-};
+$("btnEntrar").onclick=entrar;
+$("btnCriar").onclick=criarConta;
+$("btnPlano6").onclick=()=>gerarPix("6m");
+$("btnCopiar").onclick=()=>navigator.clipboard.writeText($("pixCopia").value);
 
-  function hideLogin(){
-  $("loginBox").classList.add("hide");
-}
-
-function showLogin(){
-  $("loginBox").classList.remove("hide");
-}
-
-  
-function setMsg(t){ $("msgLogin").innerText = t || ""; }
-  
-const meCallable = httpsCallable(functions, "me");
-const createPixCallable = httpsCallable(functions, "createPixCharge");
-const pixStatusCallable = httpsCallable(functions, "pixStatus");
-
-  
-$("btnEntrar").addEventListener("click", entrar);
-$("btnCriar").addEventListener("click", criarConta);
-$("btnSair").addEventListener("click", async ()=>{
-  await signOut(auth);
-  showLogin();
-  show("loginBox");
-  setMsg("");
-});
-
-$("btnAcessarApp").addEventListener("click", ()=> location.href = FRONT_URL);
-
-$("btnPlano6").addEventListener("click", ()=> gerarPix("6m"));
-$("btnPlano12").addEventListener("click", ()=> gerarPix("12m"));
-
-$("btnCopiar").addEventListener("click", async ()=>{
+async function entrar(){
 try{
-await navigator.clipboard.writeText($("pixCopia").value);
-$("payMsg").innerHTML = "<span class='ok'>Copiado. Agora pague no app do banco.</span>";
-}catch{
-$("payMsg").innerText = "Não consegui copiar automaticamente. Selecione e copie manualmente.";
-}
-});
+const email=$("email").value.trim();
+const senha=$("senha").value;
+if(!email||!senha) return msg("Preencha tudo");
 
-async function entrar() {
-  try {
-    setMsg("");
+await signInWithEmailAndPassword(auth,email,senha);
+const res=await me();
 
-    const email = $("email").value.trim();
-    const senha = $("senha").value;
-    if (!email || !senha) {
-      setMsg("Preencha email e senha.");
-      return;
-    }
+if(!res.data.emailVerified)
+return msg("Confirme seu e-mail");
 
-    await signInWithEmailAndPassword(auth, email, senha);
-
-    const res = await meCallable();
-
-    // 🚫 Email não confirmado
-    if (res.data.emailVerified === false) {
-      setMsg("Confirme seu e-mail para continuar.");
-      return;
-    }
-
-    // ❌ Sem acesso (trial expirou)
-    if (!res.data.entitled) {
-      hideLogin();
-      show("payBox");
-
-      if (res.data.expiresAt) {
-        const d = new Date(res.data.expiresAt);
-        $("payMsg").innerText = "Seu acesso expirou em " + d.toLocaleString();
-      } else {
-        $("payMsg").innerText = "Seu acesso expirou. Gere um PIX para renovar.";
-      }
-
-      return;
-    }
-
-    // ✅ Acesso válido
-    location.href = FRONT_URL;
-
-  } catch (e) {
-    setMsg("Erro ao entrar. Verifique seus dados.");
-  }
-}
-    // ✅ Acesso válido
-    location.href = FRONT_URL;
-
-  } catch (e) {
-    setMsg("Erro ao entrar. Verifique seus dados.");
-  }
-}
-  
-    // 4) Se NÃO tem direito (expirou) => NÃO redireciona.
-    //    Apenas mostra a área de pagamento (payBox) nesta mesma página.
-  if(!data.entitled){
-  hideLogin();
-  show("payBox");
-
-  const exp = data.expiresAt ? new Date(data.expiresAt) : null;
-  $("payMsg").innerText = exp
-    ? ("Seu acesso expirou em " + exp.toLocaleString() + ". Gere um PIX para renovar.")
-    : "Seu acesso expirou. Gere um PIX para renovar.";
-
-  return;
-}
-
-    // 5) Se tem acesso => atualiza status e entra no app
-    await carregarStatus();
-    location.href = FRONT_URL;
-
-  }catch(e){
-    setMsg(e?.message || "Erro ao entrar");
-  }
-}
-async function criarConta() {
-  try {
-    setMsg("");
-
-    const email = $("email").value.trim();
-    const senha = $("senha").value;
-
-    if (!email || !senha) {
-      setMsg("Preencha email e senha.");
-      return;
-    }
-
-    const cred = await createUserWithEmailAndPassword(auth, email, senha);
-
-    // envia verificação
-    await sendEmailVerification(cred.user);
-
-    // força sair para não “ficar logado” sem verificar email
-    await signOut(auth);
-
-    setMsg("Conta criada! Confirme seu e-mail antes de entrar.");
-
-  } catch (e) {
-    setMsg("Erro ao criar conta.");
-  }
-}
-
-  const cred = await createUserWithEmailAndPassword(auth, email, senha);
-
-    // 🔥 ENVIA EMAIL DE VERIFICAÇÃO
-    await sendEmailVerification(cred.user);
-
-    await signOut(auth);
-
-    setMsg("Enviamos um e-mail de confirmação. Verifique sua caixa de entrada antes de entrar.");
-
-  } catch(e){
-    setMsg(e?.message || "Erro ao criar conta");
-  }
-}
-
-async function carregarStatus(){
-const user = auth.currentUser;
-if(!user){ show("loginBox"); return; }
-
-const token = await user.getIdToken(true);
-const r = await fetch(ME_ENDPOINT, { headers: { Authorization: "Bearer " + token }});
-
-if(!data.authenticated){
-show("loginBox");
-setMsg("Sessão inválida. Faça login novamente.");
+if(!res.data.entitled){
+$("loginBox").classList.add("hide");
+$("payBox").classList.remove("hide");
+$("payMsg").innerText="Seu acesso expirou";
 return;
 }
 
-const plan = data.plan || null;         // "trial" | "6m" | "12m"
-const expiresIso = data.expiresAt || null;
-const fim = expiresIso ? new Date(expiresIso) : null;
+location.href="https://megaestudos.github.io/Quiz-Guarda-Civil-Premium/";
 
-// ✅ TEM ACESSO
-if (data.entitled) {
-  hideLogin();
-  show("statusBox");
-
-  if (plan === "trial") {
-    $("statusText").innerText = "Teste grátis ativo";
-  } else if (plan === "6m") {
-    $("statusText").innerText = "Plano 6 meses ativo";
-  } else if (plan === "12m") {
-    $("statusText").innerText = "Plano 1 ano ativo";
-  } else {
-    $("statusText").innerText = "Acesso ativo";
-  }
-
-  $("statusSub").innerText = fim ? ("Válido até: " + fim.toLocaleString()) : "";
-  return;
+}catch{msg("Erro ao entrar")}
 }
 
-// ❌ NÃO TEM ACESSO (EXPIRADO)
-hideLogin();
-show("payBox");
+async function criarConta(){
+try{
+const email=$("email").value.trim();
+const senha=$("senha").value;
+if(!email||!senha) return msg("Preencha tudo");
 
-$("statusText").innerText = "";
-$("statusSub").innerText = "";
+const cred=await createUserWithEmailAndPassword(auth,email,senha);
+await sendEmailVerification(cred.user);
+await signOut(auth);
+msg("Confirme seu e-mail antes de entrar");
 
-$("payMsg").innerText = fim
-  ? ("Seu acesso expirou em " + fim.toLocaleString() + ". Gere um PIX para renovar.")
-  : "Seu acesso expirou. Gere um PIX para renovar.";
+}catch{msg("Erro ao criar conta")}
 }
 
-let pollingTimer = null;
-
-async function gerarPix(plan) {
-  try {
-    $("qrBox").classList.add("hide");
-    $("payMsg").innerText = "Gerando cobrança PIX...";
-
-    const res = await createPixCallable({ plan });
-
-    if (res.data.alreadyEntitled) {
-      location.href = FRONT_URL;
-      return;
-    }
-
-    $("qrBox").classList.remove("hide");
-    $("qrImg").src = "data:image/png;base64," + res.data.qrcodeImage;
-    $("pixCopia").value = res.data.copiaecola;
-
-    $("payMsg").innerText = "Aguardando pagamento...";
-
-    if (pollingTimer) clearInterval(pollingTimer);
-    pollingTimer = setInterval(() => checarPagamento(res.data.txid), 5000);
-
-  } catch (e) {
-    $("payMsg").innerText = (e?.message || "Erro ao gerar PIX");
-  }
-}
-
-  } catch (e) {
-    $("payMsg").innerText = e.message || "Erro ao gerar PIX";
-  }
-}
-
-// Caso já esteja premium:
-$("qrSub").innerText = "Seu acesso já está ativo. Abrindo o app...";
-setTimeout(()=>location.href = FRONT_URL, 700);
-return;
-}
-
-if(!data.ok) throw new Error(data.error || "Falha ao gerar cobrança");
-
+let timer=null;
+async function gerarPix(plan){
+const res=await createPix({plan});
 $("qrBox").classList.remove("hide");
-// label pode vir vazio (seu backend não manda label)
-$("qrSub").innerText = `Plano: ${plan} — Valor: R$ ${String(data.price).replace(".", ",")}`;
+$("qrImg").src="data:image/png;base64,"+res.data.qrcodeImage;
+$("pixCopia").value=res.data.copiaecola;
+timer=setInterval(()=>checar(res.data.txid),5000);
+}
 
-$("qrImg").src = "data:image/png;base64," + data.qrcodeImage;
-$("pixCopia").value = data.copiaecola;
-
-$("payMsg").innerText = "Aguardando pagamento... (deixe esta tela aberta)";
-
-// polling a cada 5s
-if(pollingTimer) clearInterval(pollingTimer);
-pollingTimer = setInterval(()=> checarPagamento(data.txid), 5000);
-
-// checa já
-await checarPagamento(data.txid);
-
-}catch(e){
-$("payMsg").innerText = e?.message || "Erro no pagamento";
+async function checar(txid){
+const res=await pixStatus({txid});
+if(res.data.paid){
+clearInterval(timer);
+location.href="https://megaestudos.github.io/Quiz-Guarda-Civil-Premium/";
 }
 }
 
-async function checarPagamento(txid) {
-  try {
-    const res = await pixStatusCallable({ txid });
-
-    if (res.data.paid) {
-      clearInterval(pollingTimer);
-      $("payMsg").innerText = "Pagamento confirmado!";
-      setTimeout(() => location.href = FRONT_URL, 1000);
-    }
-
-  } catch {}
-}
-
-$("payMsg").innerText = "Aguardando pagamento... (atualiza automaticamente)";
-}catch{
-// não quebra a tela, só continua tentando
-}
-}
-
-// Ao abrir a página: SEMPRE mostrar login.
-// Não checar /me automaticamente.
-showLogin();
-show("loginBox");
-
+function msg(t){$("msgLogin").innerText=t}
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
