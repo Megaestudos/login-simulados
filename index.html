@@ -306,17 +306,17 @@ async function entrar(){
 
     // 4) Se NÃO tem direito (expirou) => NÃO redireciona.
     //    Apenas mostra a área de pagamento (payBox) nesta mesma página.
-    if(!data.entitled){
-      show("payBox");
+   if(!data.entitled){
+  hideLogin();
+  show("payBox");
 
-      // opcional: texto de status na própria tela do paywall
-      const exp = data.expiresAt ? new Date(data.expiresAt) : null;
-      $("payMsg").innerText = exp
-        ? ("Seu acesso expirou em " + exp.toLocaleString() + ". Gere um PIX para renovar.")
-        : "Seu acesso expirou. Gere um PIX para renovar.";
+  const exp = data.expiresAt ? new Date(data.expiresAt) : null;
+  $("payMsg").innerText = exp
+    ? ("Seu acesso expirou em " + exp.toLocaleString() + ". Gere um PIX para renovar.")
+    : "Seu acesso expirou. Gere um PIX para renovar.";
 
-      return;
-    }
+  return;
+}
 
     // 5) Se tem acesso => atualiza status e entra no app
     await carregarStatus();
@@ -355,29 +355,39 @@ setMsg("Sessão inválida. Faça login novamente.");
 return;
 }
 
-const status = data.entitled ? "active" : "expired";
+const plan = data.plan || null;         // "trial" | "6m" | "12m"
 const expiresIso = data.expiresAt || null;
 const fim = expiresIso ? new Date(expiresIso) : null;
 
-// ✅ Acesso liberado: premium ou trial ativo
-if(status === "active" || status === "trial_active"){
-show("statusBox");
+// ✅ TEM ACESSO
+if (data.entitled) {
+  hideLogin();
+  show("statusBox");
 
-if(status === "trial_active"){
-$("statusText").innerText = "Teste grátis ativo";
-$("statusSub").innerText = fim ? ("Válido até: " + fim.toLocaleString()) : "";
-}else{
-$("statusText").innerText = "Acesso Premium ativo";
-$("statusSub").innerText = fim ? ("Válido até: " + fim.toLocaleString()) : "";
+  if (plan === "trial") {
+    $("statusText").innerText = "Teste grátis ativo";
+  } else if (plan === "6m") {
+    $("statusText").innerText = "Plano 6 meses ativo";
+  } else if (plan === "12m") {
+    $("statusText").innerText = "Plano 1 ano ativo";
+  } else {
+    $("statusText").innerText = "Acesso ativo";
+  }
+
+  $("statusSub").innerText = fim ? ("Válido até: " + fim.toLocaleString()) : "";
+  return;
 }
 
-return;
-}
-
-// ❌ Sem acesso: paywall
+// ❌ NÃO TEM ACESSO (EXPIRADO)
+hideLogin();
 show("payBox");
+
 $("statusText").innerText = "";
 $("statusSub").innerText = "";
+
+$("payMsg").innerText = fim
+  ? ("Seu acesso expirou em " + fim.toLocaleString() + ". Gere um PIX para renovar.")
+  : "Seu acesso expirou. Gere um PIX para renovar.";
 }
 
 let pollingTimer = null;
@@ -456,13 +466,15 @@ $("payMsg").innerText = "Aguardando pagamento... (atualiza automaticamente)";
 }
 
 if(auth.currentUser){
-carregarStatus();
+  carregarStatus();
 } else {
-show("loginBox");
+  showLogin();
+  show("loginBox");
 }
 </script>
 </body>
 </html>
+
 
 
 
