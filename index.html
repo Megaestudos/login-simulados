@@ -293,8 +293,7 @@ if (!data.entitled) {
 }
   
 // ✅ TEM ACESSO → ENTRA NO APP
-window.location.href =
-  "https://megaestudos.github.io/Quiz-Guarda-Civil-Premium/";
+await carregarStatus();
 
 // ✅ Após login: NÃO redireciona. Só atualiza a tela.
 await carregarStatus();
@@ -332,15 +331,15 @@ setMsg("Sessão inválida. Faça login novamente.");
 return;
 }
 
-const status = data.access?.status || "none";
+const status = data.plan || "none";
 const expiresIso = data.access?.expiresAt || null;
 const fim = expiresIso ? new Date(expiresIso) : null;
 
 // ✅ Acesso liberado: premium ou trial ativo
-if(status === "active" || status === "trial_active"){
+if (status === "trial" || status === "premium") {
 show("statusBox");
 
-if(status === "trial_active"){
+if (status === "trial") {
 $("statusText").innerText = "Teste grátis ativo";
 $("statusSub").innerText = fim ? ("Válido até: " + fim.toLocaleString()) : "";
 }else{
@@ -352,6 +351,13 @@ return;
 }
 
 // ❌ Sem acesso: paywall
+
+// limpa qualquer QR anterior (micro passo 4)
+$("qrBox").classList.add("hide");
+$("payMsg").innerText = "";
+$("qrSub").innerText = "";
+
+// mostra paywall
 show("payBox");
 $("statusText").innerText = "";
 $("statusSub").innerText = "";
@@ -428,6 +434,7 @@ show("loginBox");
 </script>
 </body>
 </html>
+
 
 
 
