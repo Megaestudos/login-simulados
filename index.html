@@ -232,11 +232,6 @@ authDomain: "simulados-concursos-22c91.firebaseapp.com",
 projectId: "simulados-concursos-22c91"
 };
 
-// Seus endpoints functions:
-const ME_ENDPOINT = "https://us-central1-simulados-concursos-22c91.cloudfunctions.net/me";
-const CREATE_CHARGE_ENDPOINT = "https://us-central1-simulados-concursos-22c91.cloudfunctions.net/createPixCharge";
-const PIX_STATUS_ENDPOINT = "https://us-central1-simulados-concursos-22c91.cloudfunctions.net/pixStatus";
-
 /* ===== INIT ===== */
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -288,18 +283,8 @@ await signInWithEmailAndPassword(auth, email, senha);
 // ============================
 
 const user = auth.currentUser;
-const token = await user.getIdToken(true);
-
-const r = await fetch(
-  "https://us-central1-simulados-concursos-22c91.cloudfunctions.net/me",
-  {
-    headers: {
-      Authorization: "Bearer " + token
-    }
-  }
-);
-
-const data = await r.json();
+const resp = await meCall();
+const data = resp.data;
 
 // ❌ NÃO TEM MAIS ACESSO
 if (!data.entitled) {
@@ -338,9 +323,8 @@ async function carregarStatus(){
 const user = auth.currentUser;
 if(!user){ show("loginBox"); return; }
 
-const token = await user.getIdToken(true);
-const r = await fetch(ME_ENDPOINT, { headers: { Authorization: "Bearer " + token }});
-const data = await r.json();
+const resp = await meCall();
+const data = resp.data;
 
 if(!data.authenticated){
 show("loginBox");
@@ -394,8 +378,6 @@ setTimeout(()=>location.href = FRONT_URL, 700);
 return;
 }
 
-if(!data.ok) throw new Error(data.error || "Falha ao gerar cobrança");
-
 $("qrBox").classList.remove("hide");
 // label pode vir vazio (seu backend não manda label)
 $("qrSub").innerText = `Plano: ${plan} — Valor: R$ ${String(data.price).replace(".", ",")}`;
@@ -425,7 +407,7 @@ if(!user) return;
 const resp = await pixStatusCall({ txid });
 const data = resp.data;
 
-if(data.ok && data.paid){
+if (data.paid) {
 if(pollingTimer) clearInterval(pollingTimer);
 $("payMsg").innerHTML = "<span class='ok'>Pagamento confirmado. Liberando acesso...</span>";
 setTimeout(()=> location.href = FRONT_URL, 900);
@@ -446,6 +428,7 @@ show("loginBox");
 </script>
 </body>
 </html>
+
 
 
 
