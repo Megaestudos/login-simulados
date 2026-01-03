@@ -166,6 +166,37 @@ box-shadow:0 10px 24px rgba(37,99,235,.15);
 
 <button class="btn-primary" id="btnEntrar">Entrar</button>
 <button class="btn-sec" id="btnCriar">Criar conta gratuita</button>
+  let pollingTimer = null;
+
+async function gerarPix(plan) {
+  try {
+    $("qrBox").classList.add("hide");
+    $("payMsg").innerText = "Gerando cobrança PIX...";
+
+    const res = await createPixCallable({ plan });
+
+    if (res.data.alreadyEntitled) {
+      location.href = FRONT_URL;
+      return;
+    }
+
+    $("qrBox").classList.remove("hide");
+    $("qrImg").src = "data:image/png;base64," + res.data.qrcodeImage;
+    $("pixCopia").value = res.data.copiaecola;
+
+    $("payMsg").innerText = "Aguardando pagamento...";
+
+    if (pollingTimer) clearInterval(pollingTimer);
+    pollingTimer = setInterval(
+      () => checarPagamento(res.data.txid),
+      5000
+    );
+
+  } catch (e) {
+    $("payMsg").innerText = e?.message || "Erro ao gerar PIX";
+  }
+}
+
 
 <div id="msgLogin" class="msg"></div>
 </div>
@@ -211,6 +242,18 @@ box-shadow:0 10px 24px rgba(37,99,235,.15);
 </div>
 </div>
 
+  async function checarPagamento(txid) {
+  try {
+    const res = await pixStatusCallable({ txid });
+
+    if (res.data.paid) {
+      clearInterval(pollingTimer);
+      $("payMsg").innerText = "Pagamento confirmado!";
+      setTimeout(() => location.href = FRONT_URL, 1000);
+    }
+  } catch {}
+}
+
 <!-- QR -->
 <div id="qrBox" class="qrWrap hide">
 <div class="hr"></div>
@@ -237,19 +280,6 @@ box-shadow:0 10px 24px rgba(37,99,235,.15);
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-import {
-getAuth,signInWithEmailAndPassword,
-getAuth,
-signInWithEmailAndPassword,
-createUserWithEmailAndPassword,
-sendEmailVerification,signOut,
-setPersistence,browserSessionPersistence
-signOut,
-  sendEmailVerification
-  sendEmailVerification,
-  setPersistence,
-  browserSessionPersistence
-} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 import { getFunctions, httpsCallable }
 from "https://www.gstatic.com/firebasejs/10.12.5/firebase-functions.js";
 
@@ -289,14 +319,6 @@ const show = (boxId)=>{
 ["loginBox","statusBox","payBox"].forEach(x=>$(x).classList.toggle("hide", x!==boxId));
 };
 
-const app=initializeApp(firebaseConfig);
-const auth=getAuth(app);
-await setPersistence(auth,browserSessionPersistence);
-const functions=getFunctions(app,"us-central1");
-function hideLogin(){
-$("loginBox").classList.add("hide");
-}
-
 function showLogin(){
 $("loginBox").classList.remove("hide");
 }
@@ -315,8 +337,6 @@ $("btnCopiar").onclick=()=>navigator.clipboard.writeText($("pixCopia").value);
 const meCallable = httpsCallable(functions, "me");
 const createPixCallable = httpsCallable(functions, "createPixCharge");
 const pixStatusCallable = httpsCallable(functions, "pixStatus");
-
-async function entrar(){
 
 $("btnEntrar").addEventListener("click", entrar);
 $("btnCriar").addEventListener("click", criarConta);
@@ -421,10 +441,7 @@ setMsg("Erro ao entrar. Verifique seus dados.");
   
 // 4) Se NÃO tem direito (expirou) => NÃO redireciona.
 //    Apenas mostra a área de pagamento (payBox) nesta mesma página.
-if(!data.entitled){
-hideLogin();
-show("payBox");
-
+  
 const exp = data.expiresAt ? new Date(data.expiresAt) : null;
 $("payMsg").innerText = exp
 ? ("Seu acesso expirou em " + exp.toLocaleString() + ". Gere um PIX para renovar.")
@@ -643,6 +660,7 @@ show("loginBox");
 </script>
 </body>
 </html>
+
 
 
 
