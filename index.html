@@ -243,7 +243,8 @@ const pixStatusCall = httpsCallable(functions, "pixStatus");
 
 
 // IMPORTANTE: garante que não “loga sozinho” para sempre
-await setPersistence(auth, browserSessionPersistence);
+setPersistence(auth, browserSessionPersistence)
+  .catch(err => console.error("Erro setPersistence:", err));
 
 const $ = (id)=>document.getElementById(id);
 const show = (boxId)=>{
@@ -447,6 +448,7 @@ show("loginBox");
 </script>
 </body>
 </html>
+
 
 
 
