@@ -450,24 +450,33 @@ $("payMsg").innerText = fim
 
 let pollingTimer = null;
 
-async function gerarPix(plan){
-try{
-const user = auth.currentUser;
-if(!user){ show("loginBox"); setMsg("Faça login."); return; }
+async function gerarPix(plan) {
+  try {
+    $("qrBox").classList.add("hide");
+    $("payMsg").innerText = "Gerando cobrança PIX...";
 
-$("qrBox").classList.add("hide");
-$("payMsg").innerText = "";
-$("qrSub").innerText = "Gerando cobrança PIX...";
+    const res = await createPixCallable({ plan });
 
-const token = await user.getIdToken(true);
-const r = await fetch(CREATE_CHARGE_ENDPOINT, {
-method: "POST",
-headers: {
-"Content-Type":"application/json",
-Authorization: "Bearer " + token
-},
-body: JSON.stringify({ plan })
-});
+    if (res.data.alreadyEntitled) {
+      location.href = FRONT_URL;
+      return;
+    }
+
+    $("qrBox").classList.remove("hide");
+    $("qrImg").src = "data:image/png;base64," + res.data.qrcodeImage;
+    $("pixCopia").value = res.data.copiaecola;
+
+    $("payMsg").innerText = "Aguardando pagamento...";
+
+    pollingTimer = setInterval(
+      () => checarPagamento(res.data.txid),
+      5000
+    );
+
+  } catch (e) {
+    $("payMsg").innerText = e.message || "Erro ao gerar PIX";
+  }
+}
 const data = await r.json();
 
 // Caso já esteja premium:
@@ -500,21 +509,17 @@ $("payMsg").innerText = e?.message || "Erro no pagamento";
 }
 }
 
-async function checarPagamento(txid){
-try{
-const user = auth.currentUser;
-if(!user) return;
+async function checarPagamento(txid) {
+  try {
+    const res = await pixStatusCallable({ txid });
 
-const token = await user.getIdToken(true);
-const url = PIX_STATUS_ENDPOINT + "?txid=" + encodeURIComponent(txid);
-const r = await fetch(url, { headers: { Authorization: "Bearer " + token }});
-const data = await r.json();
+    if (res.data.paid) {
+      clearInterval(pollingTimer);
+      $("payMsg").innerText = "Pagamento confirmado!";
+      setTimeout(() => location.href = FRONT_URL, 1000);
+    }
 
-if(data.ok && data.paid){
-if(pollingTimer) clearInterval(pollingTimer);
-$("payMsg").innerHTML = "<span class='ok'>Pagamento confirmado. Liberando acesso...</span>";
-setTimeout(()=> location.href = FRONT_URL, 900);
-return;
+  } catch {}
 }
 
 $("payMsg").innerText = "Aguardando pagamento... (atualiza automaticamente)";
@@ -531,6 +536,7 @@ show("loginBox");
 </script>
 </body>
 </html>
+
 
 
 
