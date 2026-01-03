@@ -339,8 +339,19 @@ const senha = $("senha").value;
 if(!email || !senha){ setMsg("Preencha email e senha."); return; }
 
 await createUserWithEmailAndPassword(auth, email, senha);
-// cria conta e já entra (normal)
+
+// 🔹 FORÇA criação do trial no backend
+const user = auth.currentUser;
+const token = await user.getIdToken(true);
+
+// chama /me apenas para inicializar o usuário + trial
+await fetch(ME_ENDPOINT, {
+  headers: { Authorization: "Bearer " + token }
+});
+
+// agora sim carrega status corretamente
 await carregarStatus();
+
 }catch(e){
 setMsg(e?.message || "Erro ao criar conta");
 }
@@ -478,6 +489,7 @@ show("loginBox");
 </script>
 </body>
 </html>
+
 
 
 
