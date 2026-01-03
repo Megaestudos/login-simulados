@@ -212,6 +212,7 @@ box-shadow:0 10px 24px rgba(37,99,235,.15);
 </div>
 
 <script type="module">
+import { sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 import {
 getAuth,
@@ -332,29 +333,28 @@ async function entrar(){
   }
 }
 async function criarConta(){
-try{
-setMsg("");
-const email = $("email").value.trim();
-const senha = $("senha").value;
-if(!email || !senha){ setMsg("Preencha email e senha."); return; }
+  try {
+    setMsg("");
 
-await createUserWithEmailAndPassword(auth, email, senha);
+    const email = $("email").value.trim();
+    const senha = $("senha").value;
+    if(!email || !senha){
+      setMsg("Preencha email e senha.");
+      return;
+    }
 
-// 🔹 FORÇA criação do trial no backend
-const user = auth.currentUser;
-const token = await user.getIdToken(true);
+    const cred = await createUserWithEmailAndPassword(auth, email, senha);
 
-// chama /me apenas para inicializar o usuário + trial
-await fetch(ME_ENDPOINT, {
-  headers: { Authorization: "Bearer " + token }
-});
+    // 🔥 ENVIA EMAIL DE VERIFICAÇÃO
+    await sendEmailVerification(cred.user);
 
-// agora sim carrega status corretamente
-await carregarStatus();
+    await signOut(auth);
 
-}catch(e){
-setMsg(e?.message || "Erro ao criar conta");
-}
+    setMsg("Enviamos um e-mail de confirmação. Verifique sua caixa de entrada antes de entrar.");
+
+  } catch(e){
+    setMsg(e?.message || "Erro ao criar conta");
+  }
 }
 
 async function carregarStatus(){
@@ -489,6 +489,7 @@ show("loginBox");
 </script>
 </body>
 </html>
+
 
 
 
