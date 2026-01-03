@@ -221,6 +221,8 @@ signInWithEmailAndPassword,
 createUserWithEmailAndPassword,
 signOut
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+ import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-functions.js";
+
 
 /* ===== CONFIG ===== */
 const FRONT_URL = "https://megaestudos.github.io/Quiz-Guarda-Civil-Premium/";
@@ -238,6 +240,12 @@ const PIX_STATUS_ENDPOINT = "https://us-central1-simulados-concursos-22c91.cloud
 /* ===== INIT ===== */
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const functions = getFunctions(app, "us-central1");
+
+const meCall = httpsCallable(functions, "me");
+const createPixChargeCall = httpsCallable(functions, "createPixCharge");
+const pixStatusCall = httpsCallable(functions, "pixStatus");
+
 
 // IMPORTANTE: garante que não “loga sozinho” para sempre
 await setPersistence(auth, browserSessionPersistence);
@@ -376,16 +384,8 @@ $("qrBox").classList.add("hide");
 $("payMsg").innerText = "";
 $("qrSub").innerText = "Gerando cobrança PIX...";
 
-const token = await user.getIdToken(true);
-const r = await fetch(CREATE_CHARGE_ENDPOINT, {
-method: "POST",
-headers: {
-"Content-Type":"application/json",
-Authorization: "Bearer " + token
-},
-body: JSON.stringify({ plan })
-});
-const data = await r.json();
+const resp = await createPixChargeCall({ plan });
+const data = resp.data;
 
 // Caso já esteja premium:
 if(data.alreadyEntitled){
@@ -422,10 +422,8 @@ try{
 const user = auth.currentUser;
 if(!user) return;
 
-const token = await user.getIdToken(true);
-const url = PIX_STATUS_ENDPOINT + "?txid=" + encodeURIComponent(txid);
-const r = await fetch(url, { headers: { Authorization: "Bearer " + token }});
-const data = await r.json();
+const resp = await pixStatusCall({ txid });
+const data = resp.data;
 
 if(data.ok && data.paid){
 if(pollingTimer) clearInterval(pollingTimer);
@@ -448,5 +446,6 @@ show("loginBox");
 </script>
 </body>
 </html>
+
 
 
