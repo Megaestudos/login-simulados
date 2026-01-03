@@ -218,8 +218,11 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signOut,
-  sendEmailVerification
+  sendEmailVerification,
+  setPersistence,
+  browserSessionPersistence
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
 
 import {
   getFunctions,
@@ -319,8 +322,9 @@ async function entrar() {
 
       if (res.data.expiresAt) {
         const d = new Date(res.data.expiresAt);
-        $("payMsg").innerText =
-          "Seu acesso expirou em " + d.toLocaleString();
+        $("payMsg").innerText = "Seu acesso expirou em " + d.toLocaleString();
+      } else {
+        $("payMsg").innerText = "Seu acesso expirou. Gere um PIX para renovar.";
       }
 
       return;
@@ -333,14 +337,14 @@ async function entrar() {
     setMsg("Erro ao entrar. Verifique seus dados.");
   }
 }
-    // 3) Se não autenticado (token inválido, etc.)
-    if(!data.authenticated){
-      await signOut(auth);
-      show("loginBox");
-      setMsg("Sessão inválida. Faça login novamente.");
-      return;
-    }
+    // ✅ Acesso válido
+    location.href = FRONT_URL;
 
+  } catch (e) {
+    setMsg("Erro ao entrar. Verifique seus dados.");
+  }
+}
+  
     // 4) Se NÃO tem direito (expirou) => NÃO redireciona.
     //    Apenas mostra a área de pagamento (payBox) nesta mesma página.
   if(!data.entitled){
@@ -369,6 +373,7 @@ async function criarConta() {
 
     const email = $("email").value.trim();
     const senha = $("senha").value;
+
     if (!email || !senha) {
       setMsg("Preencha email e senha.");
       return;
@@ -376,16 +381,20 @@ async function criarConta() {
 
     const cred = await createUserWithEmailAndPassword(auth, email, senha);
 
+    // envia verificação
     await sendEmailVerification(cred.user);
 
-    setMsg("Conta criada! Confirme o e-mail para continuar.");
+    // força sair para não “ficar logado” sem verificar email
+    await signOut(auth);
+
+    setMsg("Conta criada! Confirme seu e-mail antes de entrar.");
 
   } catch (e) {
     setMsg("Erro ao criar conta.");
   }
 }
 
-    const cred = await createUserWithEmailAndPassword(auth, email, senha);
+  const cred = await createUserWithEmailAndPassword(auth, email, senha);
 
     // 🔥 ENVIA EMAIL DE VERIFICAÇÃO
     await sendEmailVerification(cred.user);
@@ -405,7 +414,6 @@ if(!user){ show("loginBox"); return; }
 
 const token = await user.getIdToken(true);
 const r = await fetch(ME_ENDPOINT, { headers: { Authorization: "Bearer " + token }});
-const data = await r.json();
 
 if(!data.authenticated){
 show("loginBox");
@@ -468,19 +476,20 @@ async function gerarPix(plan) {
 
     $("payMsg").innerText = "Aguardando pagamento...";
 
-    pollingTimer = setInterval(
-      () => checarPagamento(res.data.txid),
-      5000
-    );
+    if (pollingTimer) clearInterval(pollingTimer);
+    pollingTimer = setInterval(() => checarPagamento(res.data.txid), 5000);
+
+  } catch (e) {
+    $("payMsg").innerText = (e?.message || "Erro ao gerar PIX");
+  }
+}
 
   } catch (e) {
     $("payMsg").innerText = e.message || "Erro ao gerar PIX";
   }
 }
-const data = await r.json();
 
 // Caso já esteja premium:
-if(data.alreadyEntitled){
 $("qrSub").innerText = "Seu acesso já está ativo. Abrindo o app...";
 setTimeout(()=>location.href = FRONT_URL, 700);
 return;
@@ -536,6 +545,7 @@ show("loginBox");
 </script>
 </body>
 </html>
+
 
 
 
