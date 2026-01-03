@@ -18,14 +18,17 @@
 *{box-sizing:border-box}
 body{
 margin:0;
+font-family:Inter,system-ui,Arial,sans-serif;
 font-family: Inter, system-ui, -apple-system, Arial, sans-serif;
 min-height:100vh;
+background:linear-gradient(rgba(15,23,42,.7),rgba(15,23,42,.7)),
 color:#fff;
 background:
 linear-gradient(rgba(15,23,42,0.70), rgba(15,23,42,0.70)),
 url("https://images.pexels.com/photos/990432/pexels-photo-990432.jpeg");
 background-size:cover;
 background-position:center;
+color:#fff;
 background-attachment:fixed;
 }
 .page{
@@ -42,6 +45,9 @@ display:grid;
 grid-template-columns:1.2fr 1fr;
 gap:40px;
 }
+.page{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+.container{width:100%;max-width:980px;display:grid;grid-template-columns:1.2fr 1fr;gap:40px}
+@media(max-width:900px){.container{grid-template-columns:1fr}}
 @media(max-width:900px){
 .container{grid-template-columns:1fr}
 }
@@ -52,6 +58,8 @@ gap:40px;
 .hero li::before{content:"✓ ";color:#22c55e}
 
 .card{
+background:#fff;color:#0f172a;border-radius:20px;
+padding:32px;box-shadow:0 40px 80px rgba(0,0,0,.35)
 background:var(--card);
 color:var(--text);
 border-radius:20px;
@@ -75,13 +83,19 @@ border:0;
 font-size:15px;
 cursor:pointer;
 }
+input,button{width:100%;padding:14px;border-radius:12px;font-size:15px}
+input{border:1px solid var(--border);margin:6px 0 16px}
+button{border:0;cursor:pointer}
 .btn-primary{background:var(--primary);color:#fff}
 .btn-primary:hover{background:var(--primary-dark)}
 .btn-sec{background:#f1f5f9;margin-top:10px}
 .msg{margin-top:14px;font-size:14px;text-align:center;color:#dc2626}
 .hide{display:none}
+.msg{margin-top:14px;font-size:14px;color:#dc2626;text-align:center}
 
 .hr{height:1px;background:#e2e8f0;margin:18px 0}
+.plan{border:1px solid #e2e8f0;border-radius:14px;padding:14px;margin-top:10px}
+.qrImg{width:100%;max-width:260px}
 .small{font-size:13px;color:#64748b;line-height:1.35}
 
 .plan-grid{display:grid;grid-template-columns:1fr;gap:10px;margin-top:10px}
@@ -120,6 +134,9 @@ box-shadow:0 10px 24px rgba(37,99,235,.15);
 <div class="page">
 <div class="container">
 
+<div>
+<h1>Prepare-se para concursos</h1>
+<p>Teste grátis por 48 horas</p>
 <!-- HERO -->
 <div class="hero">
 <h1>Prepare-se para concursos<br>com foco total em aprovação</h1>
@@ -139,6 +156,8 @@ box-shadow:0 10px 24px rgba(37,99,235,.15);
 
 <!-- LOGIN FORM -->
 <div id="loginBox">
+<input id="email" type="email" placeholder="Email">
+<input id="senha" type="password" placeholder="Senha">
 <label>Email</label>
 <input id="email" type="email" placeholder="seu@email.com">
 
@@ -164,6 +183,7 @@ box-shadow:0 10px 24px rgba(37,99,235,.15);
 <!-- PAYWALL -->
 <div id="payBox" class="hide">
 <div class="hr"></div>
+<div id="payMsg"></div>
 <div style="font-weight:900">Seu acesso expirou</div>
 <div class="small" style="margin-top:6px">Escolha um plano. O de 6 meses fica em destaque (recomendado).</div>
 
@@ -179,6 +199,8 @@ box-shadow:0 10px 24px rgba(37,99,235,.15);
 </div>
 
 <div class="plan">
+<strong>Plano 6 meses</strong>
+<button class="btn-primary" id="btnPlano6">Gerar PIX</button>
 <div class="top">
 <div style="font-weight:900">Plano 1 ano</div>
 <span class="badge">Economia</span>
@@ -197,6 +219,8 @@ box-shadow:0 10px 24px rgba(37,99,235,.15);
 
 <img id="qrImg" class="qrImg" alt="QR Code PIX">
 
+<div id="qrBox" class="hide">
+<img id="qrImg" class="qrImg">
 <div class="copyRow">
 <input id="pixCopia" readonly>
 <button id="btnCopiar">Copiar</button>
@@ -214,13 +238,30 @@ box-shadow:0 10px 24px rgba(37,99,235,.15);
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 import {
+getAuth,signInWithEmailAndPassword,
 getAuth,
-setPersistence,
-browserSessionPersistence,
 signInWithEmailAndPassword,
 createUserWithEmailAndPassword,
-signOut
+sendEmailVerification,signOut,
+setPersistence,browserSessionPersistence
+signOut,
+  sendEmailVerification
+  sendEmailVerification,
+  setPersistence,
+  browserSessionPersistence
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import { getFunctions, httpsCallable }
+from "https://www.gstatic.com/firebasejs/10.12.5/firebase-functions.js";
+
+const firebaseConfig={
+apiKey:"AIzaSyB36ZszS8v_DeOn3at7zEo_tFq86WU0sI4",
+authDomain:"simulados-concursos-22c91.firebaseapp.com",
+projectId:"simulados-concursos-22c91"
+
+import {
+getFunctions,
+httpsCallable
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-functions.js";
 
 /* ===== CONFIG ===== */
 const FRONT_URL = "https://megaestudos.github.io/Quiz-Guarda-Civil-Premium/";
@@ -238,6 +279,7 @@ const PIX_STATUS_ENDPOINT = "https://us-central1-simulados-concursos-22c91.cloud
 /* ===== INIT ===== */
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const functions = getFunctions(app, "us-central1");
 
 // IMPORTANTE: garante que não “loga sozinho” para sempre
 await setPersistence(auth, browserSessionPersistence);
@@ -247,11 +289,43 @@ const show = (boxId)=>{
 ["loginBox","statusBox","payBox"].forEach(x=>$(x).classList.toggle("hide", x!==boxId));
 };
 
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+await setPersistence(auth,browserSessionPersistence);
+const functions=getFunctions(app,"us-central1");
+function hideLogin(){
+$("loginBox").classList.add("hide");
+}
+
+function showLogin(){
+$("loginBox").classList.remove("hide");
+}
+
+const me= httpsCallable(functions,"me");
+const createPix= httpsCallable(functions,"createPixCharge");
+const pixStatus= httpsCallable(functions,"pixStatus");
+
+const $=id=>document.getElementById(id);
 function setMsg(t){ $("msgLogin").innerText = t || ""; }
+
+$("btnEntrar").onclick=entrar;
+$("btnCriar").onclick=criarConta;
+$("btnPlano6").onclick=()=>gerarPix("6m");
+$("btnCopiar").onclick=()=>navigator.clipboard.writeText($("pixCopia").value);
+const meCallable = httpsCallable(functions, "me");
+const createPixCallable = httpsCallable(functions, "createPixCharge");
+const pixStatusCallable = httpsCallable(functions, "pixStatus");
+
+async function entrar(){
 
 $("btnEntrar").addEventListener("click", entrar);
 $("btnCriar").addEventListener("click", criarConta);
-$("btnSair").addEventListener("click", async ()=>{ await signOut(auth); show("loginBox"); setMsg(""); });
+$("btnSair").addEventListener("click", async ()=>{
+await signOut(auth);
+showLogin();
+show("loginBox");
+setMsg("");
+});
 
 $("btnAcessarApp").addEventListener("click", ()=> location.href = FRONT_URL);
 
@@ -260,6 +334,9 @@ $("btnPlano12").addEventListener("click", ()=> gerarPix("12m"));
 
 $("btnCopiar").addEventListener("click", async ()=>{
 try{
+const email=$("email").value.trim();
+const senha=$("senha").value;
+if(!email||!senha) return msg("Preencha tudo");
 await navigator.clipboard.writeText($("pixCopia").value);
 $("payMsg").innerHTML = "<span class='ok'>Copiado. Agora pague no app do banco.</span>";
 }catch{
@@ -267,104 +344,145 @@ $("payMsg").innerText = "Não consegui copiar automaticamente. Selecione e copie
 }
 });
 
-async function entrar(){
-try{
+await signInWithEmailAndPassword(auth,email,senha);
+const res=await me();
+async function entrar() {
+try {
 setMsg("");
+
+if(!res.data.emailVerified)
+return msg("Confirme seu e-mail");
 const email = $("email").value.trim();
 const senha = $("senha").value;
-if(!email || !senha){ setMsg("Preencha email e senha."); return; }
+if (!email || !senha) {
+setMsg("Preencha email e senha.");
+return;
+}
 
+if(!res.data.entitled){
+$("loginBox").classList.add("hide");
+$("payBox").classList.remove("hide");
+$("payMsg").innerText="Seu acesso expirou";
 await signInWithEmailAndPassword(auth, email, senha);
-  // ============================
-// VERIFICA ACESSO APÓS LOGIN
-// ============================
 
-const user = auth.currentUser;
-const token = await user.getIdToken(true);
+const res = await meCallable();
 
-const r = await fetch(
-  "https://us-central1-simulados-concursos-22c91.cloudfunctions.net/me",
-  {
-    headers: {
-      Authorization: "Bearer " + token
-  try{
-    setMsg("");
-    const email = $("email").value.trim();
-    const senha = $("senha").value;
-    if(!email || !senha){ setMsg("Preencha email e senha."); return; }
+// 🚫 Email não confirmado
+if (res.data.emailVerified === false) {
+setMsg("Confirme seu e-mail para continuar.");
+return;
+}
 
-    // 1) Faz login
-    await signInWithEmailAndPassword(auth, email, senha);
+location.href="https://megaestudos.github.io/Quiz-Guarda-Civil-Premium/";
+// ❌ Sem acesso (trial expirou)
+if (!res.data.entitled) {
+hideLogin();
+show("payBox");
 
-    // 2) Após login, consulta /me
-    const user = auth.currentUser;
-    const token = await user.getIdToken(true);
+}catch{msg("Erro ao entrar")}
+if (res.data.expiresAt) {
+const d = new Date(res.data.expiresAt);
+        $("payMsg").innerText =
+          "Seu acesso expirou em " + d.toLocaleString();
+        $("payMsg").innerText = "Seu acesso expirou em " + d.toLocaleString();
+      } else {
+        $("payMsg").innerText = "Seu acesso expirou. Gere um PIX para renovar.";
+}
 
-    const r = await fetch(ME_ENDPOINT, {
-      headers: { Authorization: "Bearer " + token }
-    });
+async function criarConta(){
+try{
+const email=$("email").value.trim();
+const senha=$("senha").value;
+if(!email||!senha) return msg("Preencha tudo");
+return;
+}
 
-    const data = await r.json();
+// ✅ Acesso válido
+location.href = FRONT_URL;
 
+} catch (e) {
+setMsg("Erro ao entrar. Verifique seus dados.");
+}
+}
     // 3) Se não autenticado (token inválido, etc.)
     if(!data.authenticated){
       await signOut(auth);
       show("loginBox");
       setMsg("Sessão inválida. Faça login novamente.");
       return;
-}
-  }
-);
-
-const data = await r.json();
-    // 4) Se NÃO tem direito (expirou) => NÃO redireciona.
-    //    Apenas mostra a área de pagamento (payBox) nesta mesma página.
-    if(!data.entitled){
-      show("payBox");
-
-// ❌ NÃO TEM MAIS ACESSO
-if (!data.entitled) {
-  // Agora SIM pode ir para pagamento
-  window.location.href = "/pagamento.html";
-  return;
-}
-      // opcional: texto de status na própria tela do paywall
-      const exp = data.expiresAt ? new Date(data.expiresAt) : null;
-      $("payMsg").innerText = exp
-        ? ("Seu acesso expirou em " + exp.toLocaleString() + ". Gere um PIX para renovar.")
-        : "Seu acesso expirou. Gere um PIX para renovar.";
-
-// ✅ TEM ACESSO → ENTRA NO APP
-window.location.href =
-  "https://megaestudos.github.io/Quiz-Guarda-Civil-Premium/";
-      return;
     }
-
-// ✅ Após login: NÃO redireciona. Só atualiza a tela.
-await carregarStatus();
-    // 5) Se tem acesso => atualiza status e entra no app
-    await carregarStatus();
+    // ✅ Acesso válido
     location.href = FRONT_URL;
+
+  } catch (e) {
+    setMsg("Erro ao entrar. Verifique seus dados.");
+  }
+}
+  
+// 4) Se NÃO tem direito (expirou) => NÃO redireciona.
+//    Apenas mostra a área de pagamento (payBox) nesta mesma página.
+if(!data.entitled){
+hideLogin();
+show("payBox");
+
+const exp = data.expiresAt ? new Date(data.expiresAt) : null;
+$("payMsg").innerText = exp
+? ("Seu acesso expirou em " + exp.toLocaleString() + ". Gere um PIX para renovar.")
+: "Seu acesso expirou. Gere um PIX para renovar.";
+
+return;
+}
+
+// 5) Se tem acesso => atualiza status e entra no app
+await carregarStatus();
+location.href = FRONT_URL;
 
 }catch(e){
 setMsg(e?.message || "Erro ao entrar");
 }
-  }catch(e){
-    setMsg(e?.message || "Erro ao entrar");
-  }
 }
-
-async function criarConta(){
-try{
+async function criarConta() {
+try {
 setMsg("");
+
 const email = $("email").value.trim();
 const senha = $("senha").value;
-if(!email || !senha){ setMsg("Preencha email e senha."); return; }
 
-await createUserWithEmailAndPassword(auth, email, senha);
-// cria conta e já entra (normal)
-await carregarStatus();
-}catch(e){
+const cred=await createUserWithEmailAndPassword(auth,email,senha);
+if (!email || !senha) {
+setMsg("Preencha email e senha.");
+return;
+}
+
+const cred = await createUserWithEmailAndPassword(auth, email, senha);
+
+    // envia verificação
+await sendEmailVerification(cred.user);
+
+    setMsg("Conta criada! Confirme o e-mail para continuar.");
+    // força sair para não “ficar logado” sem verificar email
+    await signOut(auth);
+
+    setMsg("Conta criada! Confirme seu e-mail antes de entrar.");
+
+} catch (e) {
+setMsg("Erro ao criar conta.");
+}
+}
+
+    const cred = await createUserWithEmailAndPassword(auth, email, senha);
+  const cred = await createUserWithEmailAndPassword(auth, email, senha);
+
+// 🔥 ENVIA EMAIL DE VERIFICAÇÃO
+await sendEmailVerification(cred.user);
+
+await signOut(auth);
+msg("Confirme seu e-mail antes de entrar");
+
+}catch{msg("Erro ao criar conta")}
+setMsg("Enviamos um e-mail de confirmação. Verifique sua caixa de entrada antes de entrar.");
+
+} catch(e){
 setMsg(e?.message || "Erro ao criar conta");
 }
 }
@@ -383,51 +501,80 @@ setMsg("Sessão inválida. Faça login novamente.");
 return;
 }
 
-const status = data.access?.status || "none";
-const expiresIso = data.access?.expiresAt || null;
+const plan = data.plan || null;         // "trial" | "6m" | "12m"
+const expiresIso = data.expiresAt || null;
 const fim = expiresIso ? new Date(expiresIso) : null;
 
-// ✅ Acesso liberado: premium ou trial ativo
-if(status === "active" || status === "trial_active"){
+// ✅ TEM ACESSO
+if (data.entitled) {
+hideLogin();
 show("statusBox");
 
-if(status === "trial_active"){
+if (plan === "trial") {
 $("statusText").innerText = "Teste grátis ativo";
-$("statusSub").innerText = fim ? ("Válido até: " + fim.toLocaleString()) : "";
-}else{
-$("statusText").innerText = "Acesso Premium ativo";
-$("statusSub").innerText = fim ? ("Válido até: " + fim.toLocaleString()) : "";
+} else if (plan === "6m") {
+$("statusText").innerText = "Plano 6 meses ativo";
+} else if (plan === "12m") {
+$("statusText").innerText = "Plano 1 ano ativo";
+} else {
+$("statusText").innerText = "Acesso ativo";
 }
 
+$("statusSub").innerText = fim ? ("Válido até: " + fim.toLocaleString()) : "";
 return;
 }
 
-// ❌ Sem acesso: paywall
+// ❌ NÃO TEM ACESSO (EXPIRADO)
+hideLogin();
 show("payBox");
+
 $("statusText").innerText = "";
 $("statusSub").innerText = "";
+
+$("payMsg").innerText = fim
+? ("Seu acesso expirou em " + fim.toLocaleString() + ". Gere um PIX para renovar.")
+: "Seu acesso expirou. Gere um PIX para renovar.";
 }
 
 let pollingTimer = null;
 
-async function gerarPix(plan){
-try{
-const user = auth.currentUser;
-if(!user){ show("loginBox"); setMsg("Faça login."); return; }
-
+async function gerarPix(plan) {
+try {
 $("qrBox").classList.add("hide");
-$("payMsg").innerText = "";
-$("qrSub").innerText = "Gerando cobrança PIX...";
+$("payMsg").innerText = "Gerando cobrança PIX...";
 
-const token = await user.getIdToken(true);
-const r = await fetch(CREATE_CHARGE_ENDPOINT, {
-method: "POST",
-headers: {
-"Content-Type":"application/json",
-Authorization: "Bearer " + token
-},
-body: JSON.stringify({ plan })
-});
+const res = await createPixCallable({ plan });
+
+if (res.data.alreadyEntitled) {
+location.href = FRONT_URL;
+return;
+}
+
+$("qrBox").classList.remove("hide");
+$("qrImg").src = "data:image/png;base64," + res.data.qrcodeImage;
+$("pixCopia").value = res.data.copiaecola;
+
+$("payMsg").innerText = "Aguardando pagamento...";
+
+    pollingTimer = setInterval(
+      () => checarPagamento(res.data.txid),
+      5000
+    );
+    if (pollingTimer) clearInterval(pollingTimer);
+    pollingTimer = setInterval(() => checarPagamento(res.data.txid), 5000);
+
+  } catch (e) {
+    $("payMsg").innerText = (e?.message || "Erro ao gerar PIX");
+  }
+}
+
+let timer=null;
+async function gerarPix(plan){
+const res=await createPix({plan});
+} catch (e) {
+$("payMsg").innerText = e.message || "Erro ao gerar PIX";
+}
+}
 const data = await r.json();
 
 // Caso já esteja premium:
@@ -440,6 +587,9 @@ return;
 if(!data.ok) throw new Error(data.error || "Falha ao gerar cobrança");
 
 $("qrBox").classList.remove("hide");
+$("qrImg").src="data:image/png;base64,"+res.data.qrcodeImage;
+$("pixCopia").value=res.data.copiaecola;
+timer=setInterval(()=>checar(res.data.txid),5000);
 // label pode vir vazio (seu backend não manda label)
 $("qrSub").innerText = `Plano: ${plan} — Valor: R$ ${String(data.price).replace(".", ",")}`;
 
@@ -460,21 +610,22 @@ $("payMsg").innerText = e?.message || "Erro no pagamento";
 }
 }
 
-async function checarPagamento(txid){
-try{
-const user = auth.currentUser;
-if(!user) return;
+async function checar(txid){
+const res=await pixStatus({txid});
+if(res.data.paid){
+clearInterval(timer);
+location.href="https://megaestudos.github.io/Quiz-Guarda-Civil-Premium/";
+async function checarPagamento(txid) {
+try {
+const res = await pixStatusCallable({ txid });
 
-const token = await user.getIdToken(true);
-const url = PIX_STATUS_ENDPOINT + "?txid=" + encodeURIComponent(txid);
-const r = await fetch(url, { headers: { Authorization: "Bearer " + token }});
-const data = await r.json();
+if (res.data.paid) {
+clearInterval(pollingTimer);
+$("payMsg").innerText = "Pagamento confirmado!";
+setTimeout(() => location.href = FRONT_URL, 1000);
+}
 
-if(data.ok && data.paid){
-if(pollingTimer) clearInterval(pollingTimer);
-$("payMsg").innerHTML = "<span class='ok'>Pagamento confirmado. Liberando acesso...</span>";
-setTimeout(()=> location.href = FRONT_URL, 900);
-return;
+} catch {}
 }
 
 $("payMsg").innerText = "Aguardando pagamento... (atualiza automaticamente)";
@@ -483,12 +634,23 @@ $("payMsg").innerText = "Aguardando pagamento... (atualiza automaticamente)";
 }
 }
 
-if(auth.currentUser){
-carregarStatus();
-} else {
+function msg(t){$("msgLogin").innerText=t}
+// Ao abrir a página: SEMPRE mostrar login.
+// Não checar /me automaticamente.
+showLogin();
 show("loginBox");
-}
+
 </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
 
