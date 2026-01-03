@@ -295,6 +295,9 @@ const data = await r.json();
 
 // ❌ NÃO TEM MAIS ACESSO
 if (!data.entitled) {
+  show("payBox");
+  return;
+}
   // Agora SIM pode ir para pagamento
   window.location.href = "/pagamento.html";
   return;
@@ -449,3 +452,4 @@ show("loginBox");
 </script>
 </body>
 </html>
+
