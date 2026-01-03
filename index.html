@@ -254,7 +254,17 @@ function setMsg(t){ $("msgLogin").innerText = t || ""; }
 
 $("btnEntrar").addEventListener("click", entrar);
 $("btnCriar").addEventListener("click", criarConta);
-$("btnSair").addEventListener("click", async ()=>{ await signOut(auth); show("loginBox"); setMsg(""); });
+$("btnSair").addEventListener("click", async ()=>{
+  await signOut(auth);
+
+  $("qrBox").classList.add("hide");
+  $("payMsg").innerText = "";
+  $("qrSub").innerText = "";
+
+  show("loginBox");
+  setMsg("");
+});
+
 
 $("btnAcessarApp").addEventListener("click", ()=> location.href = FRONT_URL);
 
@@ -288,7 +298,7 @@ const data = resp.data;
 
 // ❌ NÃO TEM MAIS ACESSO
 if (!data.entitled) {
-  show("payBox");
+  await carregarStatus();
   return;
 }
  
@@ -431,6 +441,7 @@ show("loginBox");
 </script>
 </body>
 </html>
+
 
 
 
