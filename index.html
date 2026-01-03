@@ -465,15 +465,15 @@ $("payMsg").innerText = "Aguardando pagamento... (atualiza automaticamente)";
 }
 }
 
-if(auth.currentUser){
-  carregarStatus();
-} else {
-  showLogin();
-  show("loginBox");
-}
+// Ao abrir a página: SEMPRE mostrar login.
+// Não checar /me automaticamente.
+showLogin();
+show("loginBox");
+
 </script>
 </body>
 </html>
+
 
 
 
