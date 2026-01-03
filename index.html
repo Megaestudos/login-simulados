@@ -408,8 +408,14 @@ pollingTimer = setInterval(()=> checarPagamento(data.txid), 5000);
 await checarPagamento(data.txid);
 
 }catch(e){
-$("payMsg").innerText = e?.message || "Erro no pagamento";
-}
+  console.error("ERRO createPixCharge:", e);
+
+  const msg =
+    e?.details ||
+    e?.message ||
+    JSON.stringify(e);
+
+  $("payMsg").innerText = msg;
 }
 
 async function checarPagamento(txid){
@@ -441,6 +447,7 @@ show("loginBox");
 </script>
 </body>
 </html>
+
 
 
 
