@@ -242,6 +242,7 @@ const PIX_STATUS_ENDPOINT = "https://us-central1-simulados-concursos-22c91.cloud
 /* ===== INIT ===== */
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const functions = getFunctions(app, "us-central1");
 
 // IMPORTANTE: garante que não “loga sozinho” para sempre
 await setPersistence(auth, browserSessionPersistence);
@@ -261,7 +262,12 @@ function showLogin(){
 
   
 function setMsg(t){ $("msgLogin").innerText = t || ""; }
+  
+const meCallable = httpsCallable(functions, "me");
+const createPixCallable = httpsCallable(functions, "createPixCharge");
+const pixStatusCallable = httpsCallable(functions, "pixStatus");
 
+  
 $("btnEntrar").addEventListener("click", entrar);
 $("btnCriar").addEventListener("click", criarConta);
 $("btnSair").addEventListener("click", async ()=>{
@@ -285,26 +291,48 @@ $("payMsg").innerText = "Não consegui copiar automaticamente. Selecione e copie
 }
 });
 
-async function entrar(){
-  try{
+async function entrar() {
+  try {
     setMsg("");
+
     const email = $("email").value.trim();
     const senha = $("senha").value;
-    if(!email || !senha){ setMsg("Preencha email e senha."); return; }
+    if (!email || !senha) {
+      setMsg("Preencha email e senha.");
+      return;
+    }
 
-    // 1) Faz login
     await signInWithEmailAndPassword(auth, email, senha);
 
-    // 2) Após login, consulta /me
-    const user = auth.currentUser;
-    const token = await user.getIdToken(true);
+    const res = await meCallable();
 
-    const r = await fetch(ME_ENDPOINT, {
-      headers: { Authorization: "Bearer " + token }
-    });
+    // 🚫 Email não confirmado
+    if (res.data.emailVerified === false) {
+      setMsg("Confirme seu e-mail para continuar.");
+      return;
+    }
 
-    const data = await r.json();
+    // ❌ Sem acesso (trial expirou)
+    if (!res.data.entitled) {
+      hideLogin();
+      show("payBox");
 
+      if (res.data.expiresAt) {
+        const d = new Date(res.data.expiresAt);
+        $("payMsg").innerText =
+          "Seu acesso expirou em " + d.toLocaleString();
+      }
+
+      return;
+    }
+
+    // ✅ Acesso válido
+    location.href = FRONT_URL;
+
+  } catch (e) {
+    setMsg("Erro ao entrar. Verifique seus dados.");
+  }
+}
     // 3) Se não autenticado (token inválido, etc.)
     if(!data.authenticated){
       await signOut(auth);
@@ -335,16 +363,27 @@ async function entrar(){
     setMsg(e?.message || "Erro ao entrar");
   }
 }
-async function criarConta(){
+async function criarConta() {
   try {
     setMsg("");
 
     const email = $("email").value.trim();
     const senha = $("senha").value;
-    if(!email || !senha){
+    if (!email || !senha) {
       setMsg("Preencha email e senha.");
       return;
     }
+
+    const cred = await createUserWithEmailAndPassword(auth, email, senha);
+
+    await sendEmailVerification(cred.user);
+
+    setMsg("Conta criada! Confirme o e-mail para continuar.");
+
+  } catch (e) {
+    setMsg("Erro ao criar conta.");
+  }
+}
 
     const cred = await createUserWithEmailAndPassword(auth, email, senha);
 
@@ -492,6 +531,7 @@ show("loginBox");
 </script>
 </body>
 </html>
+
 
 
 
