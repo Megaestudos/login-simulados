@@ -235,7 +235,7 @@ projectId: "simulados-concursos-22c91"
 /* ===== INIT ===== */
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const functions = getFunctions(app);
+const functions = getFunctions(app, "us-central1");
 
 const meCall = httpsCallable(functions, "me");
 const createPixChargeCall = httpsCallable(functions, "createPixCharge");
@@ -449,6 +449,7 @@ show("loginBox");
 </script>
 </body>
 </html>
+
 
 
 
