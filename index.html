@@ -479,9 +479,16 @@ carregarStatus();
 } else {
 show("loginBox");
 }
+  // garante que o modal nunca inicia aberto
+window.addEventListener("DOMContentLoaded", () => {
+  const modal = document.getElementById("modalOverlay");
+  if (modal) modal.classList.add("hide");
+});
+
 </script>
 </body>
 </html>
+
 
 
 
