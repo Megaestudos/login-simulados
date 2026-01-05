@@ -214,12 +214,12 @@ box-shadow:0 10px 24px rgba(37,99,235,.15);
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 import {
-getAuth,
-setPersistence,
-browserSessionPersistence,
-signInWithEmailAndPassword,
-createUserWithEmailAndPassword,
-signOut
+  getAuth,
+  setPersistence,
+  browserSessionPersistence,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  sendPasswordResetEmail
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-functions.js";
 
@@ -282,35 +282,27 @@ $("payMsg").innerText = "Não consegui copiar automaticamente. Selecione e copie
 }
 });
 
-async function entrar(){
-try{
-setMsg("");
-const email = $("email").value.trim();
-const senha = $("senha").value;
-if(!email || !senha){ setMsg("Preencha email e senha."); return; }
+async function entrar() {
+  try {
+    const email = $("email").value.trim();
+    const senha = $("senha").value;
 
-await signInWithEmailAndPassword(auth, email, senha);
-// ============================
-// VERIFICA ACESSO APÓS LOGIN
-// ============================
+    if (!email || !senha) {
+      setMsg("Preencha e-mail e senha.");
+      return;
+    }
 
-const user = auth.currentUser;
-const resp = await meCall();
-const data = resp.data;
+    await signInWithEmailAndPassword(auth, email, senha);
 
-// ❌ NÃO TEM MAIS ACESSO
-if (!data.entitled) {
-await carregarStatus();
-return;
+    // sucesso
+    await carregarStatus();
+
+  } catch (e) {
+    setMsg("E-mail ou senha inválidos.");
+    console.error(e);
+  }
 }
 
-// ✅ Após login: NÃO redireciona. Só atualiza a tela.
-await carregarStatus();
-
-}catch(e){
-setMsg(e?.message || "Erro ao entrar");
-}
-}
 
 async function criarConta(){
 try{
@@ -450,6 +442,7 @@ show("loginBox");
 </script>
 </body>
 </html>
+
 
 
 
