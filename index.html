@@ -195,15 +195,14 @@ box-shadow:0 10px 24px rgba(37,99,235,.15);
 <button class="btn-sec" id="btnCriar">Criar conta gratuita</button>
 
 <button
-  class="btn-sec"
-  id="btnResetSenha"
-  style="margin-top:6px; opacity:0.6; cursor:not-allowed"
-  disabled
+class="btn-sec"
+id="btnResetSenha"
+style="margin-top:6px; opacity:0.6; cursor:not-allowed"
+disabled
 >
-  Esqueci minha senha
+Esqueci minha senha
 </button>
 
-  
 <div id="msgLogin" class="msg"></div>
 </div>
 
@@ -270,15 +269,15 @@ box-shadow:0 10px 24px rgba(37,99,235,.15);
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 import {
-  getAuth,
-  setPersistence,
-  browserSessionPersistence,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  signOut,
-  sendPasswordResetEmail
+getAuth,
+setPersistence,
+browserSessionPersistence,
+signInWithEmailAndPassword,
+createUserWithEmailAndPassword,
+signOut,
+sendPasswordResetEmail
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
- import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-functions.js";
+import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-functions.js";
 
 
 /* ===== CONFIG ===== */
@@ -301,94 +300,63 @@ const pixStatusCall = httpsCallable(functions, "pixStatus");
 
 // IMPORTANTE: garante que não “loga sozinho” para sempre
 setPersistence(auth, browserSessionPersistence)
-  .catch(err => console.error("Erro setPersistence:", err));
+.catch(err => console.error("Erro setPersistence:", err));
 
 const $ = (id)=>document.getElementById(id);
-  let modalPodeAbrir = false;
-
-document.addEventListener("DOMContentLoaded", ()=>{
-  $("modalOverlay").classList.add("hide");
-});
-  
-  let modalPodeAbrir = false;
- function abrirModal(titulo, mensagem){
-  if(!modalPodeAbrir) return;
-
-  $("modalTitle").innerText = titulo;
-  $("modalMessage").innerText = mensagem;
-  $("modalOverlay").classList.remove("hide");
-}
-
-function fecharModal(){
-  $("modalOverlay").classList.add("hide");
-  modalPodeAbrir = false;
-}
-
-$("modalClose").addEventListener("click", fecharModal);
-$("modalOverlay").addEventListener("click", (e)=>{
-  if(e.target.id === "modalOverlay") fecharModal();
-});
-
 const show = (boxId)=>{
 ["loginBox","statusBox","payBox"].forEach(x=>$(x).classList.toggle("hide", x!==boxId));
 };
 
 function setMsg(t){ $("msgLogin").innerText = t || ""; }
-  function atualizarBotaoResetSenha() {
-  const email = $("email").value.trim();
-  const btn = $("btnResetSenha");
+function atualizarBotaoResetSenha() {
+const email = $("email").value.trim();
+const btn = $("btnResetSenha");
 
-  if (email.length === 0) {
-    btn.disabled = true;
-    btn.style.opacity = "0.6";
-    btn.style.cursor = "not-allowed";
-  } else {
-    btn.disabled = false;
-    btn.style.opacity = "1";
-    btn.style.cursor = "pointer";
-  }
+if (email.length === 0) {
+btn.disabled = true;
+btn.style.opacity = "0.6";
+btn.style.cursor = "not-allowed";
+} else {
+btn.disabled = false;
+btn.style.opacity = "1";
+btn.style.cursor = "pointer";
+}
 }
 async function recuperarSenha() {
-  modalPodeAbrir = true;
+setMsg("");
 
-  const email = $("email").value.trim();
+const email = $("email").value.trim();
 
-  if (!email) {
-    abrirModal(
-      "E-mail obrigatório",
-      "Digite seu e-mail para que possamos enviar o link de recuperação de senha."
-    );
-    return;
-  }
-
-  try {
-    await sendPasswordResetEmail(auth, email);
-
-    abrirModal(
-      "E-mail enviado",
-      "Se este e-mail estiver cadastrado, você receberá um link para redefinir sua senha."
-    );
-  } catch (e) {
-    abrirModal(
-      "Erro ao enviar e-mail",
-      "Não foi possível enviar o e-mail de recuperação. Verifique o endereço informado."
-    );
-  }
+if (!email) {
+setMsg("Digite seu e-mail para recuperar a senha.");
+return;
 }
+
+try {
+await sendPasswordResetEmail(auth, email);
+setMsg("Enviamos um link de recuperação para seu e-mail.");
+} catch (e) {
+setMsg(
+e?.message ||
+"Não foi possível enviar o e-mail de recuperação."
+);
+}
+}
+
 
 $("btnEntrar").addEventListener("click", entrar);
 $("btnCriar").addEventListener("click", criarConta);
- $("btnResetSenha").addEventListener("click", recuperarSenha);
-  $("email").addEventListener("input", atualizarBotaoResetSenha);
+$("btnResetSenha").addEventListener("click", recuperarSenha);
+$("email").addEventListener("input", atualizarBotaoResetSenha);
 $("btnSair").addEventListener("click", async ()=>{
-  await signOut(auth);
+await signOut(auth);
 
-  $("qrBox").classList.add("hide");
-  $("payMsg").innerText = "";
-  $("qrSub").innerText = "";
+$("qrBox").classList.add("hide");
+$("payMsg").innerText = "";
+$("qrSub").innerText = "";
 
-  show("loginBox");
-  setMsg("");
+show("loginBox");
+setMsg("");
 });
 
 
@@ -407,35 +375,36 @@ $("payMsg").innerText = "Não consegui copiar automaticamente. Selecione e copie
 });
 
 async function entrar(){
-  modalPodeAbrir = true;
+try{
+setMsg("");
+const email = $("email").value.trim();
+const senha = $("senha").value;
+if(!email || !senha){ setMsg("Preencha email e senha."); return; }
 
-  try{
-    setMsg("");
-    const email = $("email").value.trim();
-    const senha = $("senha").value;
+await signInWithEmailAndPassword(auth, email, senha);
+// ============================
+// VERIFICA ACESSO APÓS LOGIN
+// ============================
 
-    if(!email || !senha){
-      abrirModal(
-        "Campos obrigatórios",
-        "Preencha e-mail e senha para continuar."
-      );
-      return;
-    }
+const user = auth.currentUser;
+const resp = await meCall();
+const data = resp.data;
 
-    await signInWithEmailAndPassword(auth, email, senha);
-    await carregarStatus();
+// ❌ NÃO TEM MAIS ACESSO
+if (!data.entitled) {
+await carregarStatus();
+return;
+}
 
-  } catch(e){
-    abrirModal(
-      "Erro ao entrar",
-      "E-mail ou senha inválidos. Verifique os dados e tente novamente."
-    );
-  }
+// ✅ Após login: NÃO redireciona. Só atualiza a tela.
+await carregarStatus();
+
+}catch(e){
+setMsg(e?.message || "Erro ao entrar");
+}
 }
 
 async function criarConta(){
-  modalPodeAbrir = true;
-
 try{
 setMsg("");
 const email = $("email").value.trim();
@@ -533,14 +502,14 @@ pollingTimer = setInterval(()=> checarPagamento(data.txid), 5000);
 await checarPagamento(data.txid);
 
 }catch(e){
-  console.error("ERRO createPixCharge:", e);
+console.error("ERRO createPixCharge:", e);
 
-  const msg =
-    e?.details ||
-    e?.message ||
-    JSON.stringify(e);
+const msg =
+e?.details ||
+e?.message ||
+JSON.stringify(e);
 
-  $("payMsg").innerText = msg;
+$("payMsg").innerText = msg;
 }
 }
 
@@ -566,9 +535,9 @@ $("payMsg").innerText = "Aguardando pagamento... (atualiza automaticamente)";
 }
 
 if(auth.currentUser){
-  carregarStatus();
+carregarStatus();
 } else {
-  show("loginBox");
+show("loginBox");
 }
 
 // 👇 GARANTE ESTADO CORRETO DO BOTÃO AO CARREGAR A PÁGINA
@@ -576,10 +545,6 @@ atualizarBotaoResetSenha();
 </script>
 </body>
 </html>
-
-
-
-
 
 
 
