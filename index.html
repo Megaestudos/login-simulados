@@ -303,6 +303,21 @@ setPersistence(auth, browserSessionPersistence)
   .catch(err => console.error("Erro setPersistence:", err));
 
 const $ = (id)=>document.getElementById(id);
+  function abrirModal(titulo, mensagem){
+  $("modalTitle").innerText = titulo;
+  $("modalMessage").innerText = mensagem;
+  $("modalOverlay").classList.remove("hide");
+}
+
+function fecharModal(){
+  $("modalOverlay").classList.add("hide");
+}
+
+$("modalClose").addEventListener("click", fecharModal);
+$("modalOverlay").addEventListener("click", (e)=>{
+  if(e.target.id === "modalOverlay") fecharModal();
+});
+
 const show = (boxId)=>{
 ["loginBox","statusBox","payBox"].forEach(x=>$(x).classList.toggle("hide", x!==boxId));
 };
@@ -322,27 +337,31 @@ function setMsg(t){ $("msgLogin").innerText = t || ""; }
     btn.style.cursor = "pointer";
   }
 }
- async function recuperarSenha() {
-  setMsg("");
-
+async function recuperarSenha() {
   const email = $("email").value.trim();
 
   if (!email) {
-    setMsg("Digite seu e-mail para recuperar a senha.");
+    abrirModal(
+      "E-mail obrigatório",
+      "Digite seu e-mail para que possamos enviar o link de recuperação de senha."
+    );
     return;
   }
 
   try {
     await sendPasswordResetEmail(auth, email);
-    setMsg("Enviamos um link de recuperação para seu e-mail.");
+
+    abrirModal(
+      "E-mail enviado",
+      "Se este e-mail estiver cadastrado, você receberá um link para redefinir sua senha."
+    );
   } catch (e) {
-    setMsg(
-      e?.message ||
-      "Não foi possível enviar o e-mail de recuperação."
+    abrirModal(
+      "Erro ao enviar e-mail",
+      "Não foi possível enviar o e-mail de recuperação. Verifique o endereço informado."
     );
   }
 }
-
 
 $("btnEntrar").addEventListener("click", entrar);
 $("btnCriar").addEventListener("click", criarConta);
@@ -399,9 +418,11 @@ if (!data.entitled) {
 // ✅ Após login: NÃO redireciona. Só atualiza a tela.
 await carregarStatus();
 
-}catch(e){
-setMsg(e?.message || "Erro ao entrar");
-}
+catch(e){
+  abrirModal(
+    "Erro ao entrar",
+    "E-mail ou senha inválidos. Verifique os dados e tente novamente."
+  );
 }
 
 async function criarConta(){
@@ -545,6 +566,7 @@ atualizarBotaoResetSenha();
 </script>
 </body>
 </html>
+
 
 
 
