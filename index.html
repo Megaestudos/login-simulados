@@ -148,7 +148,12 @@ box-shadow:0 10px 24px rgba(37,99,235,.15);
 <button class="btn-primary" id="btnEntrar">Entrar</button>
 <button class="btn-sec" id="btnCriar">Criar conta gratuita</button>
 
-<button class="btn-sec" id="btnResetSenha" style="margin-top:6px">
+<button
+  class="btn-sec"
+  id="btnResetSenha"
+  style="margin-top:6px; opacity:0.6; cursor:not-allowed"
+  disabled
+>
   Esqueci minha senha
 </button>
 
@@ -257,6 +262,20 @@ const show = (boxId)=>{
 };
 
 function setMsg(t){ $("msgLogin").innerText = t || ""; }
+  function atualizarBotaoResetSenha() {
+  const email = $("email").value.trim();
+  const btn = $("btnResetSenha");
+
+  if (email.length === 0) {
+    btn.disabled = true;
+    btn.style.opacity = "0.6";
+    btn.style.cursor = "not-allowed";
+  } else {
+    btn.disabled = false;
+    btn.style.opacity = "1";
+    btn.style.cursor = "pointer";
+  }
+}
  async function recuperarSenha() {
   setMsg("");
 
@@ -282,6 +301,7 @@ function setMsg(t){ $("msgLogin").innerText = t || ""; }
 $("btnEntrar").addEventListener("click", entrar);
 $("btnCriar").addEventListener("click", criarConta);
  $("btnResetSenha").addEventListener("click", recuperarSenha);
+  $("email").addEventListener("input", atualizarBotaoResetSenha);
 $("btnSair").addEventListener("click", async ()=>{
   await signOut(auth);
 
@@ -469,13 +489,17 @@ $("payMsg").innerText = "Aguardando pagamento... (atualiza automaticamente)";
 }
 
 if(auth.currentUser){
-carregarStatus();
+  carregarStatus();
 } else {
-show("loginBox");
+  show("loginBox");
 }
+
+// 👇 GARANTE ESTADO CORRETO DO BOTÃO AO CARREGAR A PÁGINA
+atualizarBotaoResetSenha();
 </script>
 </body>
 </html>
+
 
 
 
