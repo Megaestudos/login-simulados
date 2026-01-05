@@ -148,10 +148,6 @@ box-shadow:0 10px 24px rgba(37,99,235,.15);
 <button class="btn-primary" id="btnEntrar">Entrar</button>
 <button class="btn-sec" id="btnCriar">Criar conta gratuita</button>
 
-<button class="btn-sec" id="btnResetSenha" style="margin-top:6px">
-  Esqueci minha senha
-</button>
-
 <div id="msgLogin" class="msg"></div>
 </div>
 
@@ -215,23 +211,16 @@ box-shadow:0 10px 24px rgba(37,99,235,.15);
 </div>
 </div>
 
+<script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-
 import {
-  getAuth,
-  setPersistence,
-  browserSessionPersistence,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  signOut,
-  sendPasswordResetEmail
+getAuth,
+setPersistence,
+browserSessionPersistence,
+signInWithEmailAndPassword,
+createUserWithEmailAndPassword,
+signOut
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-
-import {
-  getFunctions,
-  httpsCallable
-} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-functions.js";
-
 import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-functions.js";
 
 
@@ -246,6 +235,7 @@ projectId: "simulados-concursos-22c91"
 /* ===== INIT ===== */
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const functions = getFunctions(app);
 const functions = getFunctions(app, "us-central1");
 
 const meCall = httpsCallable(functions, "me");
@@ -263,31 +253,9 @@ const show = (boxId)=>{
 };
 
 function setMsg(t){ $("msgLogin").innerText = t || ""; }
- async function recuperarSenha() {
-  setMsg("");
-
-  const email = $("email").value.trim();
-
-  if (!email) {
-    setMsg("Digite seu e-mail para recuperar a senha.");
-    return;
-  }
-
-  try {
-    await sendPasswordResetEmail(auth, email);
-    setMsg("Enviamos um link de recuperação para seu e-mail.");
-  } catch (e) {
-    setMsg(
-      e?.message ||
-      "Não foi possível enviar o e-mail de recuperação."
-    );
-  }
-}
-
 
 $("btnEntrar").addEventListener("click", entrar);
 $("btnCriar").addEventListener("click", criarConta);
- $("btnResetSenha").addEventListener("click", recuperarSenha);
 $("btnSair").addEventListener("click", async ()=>{
 await signOut(auth);
 
@@ -479,18 +447,9 @@ carregarStatus();
 } else {
 show("loginBox");
 }
-  // garante que o modal nunca inicia aberto
-window.addEventListener("DOMContentLoaded", () => {
-  const modal = document.getElementById("modalOverlay");
-  if (modal) modal.classList.add("hide");
-});
-
 </script>
 </body>
 </html>
-
-
-
 
 
 
