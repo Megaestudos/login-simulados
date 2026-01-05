@@ -113,8 +113,54 @@ box-shadow:0 10px 24px rgba(37,99,235,.15);
 .copyRow input{margin:0;flex:1}
 .copyRow button{width:auto;padding:12px 14px;border-radius:12px;background:#0f172a;color:#fff}
 .ok{color:#16a34a}
+  .modal-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(15,23,42,0.75);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+}
+
+.modal{
+  background:#fff;
+  color:#0f172a;
+  width:100%;
+  max-width:420px;
+  border-radius:20px;
+  padding:28px;
+  box-shadow:0 30px 80px rgba(0,0,0,.35);
+  text-align:center;
+  animation:pop .2s ease-out;
+}
+
+.modal h3{
+  margin:0 0 12px;
+  font-size:22px;
+}
+
+.modal p{
+  font-size:15px;
+  color:#475569;
+  margin-bottom:18px;
+}
+
+@keyframes pop{
+  from{ transform:scale(.9); opacity:0 }
+  to{ transform:scale(1); opacity:1 }
+}
+
 </style>
 </head>
+<!-- MODAL -->
+<div id="modalOverlay" class="modal-overlay hide">
+  <div class="modal">
+    <h3 id="modalTitle">Título</h3>
+    <p id="modalMessage">Mensagem</p>
+    <button id="modalClose" class="btn-primary">OK</button>
+  </div>
+</div>
 
 <body>
 <div class="page">
@@ -499,6 +545,7 @@ atualizarBotaoResetSenha();
 </script>
 </body>
 </html>
+
 
 
 
