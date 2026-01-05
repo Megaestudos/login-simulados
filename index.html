@@ -215,15 +215,9 @@ box-shadow:0 10px 24px rgba(37,99,235,.15);
 </div>
 </div>
 
-<script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+
 import {
-getAuth,
-setPersistence,
-browserSessionPersistence,
-signInWithEmailAndPassword,
-createUserWithEmailAndPassword,
-signOut
   getAuth,
   setPersistence,
   browserSessionPersistence,
@@ -232,6 +226,12 @@ signOut
   signOut,
   sendPasswordResetEmail
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+import {
+  getFunctions,
+  httpsCallable
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-functions.js";
+
 import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-functions.js";
 
 
@@ -482,6 +482,7 @@ show("loginBox");
 </script>
 </body>
 </html>
+
 
 
 
