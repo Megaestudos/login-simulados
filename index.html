@@ -219,7 +219,8 @@ import {
   browserSessionPersistence,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-  signOut
+  signOut,
+  sendEmailVerification
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-functions.js";
 
@@ -313,7 +314,16 @@ async function criarConta(){
     if(!email || !senha){ setMsg("Preencha email e senha."); return; }
 
     await createUserWithEmailAndPassword(auth, email, senha);
-    await carregarStatus();
+
+// 🔐 ENVIA E-MAIL DE VERIFICAÇÃO
+await sendEmailVerification(auth.currentUser);
+
+// ⚠️ AVISA O USUÁRIO
+setMsg("Enviamos um e-mail de verificação. Confirme antes de comprar.");
+
+// NÃO chama carregarStatus ainda
+return;
+
   }catch(e){
     console.error("Erro criar conta:", e);
     setMsg(e?.message || "Erro ao criar conta");
@@ -437,3 +447,4 @@ if(auth.currentUser){
 </script>
 </body>
 </html>
+
