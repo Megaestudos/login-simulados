@@ -143,10 +143,37 @@ box-shadow:0 10px 24px rgba(37,99,235,.15);
 <input id="email" type="email" placeholder="seu@email.com">
 
 <label>Senha</label>
-<input id="senha" type="password" placeholder="••••••••">
+<div style="position:relative">
+  <input
+    id="senha"
+    type="password"
+    placeholder="••••••••"
+    style="padding-right:44px"
+  >
+  <span
+    id="toggleSenha"
+    style="
+      position:absolute;
+      right:14px;
+      top:50%;
+      transform:translateY(-50%);
+      cursor:pointer;
+      font-size:18px;
+      opacity:.6;
+    "
+    title="Mostrar senha"
+  >👁️</span>
+</div>
 
 <button class="btn-primary" id="btnEntrar">Entrar</button>
 <button class="btn-sec" id="btnCriar">Criar conta gratuita</button>
+  <button
+  class="btn-sec"
+  id="btnResetSenha"
+  style="margin-top:6px"
+>
+  Esqueci minha senha
+</button>
 
 <div id="msgLogin" class="msg"></div>
 </div>
@@ -223,6 +250,9 @@ import {
   sendEmailVerification
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-functions.js";
+import { sendPasswordResetEmail } from
+"https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
 
 /* ===== CONFIG ===== */
 const FRONT_URL = "https://megaestudos.github.io/Quiz-Guarda-Civil-Premium/";
@@ -260,6 +290,9 @@ function setMsg(t){ $("msgLogin").innerText = t || ""; }
 /* ===== EVENTS ===== */
 $("btnEntrar").addEventListener("click", entrar);
 $("btnCriar").addEventListener("click", criarConta);
+  document
+  .getElementById("btnResetSenha")
+  .addEventListener("click", recuperarSenha);
 
 $("btnSair").addEventListener("click", async ()=>{
   await signOut(auth);
@@ -438,6 +471,29 @@ async function checarPagamento(txid){
   }
 }
 
+  async function recuperarSenha() {
+  const email = document.getElementById("email").value.trim();
+  const msg = document.getElementById("msgLogin");
+
+  msg.innerText = "";
+
+  if (!email) {
+    msg.innerText = "Digite seu e-mail para recuperar a senha.";
+    return;
+  }
+
+  try {
+    await sendPasswordResetEmail(auth, email);
+    msg.innerText =
+      "📧 Enviamos um link de redefinição para seu e-mail.";
+  } catch (e) {
+    msg.innerText =
+      "Erro ao enviar e-mail. Verifique o endereço informado.";
+    console.error(e);
+  }
+}
+
+
 /* ===== START ===== */
 if(auth.currentUser){
   carregarStatus();
@@ -447,4 +503,5 @@ if(auth.currentUser){
 </script>
 </body>
 </html>
+
 
