@@ -409,15 +409,6 @@ $("qrSub").innerText = "";
   show("loginBox");
   setMsg("");
 });
- abrirModal(
-  "aviso",
-  "Acesso expirado",
-  "Seu período de teste terminou. Escolha um plano para continuar."
-);
-
-setTimeout(() => {
-  show("payBox");
-}, 300);
 
 $("btnAcessarApp").addEventListener("click", ()=> location.href = FRONT_URL);
 
@@ -526,17 +517,14 @@ $("payMsg").innerText = "";
 $("qrSub").innerText = "";
 
 abrirModal(
-"aviso",
-"Acesso expirado",
-"Seu período de teste terminou. Escolha um plano para continuar."
+  "aviso",
+  "Acesso expirado",
+  "Seu período de teste terminou. Escolha um plano para continuar."
 );
 
-// após o modal, mostra o paywall
 setTimeout(() => {
-show("payBox");
+  show("payBox");
 }, 300);
-
-}
 
 /* ===== PIX ===== */
 let pollingTimer = null;
@@ -605,41 +593,34 @@ $("payMsg").innerText = "Aguardando pagamento... (atualiza automaticamente)";
   const msg = document.getElementById("msgLogin");
 
   msg.innerText = "";
- async function recuperarSenha() {
+async function recuperarSenha() {
   const email = $("email").value.trim();
 
-if (!email) {
-    msg.innerText = "Digite seu e-mail para recuperar a senha.";
+  if (!email) {
     abrirModal(
       "aviso",
       "E-mail obrigatório",
       "Digite seu e-mail para enviarmos o link de redefinição de senha."
     );
-return;
-}
+    return;
+  }
 
-try {
-await sendPasswordResetEmail(auth, email);
-    msg.innerText =
-      "📧 Enviamos um link de redefinição para seu e-mail.";
-
+  try {
+    await sendPasswordResetEmail(auth, email);
     abrirModal(
       "sucesso",
       "E-mail enviado",
       "Se este e-mail estiver cadastrado, você receberá um link para redefinir sua senha."
     );
-} catch (e) {
-    msg.innerText =
-      "Erro ao enviar e-mail. Verifique o endereço informado.";
-console.error(e);
+  } catch (e) {
+    console.error(e);
     abrirModal(
       "erro",
-      "Falha ao enviar",
-      "Não foi possível enviar o e-mail. Verifique se o endereço está correto e tente novamente."
+      "Erro",
+      "Não foi possível enviar o e-mail. Verifique o endereço informado."
     );
+  }
 }
-}
-
 
 /* ===== START ===== */
 if(auth.currentUser){
@@ -650,6 +631,7 @@ show("loginBox");
 </script>
 </body>
 </html>
+
 
 
 
