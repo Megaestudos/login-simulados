@@ -295,6 +295,17 @@ function setMsg(t){ $("msgLogin").innerText = t || ""; }
 /* ===== EVENTS ===== */
 $("btnEntrar").addEventListener("click", entrar);
 $("btnCriar").addEventListener("click", criarConta);
+  // 👁️ Mostrar / esconder senha
+const toggleSenha = document.getElementById("toggleSenha");
+const senhaInput = document.getElementById("senha");
+
+if (toggleSenha && senhaInput) {
+  toggleSenha.addEventListener("click", () => {
+    const isPassword = senhaInput.type === "password";
+    senhaInput.type = isPassword ? "text" : "password";
+    toggleSenha.innerText = isPassword ? "🙈" : "👁️";
+  });
+}
   document
   .getElementById("btnResetSenha")
   .addEventListener("click", recuperarSenha);
@@ -508,6 +519,7 @@ if(auth.currentUser){
 </script>
 </body>
 </html>
+
 
 
 
