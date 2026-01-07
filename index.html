@@ -113,9 +113,63 @@ box-shadow:0 10px 24px rgba(37,99,235,.15);
 .copyRow input{margin:0;flex:1}
 .copyRow button{width:auto;padding:12px 14px;border-radius:12px;background:#0f172a;color:#fff}
 .ok{color:#16a34a}
+  /* ===== MODAL ===== */
+.modal-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(15,23,42,0.75);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+}
+
+.modal-box{
+  background:#fff;
+  color:#0f172a;
+  width:100%;
+  max-width:420px;
+  border-radius:20px;
+  padding:28px;
+  text-align:center;
+  box-shadow:0 40px 80px rgba(0,0,0,.4);
+  animation:pop .2s ease-out;
+}
+
+.modal-icon{
+  font-size:40px;
+  margin-bottom:10px;
+}
+
+.modal-box h3{
+  margin:0 0 10px;
+  font-size:22px;
+}
+
+.modal-box p{
+  font-size:15px;
+  color:#475569;
+  margin-bottom:18px;
+}
+
+@keyframes pop{
+  from{ transform:scale(.9); opacity:0 }
+  to{ transform:scale(1); opacity:1 }
+}
+
+.hide{ display:none; }
 </style>
 </head>
-
+<!-- ===== MODAL GLOBAL ===== -->
+<div id="modalOverlay" class="modal-overlay hide">
+  <div class="modal-box">
+    <div id="modalIcon" class="modal-icon">ℹ️</div>
+    <h3 id="modalTitle">Título</h3>
+    <p id="modalMessage">Mensagem</p>
+    <button id="modalBtn" class="btn-primary">OK</button>
+  </div>
+</div>
+  
 <body>
 <div class="page">
 <div class="container">
@@ -351,7 +405,12 @@ async function entrar() {
     await carregarStatus();
   } catch (e) {
     console.error("Erro ao entrar:", e);
-    setMsg(e?.message || "E-mail ou senha inválidos.");
+   abrirModal(
+  "erro",
+  "Erro ao entrar",
+  "E-mail ou senha inválidos. Verifique os dados e tente novamente."
+);
+    
   }
 }
 
@@ -422,7 +481,17 @@ async function carregarStatus(){
   $("payMsg").innerText = "";
   $("qrSub").innerText = "";
 
+  abrirModal(
+  "aviso",
+  "Acesso expirado",
+  "Seu período de teste terminou. Escolha um plano para continuar."
+);
+
+// após o modal, mostra o paywall
+setTimeout(() => {
   show("payBox");
+}, 300);
+
 }
 
 /* ===== PIX ===== */
@@ -519,6 +588,7 @@ if(auth.currentUser){
 </script>
 </body>
 </html>
+
 
 
 
