@@ -588,11 +588,6 @@ $("payMsg").innerText = "Aguardando pagamento... (atualiza automaticamente)";
 }
 }
 
-  async function recuperarSenha() {
-  const email = document.getElementById("email").value.trim();
-  const msg = document.getElementById("msgLogin");
-
-  msg.innerText = "";
 async function recuperarSenha() {
   const email = $("email").value.trim();
 
@@ -607,6 +602,7 @@ async function recuperarSenha() {
 
   try {
     await sendPasswordResetEmail(auth, email);
+
     abrirModal(
       "sucesso",
       "E-mail enviado",
@@ -614,9 +610,10 @@ async function recuperarSenha() {
     );
   } catch (e) {
     console.error(e);
+
     abrirModal(
       "erro",
-      "Erro",
+      "Erro ao enviar e-mail",
       "Não foi possível enviar o e-mail. Verifique o endereço informado."
     );
   }
@@ -631,6 +628,7 @@ show("loginBox");
 </script>
 </body>
 </html>
+
 
 
 
