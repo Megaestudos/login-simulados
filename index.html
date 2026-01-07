@@ -399,29 +399,31 @@ document
 .getElementById("btnResetSenha")
 .addEventListener("click", recuperarSenha);
 
-$("btnSair").addEventListener("click", async ()=>{
-await signOut(auth);
+$("btnSair").addEventListener("click", async () => {
+  try {
+    await signOut(auth);
+  } catch (e) {
+    console.warn("Erro ao sair:", e);
+  }
 
-$("qrBox").classList.add("hide");
-$("payMsg").innerText = "";
-$("qrSub").innerText = "";
+  // limpa campos
+  $("email").value = "";
+  $("senha").value = "";
 
-  show("loginBox");
+  // limpa mensagens
   setMsg("");
-});
+  $("payMsg").innerText = "";
+  $("qrSub").innerText = "";
+  $("qrBox").classList.add("hide");
 
-$("btnAcessarApp").addEventListener("click", ()=> location.href = FRONT_URL);
+  // cancela polling se existir
+  if (pollingTimer) {
+    clearInterval(pollingTimer);
+    pollingTimer = null;
+  }
 
-$("btnPlano6").addEventListener("click", ()=> gerarPix("6m"));
-$("btnPlano12").addEventListener("click", ()=> gerarPix("12m"));
-
-$("btnCopiar").addEventListener("click", async ()=>{
-try{
-await navigator.clipboard.writeText($("pixCopia").value);
-$("payMsg").innerHTML = "<span class='ok'>Copiado. Agora pague no app do banco.</span>";
-}catch{
-$("payMsg").innerText = "Não consegui copiar automaticamente. Selecione e copie manualmente.";
-}
+  // volta para login
+  show("loginBox");
 });
 
 /* ===== LOGIN ===== */
@@ -519,12 +521,11 @@ $("qrSub").innerText = "";
 abrirModal(
   "aviso",
   "Acesso expirado",
-  "Seu período de teste terminou. Escolha um plano para continuar."
+  "Seu período de teste terminou. Você pode sair e entrar com outra conta ou escolher um plano."
 );
 
-setTimeout(() => {
-  show("payBox");
-}, 300);
+// só mostra o paywall, sem bloquear a troca de conta
+show("payBox");
 
 } // ← FECHA carregarStatus()
 
@@ -631,6 +632,7 @@ show("loginBox");
      
 </body>
 </html>
+
 
 
 
