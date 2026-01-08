@@ -623,15 +623,25 @@ async function recuperarSenha() {
 }
 
 /* ===== START ===== */
-if(auth.currentUser){
-carregarStatus();
-} else {
-show("loginBox");
-}
+import { onAuthStateChanged } from
+"https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+onAuthStateChanged(auth, (user) => {
+  if (!user) {
+    // ninguém logado → mostra login
+    show("loginBox");
+    return;
+  }
+
+  // usuário logado → valida status
+  carregarStatus();
+});
+
 </script>
      
 </body>
 </html>
+
 
 
 
