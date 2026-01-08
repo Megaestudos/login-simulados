@@ -398,10 +398,12 @@ function abrirModal(tipo, titulo, mensagem) {
   overlay.classList.remove("hide");
 }
 
-function fecharModal() {
-  $("modalOverlay").classList.add("hide");
-}
+$("modalBtn").addEventListener("click", fecharModal);
 
+$("modalOverlay").addEventListener("click", (e) => {
+  if (e.target.id === "modalOverlay") fecharModal();
+});
+  
 function fecharModal() {
 $("modalOverlay").classList.add("hide");
 }
@@ -708,6 +710,7 @@ show("loginBox");
 
 </body>
 </html>
+
 
 
 
