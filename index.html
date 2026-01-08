@@ -636,57 +636,31 @@ $("payMsg").innerText = msg;
 }
 
 async function checarPagamento(txid){
-try{
-const user = auth.currentUser;
-if(!user) return;
+  try{
+    if (!auth.currentUser) return; // SEM USUÁRIO, NÃO POLLA
 
-const resp = await pixStatusCall({ txid });
-const data = resp.data;
+    const resp = await pixStatusCall({ txid });
+    const data = resp.data;
 
-if (data.paid) {
-if(pollingTimer) clearInterval(pollingTimer);
-$("payMsg").innerHTML = "<span class='ok'>Pagamento confirmado. Liberando acesso...</span>";
-setTimeout(()=> location.href = FRONT_URL, 900);
-return;
+    if (data.paid) {
+      if(pollingTimer) { clearInterval(pollingTimer); pollingTimer = null; }
+      $("payMsg").innerHTML = "<span class='ok'>Pagamento confirmado. Liberando acesso...</span>";
+      setTimeout(()=> location.href = FRONT_URL, 600);
+      return;
+    }
+
+    if (data.expired) {
+      if(pollingTimer) { clearInterval(pollingTimer); pollingTimer = null; }
+      $("payMsg").innerText = "Cobrança expirada. Gere um novo PIX.";
+      return;
+    }
+
+    $("payMsg").innerText = "Aguardando pagamento... (atualiza automaticamente)";
+  } catch(e){
+    console.warn("checarPagamento falhou:", e?.message || e);
+  }
 }
-
-$("payMsg").innerText = "Aguardando pagamento... (atualiza automaticamente)";
-}catch{
-// mantém silencioso
-}
-}
-
-async function recuperarSenha() {
-const email = $("email").value.trim();
-
-if (!email) {
-abrirModal(
-"aviso",
-"E-mail obrigatório",
-"Digite seu e-mail para enviarmos o link de redefinição de senha."
-);
-return;
-}
-
-try {
-await sendPasswordResetEmail(auth, email);
-
-abrirModal(
-"sucesso",
-"E-mail enviado",
-"Se este e-mail estiver cadastrado, você receberá um link para redefinir sua senha."
-);
-} catch (e) {
-console.error(e);
-
-abrirModal(
-"erro",
-"Erro ao enviar e-mail",
-"Não foi possível enviar o e-mail. Verifique o endereço informado."
-);
-}
-}
-
+  
 /* ===== START ===== */
 onAuthStateChanged(auth, (user) => {
   if (!user) {
@@ -703,6 +677,7 @@ show("loginBox");
 
 </body>
 </html>
+
 
 
 
