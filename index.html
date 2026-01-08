@@ -389,6 +389,33 @@ if (e.target.id === "modalOverlay") fecharModal();
 /* ===== EVENTS ===== */
 $("btnEntrar").addEventListener("click", entrar);
 $("btnCriar").addEventListener("click", criarConta);
+$("btnTrocarConta").addEventListener("click", async () => {
+  try {
+    await signOut(auth);
+  } catch (e) {
+    console.warn("Erro ao sair:", e);
+  }
+
+  // limpa campos
+  $("email").value = "";
+  $("senha").value = "";
+
+  // limpa mensagens
+  setMsg("");
+  $("payMsg").innerText = "";
+  $("qrSub").innerText = "";
+  $("qrBox").classList.add("hide");
+
+  // cancela polling do PIX
+  if (pollingTimer) {
+    clearInterval(pollingTimer);
+    pollingTimer = null;
+  }
+
+  // volta para login
+  show("loginBox");
+});
+
 // 👁️ Mostrar / esconder senha
 const toggleSenha = document.getElementById("toggleSenha");
 const senhaInput = document.getElementById("senha");
@@ -648,6 +675,7 @@ show("loginBox");
 
 </body>
 </html>
+
 
 
 
