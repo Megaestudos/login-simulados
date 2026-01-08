@@ -392,16 +392,38 @@ $("modalOverlay").addEventListener("click", (e) => {
 /* ===== EVENTS ===== */
 $("btnEntrar").addEventListener("click", entrar);
 $("btnCriar").addEventListener("click", criarConta);
-// 👁️ Mostrar / esconder senha
-const toggleSenha = document.getElementById("toggleSenha");
-const senhaInput = document.getElementById("senha");
 
-if (toggleSenha && senhaInput) {
-toggleSenha.addEventListener("click", () => {
-const isPassword = senhaInput.type === "password";
-senhaInput.type = isPassword ? "text" : "password";
-toggleSenha.innerText = isPassword ? "🙈" : "👁️";
+document.getElementById("btnResetSenha").addEventListener("click", recuperarSenha);
+
+// ✅ BOTÃO ACESSAR APP (TEM QUE FICAR AQUI, FORA DO SAIR)
+$("btnAcessarApp").addEventListener("click", () => {
+  console.log("➡️ Acessando app:", FRONT_URL);
+  window.location.href = FRONT_URL;
 });
+
+$("btnSair").addEventListener("click", async () => {
+  try {
+    await signOut(auth);
+  } catch (e) {
+    console.warn("Erro ao sair:", e);
+  }
+
+  $("email").value = "";
+  $("senha").value = "";
+
+  setMsg("");
+  $("payMsg").innerText = "";
+  $("qrSub").innerText = "";
+  $("qrBox").classList.add("hide");
+
+  if (pollingTimer) {
+    clearInterval(pollingTimer);
+    pollingTimer = null;
+  }
+
+  show("loginBox");
+});
+  
 }
 document
 .getElementById("btnResetSenha")
@@ -546,10 +568,34 @@ async function carregarStatus(){
   show("payBox");
 }
 
-// só mostra o paywall, sem bloquear a troca de conta
-show("payBox");
+  // ===== ACESSO VÁLIDO =====
+  if (status === "trial" || status === "premium") {
+    fecharModal();
+    show("statusBox");
 
-} // ← FECHA carregarStatus()
+    if (status === "trial") {
+      $("statusText").innerText = "Teste grátis ativo";
+      $("statusSub").innerText = fim ? ("Válido até: " + fim.toLocaleString()) : "";
+    } else {
+      $("statusText").innerText = "Acesso Premium ativo";
+      $("statusSub").innerText = fim ? ("Válido até: " + fim.toLocaleString()) : "";
+    }
+    return;
+  }
+
+  // ===== ACESSO EXPIRADO =====
+  $("qrBox").classList.add("hide");
+  $("payMsg").innerText = "";
+  $("qrSub").innerText = "";
+
+  abrirModal(
+    "aviso",
+    "Acesso expirado",
+    "Seu período de teste terminou. Você pode sair e entrar com outra conta ou escolher um plano."
+  );
+
+  show("payBox");
+}
 
 /* ===== PIX ===== */
 let pollingTimer = null;
@@ -652,6 +698,7 @@ show("loginBox");
      
 </body>
 </html>
+
 
 
 
