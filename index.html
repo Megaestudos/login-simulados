@@ -113,6 +113,15 @@ box-shadow:0 10px 24px rgba(37,99,235,.15);
 .copyRow input{margin:0;flex:1}
 .copyRow button{width:auto;padding:12px 14px;border-radius:12px;background:#0f172a;color:#fff}
 .ok{color:#16a34a}
+    /* === BOTÃO TROCAR CONTA (FORÇA AZUL) === */
+.btn-primary-force{
+  background: var(--primary) !important;
+  color:#fff !important;
+}
+.btn-primary-force:hover{
+  background: var(--primary-dark) !important;
+}
+
 /* ===== MODAL ===== */
 .modal-overlay{
 position:fixed;
@@ -251,7 +260,7 @@ Sair
 <div id="payBox" class="hide">
 <div class="hr"></div>
 <div style="font-weight:900">Seu acesso expirou</div>
-<button class="btn-primary" id="btnTrocarConta" style="margin-top:10px">
+<button class="btn-primary-force" id="btnTrocarConta" style="margin-top:10px">
 Trocar conta
 </button>
 <div class="small" style="margin-top:6px">Escolha um plano. O de 6 meses fica em destaque (recomendado).</div>
@@ -675,6 +684,7 @@ show("loginBox");
 
 </body>
 </html>
+
 
 
 
