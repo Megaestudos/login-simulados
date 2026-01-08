@@ -504,7 +504,8 @@ const expiresIso = data.expiresAt || null;
 const fim = expiresIso ? new Date(expiresIso) : null;
 
 if (status === "trial" || status === "premium") {
-show("statusBox");
+  fecharModal(); // ← FECHA QUALQUER MODAL ABERTO
+  show("statusBox");
 
 if (status === "trial") {
 $("statusText").innerText = "Teste grátis ativo";
@@ -632,6 +633,7 @@ show("loginBox");
      
 </body>
 </html>
+
 
 
 
