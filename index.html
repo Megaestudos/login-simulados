@@ -625,19 +625,18 @@ abrirModal(
 }
 
 /* ===== START ===== */
-import { onAuthStateChanged } from
-"https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-
 onAuthStateChanged(auth, (user) => {
-if (!user) {
-// ninguém logado → mostra login
-show("loginBox");
-return;
-}
+  if (!user) {
+    // ninguém logado → mostra login
+    show("loginBox");
+    return;
+  }
 
-// usuário logado → valida status
-carregarStatus();
+  // usuário logado → valida status
+  carregarStatus();
 });
+// estado inicial SEMPRE é login
+show("loginBox");
 
 </script>
 
