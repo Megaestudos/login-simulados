@@ -166,6 +166,16 @@ from{ transform:scale(.9); opacity:0 }
 to{ transform:scale(1); opacity:1 }
 }
 
+    /* === BOTÃO TROCAR CONTA === */
+.btn-trocar{
+  background:#e0e7ff;
+  color:#1e40af;
+  font-weight:600;
+}
+.btn-trocar:hover{
+  background:#c7d2fe;
+}
+    
 .hide{ display:none; }
 </style>
 </head>
@@ -260,7 +270,7 @@ Sair
 <div id="payBox" class="hide">
 <div class="hr"></div>
 <div style="font-weight:900">Seu acesso expirou</div>
-<button class="btn-primary-force" id="btnTrocarConta" style="margin-top:10px">
+<button class="btn-trocar" id="btnTrocarConta" style="margin-top:10px">
 Trocar conta
 </button>
 <div class="small" style="margin-top:6px">Escolha um plano. O de 6 meses fica em destaque (recomendado).</div>
@@ -684,6 +694,7 @@ show("loginBox");
 
 </body>
 </html>
+
 
 
 
