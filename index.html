@@ -625,21 +625,14 @@ async function recuperarSenha() {
 }
 
 /* ===== START ===== */
-onAuthStateChanged(auth, (user) => {
-  if (!user) {
-    // ninguém logado → mostra login
-    show("loginBox");
-    return;
-  }
-
-  // usuário logado → valida status
-  carregarStatus();
-});
+// estado inicial SEMPRE é login
+show("loginBox");
 
 </script>
      
 </body>
 </html>
+
 
 
 
