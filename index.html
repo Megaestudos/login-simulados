@@ -79,7 +79,10 @@ cursor:pointer;
 .btn-primary:hover{background:var(--primary-dark)}
 .btn-sec{background:#f1f5f9;margin-top:10px}
 .msg{margin-top:14px;font-size:14px;text-align:center;color:#dc2626}
-.hide{display:none}
+.hide{
+  display:none !important;
+  pointer-events:none !important;
+}
 
 .hr{height:1px;background:#e2e8f0;margin:18px 0}
 .small{font-size:13px;color:#64748b;line-height:1.35}
@@ -176,7 +179,11 @@ to{ transform:scale(1); opacity:1 }
   background:#c7d2fe;
 }
     
-.hide{ display:none; }
+.hide{
+  display:none !important;
+  pointer-events:none !important;
+}
+
 </style>
 </head>
 <!-- ===== MODAL GLOBAL ===== -->
@@ -372,24 +379,27 @@ function setMsg(t){ $("msgLogin").innerText = t || ""; }
 
 /* ===== MODAL ===== */
 function abrirModal(tipo, titulo, mensagem) {
-const overlay = $("modalOverlay");
-const icon = $("modalIcon");
-const title = $("modalTitle");
-const msg = $("modalMessage");
+  const overlay = $("modalOverlay");
+  const icon = $("modalIcon");
+  const title = $("modalTitle");
+  const msg = $("modalMessage");
 
-// ícones por tipo
-const icons = {
-sucesso: "✅",
-erro: "❌",
-aviso: "⚠️",
-info: "ℹ️"
-};
+  const icons = {
+    sucesso: "✅",
+    erro: "❌",
+    aviso: "⚠️",
+    info: "ℹ️"
+  };
 
-icon.innerText = icons[tipo] || "ℹ️";
-title.innerText = titulo || "Aviso";
-msg.innerText = mensagem || "";
+  icon.innerText = icons[tipo] || "ℹ️";
+  title.innerText = titulo || "Aviso";
+  msg.innerText = mensagem || "";
 
-overlay.classList.remove("hide");
+  overlay.classList.remove("hide");
+}
+
+function fecharModal() {
+  $("modalOverlay").classList.add("hide");
 }
 
 function fecharModal() {
@@ -414,8 +424,8 @@ $("btnTrocarConta").addEventListener("click", async () => {
   } catch (e) {
     console.warn("Erro ao sair:", e);
   }
-    $("btnAcessarApp").addEventListener("click", () => {
-  console.log("➡️ Redirecionando para o app:", FRONT_URL);
+   $("btnAcessarApp").addEventListener("click", () => {
+  console.log("➡️ Indo para o app");
   window.location.href = FRONT_URL;
 });
 
@@ -698,6 +708,7 @@ show("loginBox");
 
 </body>
 </html>
+
 
 
 
