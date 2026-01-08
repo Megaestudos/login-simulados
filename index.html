@@ -408,9 +408,6 @@ function fecharModal() {
 $("modalOverlay").classList.add("hide");
 }
 
-// Fecha no botão OK
-$("modalBtn").addEventListener("click", fecharModal);
-
 // Fecha clicando fora da caixa
 $("modalOverlay").addEventListener("click", (e) => {
 if (e.target.id === "modalOverlay") fecharModal();
@@ -420,16 +417,17 @@ if (e.target.id === "modalOverlay") fecharModal();
 /* ===== EVENTS ===== */
 $("btnEntrar").addEventListener("click", entrar);
 $("btnCriar").addEventListener("click", criarConta);
+$("btnAcessarApp").addEventListener("click", () => {
+  console.log("➡️ Acessar app:", FRONT_URL);
+  window.location.href = FRONT_URL;
+});
+
 $("btnTrocarConta").addEventListener("click", async () => {
   try {
     await signOut(auth);
   } catch (e) {
     console.warn("Erro ao sair:", e);
   }
-   $("btnAcessarApp").addEventListener("click", () => {
-  console.log("➡️ Indo para o app");
-  window.location.href = FRONT_URL;
-});
 
   // limpa campos
   $("email").value = "";
@@ -591,11 +589,6 @@ abrirModal(
   "Seu período de teste terminou. Faça login com outra conta ou assine."
 );
 
-// desloga para permitir troca imediata
-try { await signOut(auth); } catch(e) { console.warn(e); }
-
-show("loginBox");
-
 // só mostra o paywall, sem bloquear a troca de conta
 show("payBox");
 
@@ -710,6 +703,7 @@ show("loginBox");
 
 </body>
 </html>
+
 
 
 
