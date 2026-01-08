@@ -414,6 +414,10 @@ $("btnTrocarConta").addEventListener("click", async () => {
   } catch (e) {
     console.warn("Erro ao sair:", e);
   }
+    $("btnAcessarApp").addEventListener("click", () => {
+  console.log("➡️ Redirecionando para o app:", FRONT_URL);
+  window.location.href = FRONT_URL;
+});
 
   // limpa campos
   $("email").value = "";
@@ -694,6 +698,7 @@ show("loginBox");
 
 </body>
 </html>
+
 
 
 
