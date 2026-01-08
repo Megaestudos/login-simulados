@@ -311,6 +311,8 @@ sendEmailVerification
 import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-functions.js";
 import { sendPasswordResetEmail } from
 "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import { onAuthStateChanged } from
+"https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
 
 /* ===== CONFIG ===== */
@@ -623,9 +625,6 @@ async function recuperarSenha() {
 }
 
 /* ===== START ===== */
-import { onAuthStateChanged } from
-"https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-
 onAuthStateChanged(auth, (user) => {
   if (!user) {
     // ninguém logado → mostra login
@@ -641,6 +640,7 @@ onAuthStateChanged(auth, (user) => {
      
 </body>
 </html>
+
 
 
 
