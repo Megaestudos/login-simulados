@@ -79,7 +79,10 @@ cursor:pointer;
 .btn-primary:hover{background:var(--primary-dark)}
 .btn-sec{background:#f1f5f9;margin-top:10px}
 .msg{margin-top:14px;font-size:14px;text-align:center;color:#dc2626}
-.hide{display:none}
+.hide{
+  display:none !important;
+  pointer-events:none !important;
+}
 
 .hr{height:1px;background:#e2e8f0;margin:18px 0}
 .small{font-size:13px;color:#64748b;line-height:1.35}
@@ -371,7 +374,10 @@ function abrirModal(tipo, titulo, mensagem) {
 }
 
 function fecharModal() {
-  $("modalOverlay").classList.add("hide");
+  const overlay = $("modalOverlay");
+  overlay.classList.add("hide");
+  overlay.style.display = "none";
+  overlay.style.pointerEvents = "none";
 }
 
 // Fecha no botão OK
@@ -423,6 +429,11 @@ $("btnSair").addEventListener("click", async () => {
     clearInterval(pollingTimer);
     pollingTimer = null;
   }
+
+ $("btnAcessarApp").addEventListener("click", () => {
+  console.log("➡️ Acessando app:", FRONT_URL);
+  window.location.href = FRONT_URL;
+});
 
   // volta para login
   show("loginBox");
@@ -504,8 +515,10 @@ const expiresIso = data.expiresAt || null;
 const fim = expiresIso ? new Date(expiresIso) : null;
 
 if (status === "trial" || status === "premium") {
-  fecharModal(); // ← FECHA QUALQUER MODAL ABERTO
+  fecharModal();           // mata overlay
   show("statusBox");
+  return;
+}
 
 if (status === "trial") {
 $("statusText").innerText = "Teste grátis ativo";
@@ -633,6 +646,7 @@ show("loginBox");
      
 </body>
 </html>
+
 
 
 
