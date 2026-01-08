@@ -251,6 +251,9 @@ Sair
 <div id="payBox" class="hide">
 <div class="hr"></div>
 <div style="font-weight:900">Seu acesso expirou</div>
+<button class="btn-sec" id="btnTrocarConta" style="margin-top:10px">
+Trocar conta
+</button>
 <div class="small" style="margin-top:6px">Escolha um plano. O de 6 meses fica em destaque (recomendado).</div>
 
 <div class="plan-grid">
@@ -521,10 +524,15 @@ $("payMsg").innerText = "";
 $("qrSub").innerText = "";
 
 abrirModal(
-"aviso",
-"Acesso expirado",
-"Seu período de teste terminou. Você pode sair e entrar com outra conta ou escolher um plano."
+  "aviso",
+  "Acesso expirado",
+  "Seu período de teste terminou. Faça login com outra conta ou assine."
 );
+
+// desloga para permitir troca imediata
+try { await signOut(auth); } catch(e) { console.warn(e); }
+
+show("loginBox");
 
 // só mostra o paywall, sem bloquear a troca de conta
 show("payBox");
@@ -627,14 +635,12 @@ abrirModal(
 /* ===== START ===== */
 onAuthStateChanged(auth, (user) => {
   if (!user) {
-    // ninguém logado → mostra login
     show("loginBox");
     return;
   }
-
-  // usuário logado → valida status
   carregarStatus();
 });
+
 // estado inicial SEMPRE é login
 show("loginBox");
 
@@ -642,6 +648,7 @@ show("loginBox");
 
 </body>
 </html>
+
 
 
 
