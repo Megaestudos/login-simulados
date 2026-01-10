@@ -413,10 +413,30 @@ $("modalOverlay").addEventListener("click", (e) => {
 if (e.target.id === "modalOverlay") fecharModal();
 });
 
-
 /* ===== EVENTS ===== */
 $("btnEntrar").addEventListener("click", entrar);
 $("btnCriar").addEventListener("click", criarConta);
+  // ===== PAYWALL / PIX (BOTÕES) =====
+$("btnPlano6").addEventListener("click", () => gerarPix("6m"));
+$("btnPlano12").addEventListener("click", () => gerarPix("12m"));
+
+// Copiar código PIX
+$("btnCopiar").addEventListener("click", async () => {
+  const txt = $("pixCopia").value || "";
+  if (!txt) return;
+
+  try {
+    await navigator.clipboard.writeText(txt);
+    $("payMsg").innerHTML = "<span class='ok'>Código PIX copiado!</span>";
+  } catch (e) {
+    // fallback simples
+    $("pixCopia").focus();
+    $("pixCopia").select();
+    document.execCommand("copy");
+    $("payMsg").innerHTML = "<span class='ok'>Código PIX copiado!</span>";
+  }
+});
+
 $("btnAcessarApp").addEventListener("click", () => {
   console.log("➡️ Acessar app:", FRONT_URL);
   window.location.href = FRONT_URL;
@@ -547,14 +567,36 @@ if(!user){ show("loginBox"); return; }
 
 let data;
 try {
-const resp = await meCall();
-data = resp.data;
+  const resp = await meCall();
+  data = resp.data;
 } catch (e) {
-console.error("Erro meCall:", e);
-show("loginBox");
-setMsg(e?.message || "Falha ao validar sessão. Faça login novamente.");
-return;
+  console.error("Erro meCall:", e);
+  show("loginBox");
+  setMsg(e?.message || "Falha ao validar sessão. Faça login novamente.");
+  return;
 }
+
+/* ===== TRATAMENTO DE E-MAIL NÃO CONFIRMADO ===== */
+if (data.emailVerified === false) {
+  abrirModal(
+    "aviso",
+    "Confirme seu e-mail",
+    "Você precisa confirmar o e-mail antes de comprar. Verifique sua caixa de entrada e spam."
+  );
+
+  show("statusBox");
+  $("statusText").innerText = "E-mail não confirmado";
+  $("statusSub").innerText = "Confirme o e-mail para liberar compra e acesso.";
+  return;
+}
+/* ===== FIM ===== */
+
+if(!data.authenticated){
+  show("loginBox");
+  setMsg("Sessão inválida. Faça login novamente.");
+  return;
+}
+
 
 if(!data.authenticated){
 show("loginBox");
@@ -677,6 +719,7 @@ show("loginBox");
 
 </body>
 </html>
+
 
 
 
