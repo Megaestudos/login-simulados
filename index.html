@@ -597,13 +597,6 @@ if(!data.authenticated){
   return;
 }
 
-
-if(!data.authenticated){
-show("loginBox");
-setMsg("Sessão inválida. Faça login novamente.");
-return;
-}
-
 const status = data.entitled ? data.plan : "none";
 const expiresIso = data.expiresAt || null;
 const fim = expiresIso ? new Date(expiresIso) : null;
@@ -719,6 +712,7 @@ show("loginBox");
 
 </body>
 </html>
+
 
 
 
