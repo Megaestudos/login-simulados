@@ -705,6 +705,33 @@ onAuthStateChanged(auth, (user) => {
   carregarStatus();
 });
 
+async function recuperarSenha() {
+  const email = $("email").value.trim();
+  if (!email) {
+    abrirModal(
+      "aviso",
+      "E-mail obrigatório",
+      "Digite seu e-mail para receber o link de redefinição de senha."
+    );
+    return;
+  }
+
+  try {
+    await sendPasswordResetEmail(auth, email);
+    abrirModal(
+      "sucesso",
+      "E-mail enviado",
+      "Se este e-mail estiver cadastrado, você receberá um link para redefinir a senha."
+    );
+  } catch (e) {
+    abrirModal(
+      "erro",
+      "Erro",
+      "Não foi possível enviar o e-mail. Verifique o endereço informado."
+    );
+  }
+}
+  
 // estado inicial SEMPRE é login
 show("loginBox");
 
@@ -712,6 +739,7 @@ show("loginBox");
 
 </body>
 </html>
+
 
 
 
