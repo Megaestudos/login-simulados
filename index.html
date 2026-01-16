@@ -664,7 +664,10 @@ async function gerarPix(plan) {
     $("qrBox").classList.remove("hide");
     $("qrSub").innerText = `Plano: ${plan} — Valor: R$ ${String(data.price).replace(".", ",")}`;
 
-    $("qrImg").src = "data:image/png;base64," + data.qrcodeImage;
+    $("qrImg").src = data.qrcodeImage.startsWith("data:")
+  ? data.qrcodeImage
+  : "data:image/png;base64," + data.qrcodeImage;
+
     $("pixCopia").value = data.copiaecola;
 
     $("payMsg").innerText = "Aguardando pagamento... (deixe esta tela aberta)";
@@ -743,6 +746,7 @@ show("loginBox");
 
 </body>
 </html>
+
 
 
 
