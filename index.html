@@ -527,7 +527,9 @@ return;
 }
 
 await signInWithEmailAndPassword(auth, email, senha);
-await carregarStatus();
+await signInWithEmailAndPassword(auth, email, senha);
+// NÃO chama carregarStatus aqui
+   
 } catch (e) {
 console.error("Erro ao entrar:", e);
 abrirModal(
@@ -750,6 +752,7 @@ show("loginBox");
 
 </body>
 </html>
+
 
 
 
