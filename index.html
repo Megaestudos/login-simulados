@@ -632,113 +632,77 @@ show("payBox");
 /* ===== PIX ===== */
 let pollingTimer = null;
 
-async function gerarPix(plan){
-try{
-const user = auth.currentUser;
-if(!user){ show("loginBox"); setMsg("Faça login."); return; }
-
-$("qrBox").classList.add("hide");
-$("payMsg").innerText = "";
-$("qrSub").innerText = "Gerando cobrança PIX...";
-  console.log("🚀 gerarPix chamado:", plan); // 👈 LOG 1 (ENTROU NA FUNÇÃO)
-
-const resp = await createPixChargeCall({ plan });
-const data = resp.data;
-  try{
+async function gerarPix(plan) {
+  try {
     const user = auth.currentUser;
-
-    if(!user){
-      console.warn("❌ Sem usuário autenticado"); // 👈 LOG 2
+    if (!user) {
       show("loginBox");
+      setMsg("Faça login.");
       return;
     }
 
+    // UI inicial
     $("qrBox").classList.add("hide");
     $("payMsg").innerText = "";
     $("qrSub").innerText = "Gerando cobrança PIX...";
 
-    console.log("📡 Chamando createPixCharge..."); // 👈 LOG 3
+    console.log("🚀 gerarPix:", plan);
 
+    // 🔥 chamada correta da Cloud Function
     const resp = await createPixChargeCall({ plan });
-
-    console.log("✅ Resposta createPixCharge:", resp); // 👈 LOG 4
-
     const data = resp.data;
 
-if(data.alreadyEntitled){
-$("qrSub").innerText = "Seu acesso já está ativo. Abrindo o app...";
-setTimeout(()=>location.href = FRONT_URL, 700);
-return;
-}
+    if (data.alreadyEntitled) {
+      $("qrSub").innerText =
+        "Seu acesso já está ativo. Abrindo o app...";
+      setTimeout(() => (location.href = FRONT_URL), 700);
+      return;
+    }
 
-$("qrBox").classList.remove("hide");
-$("qrSub").innerText = `Plano: ${plan} — Valor: R$ ${String(data.price).replace(".", ",")}`;
+    // Exibe QR Code
+    $("qrBox").classList.remove("hide");
+    $("qrSub").innerText = `Plano ${plan} — R$ ${String(
+      data.price
+    ).replace(".", ",")}`;
 
-$("qrImg").src = "data:image/png;base64," + data.qrcodeImage;
-$("pixCopia").value = data.copiaecola;
+    $("qrImg").src =
+      "data:image/png;base64," + data.qrcodeImage;
+    $("pixCopia").value = data.copiaecola;
 
-$("payMsg").innerText = "Aguardando pagamento... (deixe esta tela aberta)";
+    $("payMsg").innerText =
+      "Aguardando pagamento... (deixe esta tela aberta)";
 
-if(pollingTimer) clearInterval(pollingTimer);
-pollingTimer = setInterval(()=> checarPagamento(data.txid), 5000);
+    // polling
+    if (pollingTimer) clearInterval(pollingTimer);
+    pollingTimer = setInterval(
+      () => checarPagamento(data.txid),
+      5000
+    );
 
-await checarPagamento(data.txid);
+    await checarPagamento(data.txid);
+  } catch (e) {
+    console.error("❌ ERRO gerarPix:", e);
 
-}catch(e){
-console.error("ERRO createPixCharge:", e);
-const msg = e?.details || e?.message || "Erro ao gerar PIX";
-$("payMsg").innerText = msg;
-}
-catch (e) {
-  console.error("❌ ERRO createPixCharge:", e);
+    let msg = "Erro ao gerar PIX.";
 
-  let msg = "Erro ao gerar PIX.";
+    if (e?.code === "functions/unauthenticated") {
+      msg = "Sessão expirada. Faça login novamente.";
+      show("loginBox");
+    } else if (e?.code === "functions/failed-precondition") {
+      msg = e.message || "Confirme seu e-mail antes de comprar.";
+    } else if (e?.code === "functions/invalid-argument") {
+      msg = "Plano inválido. Atualize a página.";
+    } else if (e?.code === "functions/internal") {
+      msg =
+        "Erro interno no servidor. Tente novamente em instantes.";
+    } else if (e?.message) {
+      msg = e.message;
+    }
 
-  if (e?.code === "functions/unauthenticated") {
-    msg = "Sua sessão expirou. Faça login novamente.";
-    show("loginBox");
-  } 
-  else if (e?.code === "functions/failed-precondition") {
-    msg = e.message || "Verifique seu e-mail antes de comprar.";
+    $("payMsg").innerText = msg;
   }
-  else if (e?.code === "functions/invalid-argument") {
-    msg = "Plano inválido. Atualize a página.";
-  }
-  else if (e?.code === "functions/internal") {
-    msg = "Erro interno no servidor. Tente novamente em instantes.";
-  }
-  else if (e?.message) {
-    msg = e.message;
-  }
-
-  $("payMsg").innerText = msg;
 }
 
-async function checarPagamento(txid){
-try{
-if (!auth.currentUser) return; // SEM USUÁRIO, NÃO POLLA
-
-const resp = await pixStatusCall({ txid });
-const data = resp.data;
-
-if (data.paid) {
-if(pollingTimer) { clearInterval(pollingTimer); pollingTimer = null; }
-$("payMsg").innerHTML = "<span class='ok'>Pagamento confirmado. Liberando acesso...</span>";
-setTimeout(()=> location.href = FRONT_URL, 600);
-return;
-}
-
-if (data.expired) {
-if(pollingTimer) { clearInterval(pollingTimer); pollingTimer = null; }
-$("payMsg").innerText = "Cobrança expirada. Gere um novo PIX.";
-return;
-}
-
-$("payMsg").innerText = "Aguardando pagamento... (atualiza automaticamente)";
-} catch(e){
-console.warn("checarPagamento falhou:", e?.message || e);
-}
-}
 
 /* ===== START ===== */
 onAuthStateChanged(auth, (user) => {
@@ -783,6 +747,7 @@ show("loginBox");
 
 </body>
 </html>
+
 
 
 
