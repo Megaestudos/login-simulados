@@ -358,7 +358,10 @@ const auth = getAuth(app);
 
 // Persistência (UMA VEZ)
 try {
-await setPersistence(auth, browserSessionPersistence);
+import { browserLocalPersistence } from
+"https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+await setPersistence(auth, browserLocalPersistence);
 } catch (err) {
 console.error("Erro setPersistence:", err);
 }
@@ -747,6 +750,7 @@ show("loginBox");
 
 </body>
 </html>
+
 
 
 
