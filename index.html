@@ -355,12 +355,17 @@ $("btnCriar").disabled = false;
 
 /* ===== START ===== */
 onAuthStateChanged(auth, (user) => {
-if (!user) {
-show("loginBox");
-return;
-}
-// Se já está logado, verificar status
-entrar();
+  console.log("[AUTH STATE CHANGE]", user ? "Usuário logado: " + user.email : "Sem usuário");
+  
+  if (!user) {
+    show("loginBox");
+    debug("Sem usuário logado (esperando login...)");
+    return;
+  }
+  
+  // Usuário está logado, verificar status
+  debug("Usuário detectado: " + user.email);
+  entrar();
 });
 
 // estado inicial
