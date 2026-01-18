@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Simulados de Concursos</title>
+<title>Simulados de Concursos - DEBUG</title>
 
 <style>
 :root{
@@ -14,7 +14,6 @@
 --muted:#cbd5f5;
 --border:#e2e8f0;
 --success:#16a34a;
---warning:#f59e0b;
 --danger:#dc2626;
 }
 *{box-sizing:border-box}
@@ -77,184 +76,37 @@ border:0;
 font-size:15px;
 cursor:pointer;
 }
-.btn-primary{background:var(--primary);color:#fff;position:relative;overflow:hidden}
+.btn-primary{background:var(--primary);color:#fff}
 .btn-primary:hover{background:var(--primary-dark)}
-.btn-primary:disabled{background:#94a3b8;cursor:not-allowed}
 .btn-sec{background:#f1f5f9;margin-top:10px}
 .btn-sec:hover{background:#e2e8f0}
 .msg{margin-top:14px;font-size:14px;text-align:center;color:var(--danger)}
-.msg-success{margin-top:14px;font-size:14px;text-align:center;color:var(--success)}
-.hide{
-display:none !important;
-pointer-events:none !important;
+.debug-panel{
+background:#1e293b;
+border:2px solid #f59e0b;
+border-radius:12px;
+padding:16px;
+margin-bottom:16px;
+font-family:monospace;
+font-size:12px;
+color:#f59e0b;
 }
+.debug-panel.error{
+background:#450a0a;
+border-color:#dc2626;
+color:#fca5a5;
+}
+.debug-panel.success{
+background:#064e3b;
+border-color:#10b981;
+color:#6ee7b7;
+}
+.hide{display:none !important}
 
 .hr{height:1px;background:#e2e8f0;margin:18px 0}
 .small{font-size:13px;color:#64748b;line-height:1.35}
-
-.plan-grid{display:grid;grid-template-columns:1fr;gap:10px;margin-top:10px}
-.plan{
-border:1px solid #e2e8f0;
-border-radius:14px;
-padding:14px;
-background:#fff;
-}
-.plan .top{display:flex;justify-content:space-between;align-items:center;gap:10px}
-.badge{
-background:#e0e7ff;
-color:#1e40af;
-padding:6px 10px;
-border-radius:999px;
-font-size:13px;
-font-weight:700;
-}
-.reco{
-border:2px solid #2563eb;
-box-shadow:0 10px 24px rgba(37,99,235,.15);
-}
-.price{font-size:22px;font-weight:900;color:#0f172a;margin:8px 0 0}
-.plan button{margin-top:10px}
-
-.qrWrap{margin-top:10px}
-.qrImg{width:100%;max-width:260px;border:1px solid #e2e8f0;border-radius:12px;padding:10px;background:#fff;display:block;margin:0 auto}
-.copyRow{display:flex;gap:8px;margin-top:10px}
-.copyRow input{margin:0;flex:1}
-.copyRow button{width:auto;padding:12px 14px;border-radius:12px;background:#0f172a;color:#fff}
-.ok{color:#16a34a}
-
-/* ===== MODAL ===== */
-.modal-overlay{
-position:fixed;
-inset:0;
-background:rgba(15,23,42,0.75);
-display:flex;
-align-items:center;
-justify-content:center;
-z-index:9999;
-}
-
-.modal-box{
-background:#fff;
-color:#0f172a;
-width:100%;
-max-width:420px;
-border-radius:20px;
-padding:28px;
-text-align:center;
-box-shadow:0 40px 80px rgba(0,0,0,.4);
-animation:pop .2s ease-out;
-}
-
-.modal-icon{font-size:48px;margin-bottom:10px}
-.modal-box h3{margin:0 0 10px;font-size:22px}
-.modal-box p{font-size:15px;color:#475569;margin-bottom:18px}
-.modal-btn{width:100%;padding:14px;border-radius:12px;border:0;font-size:15px;cursor:pointer}
-.modal-btn-primary{background:var(--primary);color:#fff}
-.modal-btn-primary:hover{background:var(--primary-dark)}
-.modal-btn-secondary{background:#f1f5f9;color:#0f172a}
-.modal-btn-secondary:hover{background:#e2e8f0}
-
-@keyframes pop{
-from{ transform:scale(.9); opacity:0 }
-to{ transform:scale(1); opacity:1 }
-}
-
-/* ===== LOADING ANIMATIONS ===== */
-@keyframes pulse {
-0%, 100% { opacity: 1; }
-50% { opacity: 0.5; }
-}
-.loading-pulse {
-animation: pulse 1.5s ease-in-out infinite;
-}
-@keyframes spin {
-0% { transform: rotate(0deg); }
-100% { transform: rotate(360deg); }
-}
-.loading-spinner {
-width: 20px;
-height: 20px;
-border: 2px solid transparent;
-border-top-color: currentColor;
-border-radius: 50%;
-animation: spin 0.8s linear infinite;
-display: inline-block;
-vertical-align: middle;
-margin-right: 8px;
-}
-
-/* ===== STATUS BOX ===== */
-.status-box{
-background: linear-gradient(135deg, #f0fdf4, #dcfce7);
-border: 1px solid #86efac;
-border-radius: 12px;
-padding: 16px;
-margin-bottom: 16px;
-text-align: center;
-}
-.status-box.trial{
-background: linear-gradient(135deg, #fefce8, #fef9c3);
-border-color: #fde047;
-}
-.status-box.premium{
-background: linear-gradient(135deg, #f0f9ff, #bae6fd);
-border-color: #7dd3fc;
-}
-
-/* ===== PAYMENT STATUS ===== */
-.payment-status{
-display:flex;
-align-items:center;
-justify-content:center;
-gap:8px;
-padding:12px;
-border-radius:8px;
-margin-top:10px;
-font-weight:600;
-}
-.payment-status.pending{
-background:#fef3c7;
-color:#92400e;
-}
-.payment-status.processing{
-background:#dbeafe;
-color:#1e40af;
-animation: pulse 2s ease-in-out infinite;
-}
-.payment-status.success{
-background:#dcfce7;
-color:#166534;
-}
-.payment-status.error{
-background:#fee2e2;
-color:#991b1b;
-}
-
-/* ===== TIMER ===== */
-.pix-timer{
-display:flex;
-align-items:center;
-justify-content:center;
-gap:4px;
-font-size:13px;
-color:#64748b;
-margin-top:8px;
-}
-.pix-timer span{
-font-weight:600;
-color:#0f172a;
-}
 </style>
 </head>
-<!-- ===== MODAL GLOBAL ===== -->
-<div id="modalOverlay" class="modal-overlay hide">
-<div class="modal-box">
-<div id="modalIcon" class="modal-icon">ℹ️</div>
-<h3 id="modalTitle">Título</h3>
-<p id="modalMessage">Mensagem</p>
-<div id="modalActions" style="display:flex;flex-direction:column;gap:8px"></div>
-</div>
-</div>
 
 <body>
 <div class="page">
@@ -275,7 +127,12 @@ color:#0f172a;
 <!-- CARD -->
 <div class="card">
 <h2>Acesso à plataforma</h2>
-<p class="small">Entre com sua conta. Se estiver no teste, você verá o tempo restante. Se expirou, você pode assinar.</p>
+<p class="small">Entre com sua conta.</p>
+
+<!-- PAINEL DE DEBUG -->
+<div id="debugPanel" class="debug-panel hide">
+<div id="debugContent"></div>
+</div>
 
 <!-- LOGIN FORM -->
 <div id="loginBox">
@@ -307,13 +164,6 @@ title="Mostrar senha"
 
 <button class="btn-primary" id="btnEntrar">Entrar</button>
 <button class="btn-sec" id="btnCriar">Criar conta gratuita</button>
-<button
-class="btn-sec"
-id="btnResetSenha"
-style="margin-top:6px"
->
-Esqueci minha senha
-</button>
 
 <div id="msgLogin" class="msg"></div>
 </div>
@@ -321,12 +171,8 @@ Esqueci minha senha
 <!-- STATUS -->
 <div id="statusBox" class="hide">
 <div class="hr"></div>
-
-<!-- Status Box com informações do plano -->
-<div id="statusInfoBox" class="status-box">
-<div id="statusText" style="font-weight:900;font-size:18px"></div>
-<div id="statusSub" class="small" style="margin-top:6px"></div>
-</div>
+<div id="statusText" style="font-weight:900;font-size:18px;margin-bottom:8px"></div>
+<div id="statusSub" class="small" style="margin-bottom:16px"></div>
 
 <button class="btn-primary" id="btnAcessarApp">
 🚀 Acessar o App
@@ -337,86 +183,7 @@ Sair
 </button>
 </div>
 
-<!-- PAYWALL -->
-<div id="payBox" class="hide">
-<div class="hr"></div>
-
-<div style="background:#fef3c7;border:1px solid #fde047;border-radius:12px;padding:14px;margin-bottom:16px">
-<div style="font-weight:900;color:#92400e">⚠️ Seu acesso expirou</div>
-<div class="small" style="color:#78350f;margin-top:4px">Renove agora para continuar estudando sem interrupções.</div>
 </div>
-
-<button class="btn-sec" id="btnTrocarConta" style="margin-bottom:16px">
-🔄 Trocar conta
-</button>
-
-<div class="small" style="margin-bottom:10px">Escolha um plano:</div>
-
-<div class="plan-grid">
-<div class="plan reco">
-<div class="top">
-<div style="font-weight:900">Plano 6 meses</div>
-<span class="badge">Recomendado</span>
-</div>
-<div class="price">R$ 29,90</div>
-<div class="small">Acesso completo por 6 meses.</div>
-<button class="btn-primary" id="btnPlano6">Gerar PIX (6 meses)</button>
-</div>
-
-<div class="plan">
-<div class="top">
-<div style="font-weight:900">Plano 1 ano</div>
-<span class="badge">Economia</span>
-</div>
-<div class="price">R$ 49,90</div>
-<div class="small">Acesso completo por 12 meses.</div>
-<button class="btn-primary" id="btnPlano12">Gerar PIX (1 ano)</button>
-</div>
-</div>
-
-<!-- QR / PAGAMENTO -->
-<div id="qrBox" class="qrWrap hide">
-<div class="hr"></div>
-
-<div id="paymentStatusBox" class="payment-status pending">
-<span id="paymentStatusIcon">⏳</span>
-<span id="paymentStatusText">Aguardando pagamento...</span>
-</div>
-
-<div id="paymentDetails" style="text-align:center;margin-top:12px">
-<div style="font-weight:900" id="qrPlanInfo">Plano 6 meses — R$ 29,90</div>
-<div class="small" id="qrSub" style="margin-top:4px"></div>
-</div>
-
-<img id="qrImg" class="qrImg" alt="QR Code PIX">
-
-<div class="pix-timer" id="pixTimer">
-⏰ Expira em: <span id="countdown">--:--</span>
-</div>
-
-<div class="copyRow">
-<input id="pixCopia" readonly>
-<button id="btnCopiar">📋 Copiar</button>
-</div>
-
-<div id="payMsg" class="small" style="margin-top:12px;text-align:center"></div>
-
-<div style="margin-top:16px;display:flex;gap:8px">
-<button class="btn-sec" id="btnCancelarPix" style="flex:1">
-Cancelar
-</button>
-<button class="btn-primary" id="btnRecheck" style="flex:1">
-🔄 Verificar pagamento
-</button>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-</div>
-
 </div>
 </div>
 
@@ -424,19 +191,13 @@ Cancelar
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 import {
 getAuth,
-setPersistence,
-browserSessionPersistence,
 signInWithEmailAndPassword,
 createUserWithEmailAndPassword,
 signOut,
-sendEmailVerification
+sendEmailVerification,
+onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-functions.js";
-import { sendPasswordResetEmail } from
-"https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-import { onAuthStateChanged } from
-"https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-
 
 /* ===== CONFIG ===== */
 const FRONT_URL = "https://megaestudos.github.io/Quiz-Guarda-Civil-Premium/";
@@ -449,190 +210,43 @@ projectId: "simulados-concursos-22c91"
 /* ===== INIT ===== */
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-
-// Persistência (UMA VEZ)
-try {
-import { browserLocalPersistence } from
-"https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-
-await setPersistence(auth, browserLocalPersistence);
-} catch (err) {
-console.error("Erro setPersistence:", err);
-}
-
-const functionsRegion = "us-central1";
-const fx = getFunctions(app, functionsRegion);
+const fx = getFunctions(app, "us-central1");
 
 const meCall = httpsCallable(fx, "me");
-const createPixChargeCall = httpsCallable(fx, "createPixCharge");
-const pixStatusCall = httpsCallable(fx, "pixStatus");
 
 /* ===== UI ===== */
 const $ = (id)=>document.getElementById(id);
 const show = (boxId)=>{
-["loginBox","statusBox","payBox"].forEach(x=>$(x).classList.toggle("hide", x!==boxId));
+["loginBox","statusBox"].forEach(x=>$(x).classList.toggle("hide", x!==boxId));
 };
 function setMsg(t){ $("msgLogin").innerText = t || ""; }
 
-/* ===== MODAL ===== */
-function abrirModal(tipo, titulo, mensagem, botoes = null) {
-const overlay = $("modalOverlay");
-const icon = $("modalIcon");
-const title = $("modalTitle");
-const msg = $("modalMessage");
-const actions = $("modalActions");
-
-const icons = {
-sucesso: "✅",
-erro: "❌",
-aviso: "⚠️",
-info: "ℹ️",
-pagamento: "💳",
-carregando: "⏳"
-};
-
-icon.innerText = icons[tipo] || "ℹ️";
-title.innerText = titulo || "Aviso";
-msg.innerText = mensagem || "";
-
-// Botões personalizados ou padrão
-actions.innerHTML = "";
-if (botoes && Array.isArray(botoes)) {
-botoes.forEach(btn => {
-const button = document.createElement("button");
-button.className = btn.primary ? "modal-btn modal-btn-primary" : "modal-btn modal-btn-secondary";
-button.innerText = btn.text;
-button.onclick = btn.onclick || (() => fecharModal());
-actions.appendChild(button);
-});
-} else {
-const button = document.createElement("button");
-button.className = "modal-btn modal-btn-primary";
-button.innerText = "OK";
-button.onclick = () => fecharModal();
-actions.appendChild(button);
-}
-
-overlay.classList.remove("hide");
-}
-
-$("modalOverlay").addEventListener("click", (e) => {
-if (e.target.id === "modalOverlay") fecharModal();
-});
-
-function fecharModal() {
-$("modalOverlay").classList.add("hide");
-}
-
-/* ===== UI HELPERS ===== */
-function setButtonLoading(buttonId, loading, text = null) {
-const btn = $(buttonId);
-if (!btn) return;
-btn.disabled = loading;
-if (loading) {
-btn.dataset.originalText = btn.innerText;
-btn.innerHTML = `<span class="loading-spinner"></span>Carregando...`;
-} else {
-btn.innerText = btn.dataset.originalText || text || "OK";
-}
-}
-
-function updatePaymentStatus(status, message) {
-const box = $("paymentStatusBox");
-const icon = $("paymentStatusIcon");
-const text = $("paymentStatusText");
-
-box.className = "payment-status " + status;
-icon.innerText = {
-pending: "⏳",
-processing: "🔄",
-success: "✅",
-error: "❌"
-}[status] || "ℹ️";
-text.innerText = message || "";
-}
-
-function startCountdown(expiresAt) {
-const timer = $("pixTimer");
-const countdown = $("countdown");
-
-if (!expiresAt) {
-timer.style.display = "none";
-return;
-}
-
-timer.style.display = "flex";
-
-function update() {
-const now = new Date().getTime();
-const expires = new Date(expiresAt).getTime();
-const diff = expires - now;
-
-if (diff <= 0) {
-countdown.innerText = "00:00";
-updatePaymentStatus("error", "PIX expirado! Gere um novo.");
-if (pollingTimer) {
-clearInterval(pollingTimer);
-pollingTimer = null;
-}
-return;
-}
-
-const mins = Math.floor(diff / 60000);
-const secs = Math.floor((diff % 60000) / 1000);
-countdown.innerText = `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
-}
-
-update();
-const interval = setInterval(update, 1000);
-
-return interval;
+/* ===== DEBUG ===== */
+function debug(msg, isError = false) {
+const panel = $("debugPanel");
+const content = $("debugContent");
+panel.classList.remove("hide", "error", "success");
+panel.classList.add(isError ? "error" : "success");
+content.innerHTML = `<strong>${isError ? "❌ ERRO:" : "✅"}</strong> ${msg}`;
+console.log("[DEBUG]", msg);
 }
 
 /* ===== EVENTOS ===== */
 $("btnEntrar").addEventListener("click", entrar);
 $("btnCriar").addEventListener("click", criarConta);
-
-// PAYWALL / PIX (BOTÕES)
-$("btnPlano6").addEventListener("click", () => gerarPix("6m"));
-$("btnPlano12").addEventListener("click", () => gerarPix("12m"));
-$("btnCopiar").addEventListener("click", copiarPix);
-$("btnCancelarPix").addEventListener("click", cancelarPix);
-$("btnRecheck").addEventListener("click", verificarPagamentoManual);
-
 $("btnAcessarApp").addEventListener("click", () => {
-console.log("➡️ Acessar app:", FRONT_URL);
 window.location.href = FRONT_URL;
 });
-
-$("btnTrocarConta").addEventListener("click", async () => {
-try {
+$("btnSair").addEventListener("click", async () => {
 await signOut(auth);
-} catch (e) {
-console.warn("Erro ao sair:", e);
-}
-
-// limpa campos
 $("email").value = "";
 $("senha").value = "";
-
-// limpa mensagens
-setMsg("");
-$("payMsg").innerText = "";
-$("qrSub").innerText = "";
-$("qrBox").classList.add("hide");
-
-// cancela polling do PIX
-cancelarPolling();
-
-// volta para login
 show("loginBox");
 });
 
 // 👁️ Mostrar / esconder senha
 const toggleSenha = document.getElementById("toggleSenha");
 const senhaInput = document.getElementById("senha");
-
 if (toggleSenha && senhaInput) {
 toggleSenha.addEventListener("click", () => {
 const isPassword = senhaInput.type === "password";
@@ -641,36 +255,8 @@ toggleSenha.innerText = isPassword ? "🙈" : "👁️";
 });
 }
 
-document.getElementById("btnResetSenha").addEventListener("click", recuperarSenha);
-
-$("btnSair").addEventListener("click", async () => {
-try {
-await signOut(auth);
-} catch (e) {
-console.warn("Erro ao sair:", e);
-}
-
-// limpa campos
-$("email").value = "";
-$("senha").value = "";
-
-// limpa mensagens
-setMsg("");
-$("payMsg").innerText = "";
-$("qrSub").innerText = "";
-$("qrBox").classList.add("hide");
-
-// cancela polling se existir
-cancelarPolling();
-
-// volta para login
-show("loginBox");
-});
-
 /* ===== LOGIN ===== */
 async function entrar() {
-try {
-setMsg("");
 const email = $("email").value.trim();
 const senha = $("senha").value;
 
@@ -679,387 +265,92 @@ setMsg("Preencha e-mail e senha.");
 return;
 }
 
-setButtonLoading("btnEntrar", true);
-await signInWithEmailAndPassword(auth, email, senha);
-// ✅ IMPORTANTE: Carregar status após login bem-sucedido
-await carregarStatus();
+debug("Tentando fazer login com: " + email);
+$("btnEntrar").innerText = "Carregando...";
+$("btnEntrar").disabled = true;
 
-} catch (e) {
-console.error("Erro ao entrar:", e);
-abrirModal(
-"erro",
-"Erro ao entrar",
-"E-mail ou senha inválidos. Verifique os dados e tente novamente."
-);
-} finally {
-setButtonLoading("btnEntrar", false);
-}
-}
-
-async function criarConta(){
-try{
-setMsg("");
-const email = $("email").value.trim();
-const senha = $("senha").value;
-if(!email || !senha){ setMsg("Preencha email e senha."); return; }
-
-setButtonLoading("btnCriar", true);
-await createUserWithEmailAndPassword(auth, email, senha);
-
-// 🔐 ENVIA E-MAIL DE VERIFICAÇÃO
-await sendEmailVerification(auth.currentUser);
-
-// ⚠️ AVISA O USUÁRIO
-setMsg("Enviamos um e-mail de verificação. Confirme antes de comprar.");
-
-setButtonLoading("btnCriar", false);
-return;
-
-}catch(e){
-console.error("Erro criar conta:", e);
-setMsg(e?.message || "Erro ao criar conta");
-setButtonLoading("btnCriar", false);
-}
-}
-
-/* ===== STATUS ===== */
-async function carregarStatus(){
-const user = auth.currentUser;
-if(!user){ show("loginBox"); return; }
-
-let data;
 try {
+debug("Chamando Firebase Auth...");
+await signInWithEmailAndPassword(auth, email, senha);
+debug("Firebase Auth OK!");
+
+debug("Chamando Cloud Function 'me'...");
 const resp = await meCall();
-data = resp.data;
-} catch (e) {
-console.error("Erro meCall:", e);
-show("loginBox");
-setMsg(e?.message || "Falha ao validar sessão. Faça login novamente.");
-return;
-}
+const data = resp.data;
 
-/* ===== TRATAMENTO DE E-MAIL NÃO CONFIRMADO ===== */
-if (data.emailVerified === false) {
-abrirModal(
-"aviso",
-"Confirme seu e-mail",
-"Você precisa confirmar o e-mail antes de comprar. Verifique sua caixa de entrada e spam."
-);
+debug("Cloud Function retornou: " + JSON.stringify(data));
 
-show("statusBox");
-$("statusText").innerText = "E-mail não confirmado";
-$("statusSub").innerText = "Confirme o e-mail para liberar compra e acesso.";
-return;
-}
-/* ===== FIM ===== */
-
-if(!data.authenticated){
+if (!data.authenticated) {
+debug("Sessão inválida", true);
 show("loginBox");
 setMsg("Sessão inválida. Faça login novamente.");
+$("btnEntrar").innerText = "Entrar";
+$("btnEntrar").disabled = false;
+return;
+}
+
+if (data.emailVerified === false) {
+debug("E-mail não confirmado", true);
+show("statusBox");
+$("statusText").innerText = "⚠️ E-mail não confirmado";
+$("statusSub").innerText = "Verifique sua caixa de entrada e spam.";
+$("btnEntrar").innerText = "Entrar";
+$("btnEntrar").disabled = false;
 return;
 }
 
 const status = data.entitled ? data.plan : "none";
-const expiresIso = data.expiresAt || null;
-const fim = expiresIso ? new Date(expiresIso) : null;
+const fim = data.expiresAt ? new Date(data.expiresAt) : null;
 
-if (status === "trial" || status === "premium") {
 show("statusBox");
-
-// Atualiza status box
-const statusBox = $("statusInfoBox");
-statusBox.className = "status-box " + (status === "trial" ? "trial" : "premium");
 
 if (status === "trial") {
 $("statusText").innerText = "🕐 Teste grátis ativo";
 $("statusSub").innerText = fim ? ("Válido até: " + fim.toLocaleString()) : "";
-} else {
+} else if (status === "premium") {
 $("statusText").innerText = "✅ Acesso Premium ativo";
 $("statusSub").innerText = fim ? ("Válido até: " + fim.toLocaleString()) : "";
-}
-return;
-}
-
-// Sem acesso - mostra paywall
-$("qrBox").classList.add("hide");
-$("payMsg").innerText = "";
-$("qrSub").innerText = "";
-
-abrirModal(
-"aviso",
-"Acesso expirado",
-"Seu período de teste terminou. Faça login com outra conta ou assine."
-);
-
-show("payBox");
-
-} // ← FECHA carregarStatus()
-
-/* ===== PIX ===== */
-let pollingTimer = null;
-let countdownInterval = null;
-let currentTxid = null;
-let currentPlan = null;
-let retryCount = 0;
-const MAX_RETRIES = 3;
-
-async function gerarPix(plan) {
-try {
-const user = auth.currentUser;
-if (!user) {
-show("loginBox");
-setMsg("Faça login.");
-return;
-}
-
-// UI inicial
-$("qrBox").classList.remove("hide");
-$("payMsg").innerText = "";
-$("qrSub").innerText = "";
-
-updatePaymentStatus("processing", "Gerando PIX...");
-
-console.log("🚀 gerarPix:", plan);
-
-// Desabilita botões de plano
-$("btnPlano6").disabled = true;
-$("btnPlano12").disabled = true;
-
-setButtonLoading(`btnPlano${plan === "6m" ? "6" : "12"}`, true);
-
-// 🔥 chamada correta da Cloud Function
-const resp = await createPixChargeCall({ plan });
-const data = resp.data;
-
-if (data.alreadyEntitled) {
-$("qrSub").innerText = "Seu acesso já está ativo. Abrindo o app...";
-abrirModal(
-"sucesso",
-"Acesso ativo!",
-"Seu acesso premium já está ativo. Redirecionando para o app...",
-[
-{
-text: "Ir para o app",
-primary: true,
-onclick: () => {
-window.location.href = FRONT_URL;
-}
-}
-]
-);
-setTimeout(() => (location.href = FRONT_URL), 2000);
-return;
-}
-
-// Armazena dados para polling
-currentTxid = data.txid;
-currentPlan = plan;
-
-// Exibe QR Code
-$("qrPlanInfo").innerText = `Plano ${plan === "6m" ? "6 meses" : "1 ano"} — R$ ${String(data.price).replace(".", ",")}`;
-$("qrSub").innerText = "Escaneie o QR Code ou copie o código";
-
-$("qrImg").src = "data:image/png;base64," + data.qrcodeImage;
-$("pixCopia").value = data.copiaecola;
-
-updatePaymentStatus("pending", "Aguardando pagamento...");
-
-$("payMsg").innerHTML = "<span style='color:#64748b'>Escaneie com o app do seu banco ou cole o código PIX.</span>";
-
-// Inicia countdown
-if (countdownInterval) clearInterval(countdownInterval);
-countdownInterval = startCountdown(data.expiresAt);
-
-// Habilita botões novamente
-$("btnPlano6").disabled = false;
-$("btnPlano12").disabled = false;
-setButtonLoading(`btnPlano${plan === "6m" ? "6" : "12"}`, false);
-
-// Inicia polling
-iniciarPolling(data.txid);
-
-} catch (e) {
-console.error("❌ ERRO gerarPix:", e);
-
-// Habilita botões
-$("btnPlano6").disabled = false;
-$("btnPlano12").disabled = false;
-setButtonLoading("btnPlano6", false);
-setButtonLoading("btnPlano12", false);
-
-let msg = "Erro ao gerar PIX. Tente novamente.";
-
-if (e?.code === "functions/unauthenticated") {
-msg = "Sessão expirada. Faça login novamente.";
-show("loginBox");
-} else if (e?.code === "functions/failed-precondition") {
-msg = e.message || "Confirme seu e-mail antes de comprar.";
-} else if (e?.code === "functions/invalid-argument") {
-msg = "Plano inválido. Atualize a página.";
-} else if (e?.code === "functions/internal") {
-msg = "Erro interno no servidor. Tente novamente em instantes.";
-} else if (e?.message) {
-msg = e.message;
-}
-
-updatePaymentStatus("error", msg);
-$("payMsg").innerText = msg;
-}
-}
-
-function iniciarPolling(txid) {
-cancelarPolling();
-
-console.log("📡 Iniciando polling para txid:", txid);
-
-// Primeira verificação imediata
-verificarPagamento(txid);
-
-// Intervalo de 5 segundos
-pollingTimer = setInterval(() => {
-verificarPagamento(txid);
-}, 5000);
-}
-
-function cancelarPolling() {
-if (pollingTimer) {
-clearInterval(pollingTimer);
-pollingTimer = null;
-}
-if (countdownInterval) {
-clearInterval(countdownInterval);
-countdownInterval = null;
-}
-currentTxid = null;
-currentPlan = null;
-retryCount = 0;
-}
-
-async function verificarPagamento(txid) {
-if (!txid) return;
-
-try {
-const resp = await pixStatusCall({ txid });
-const data = resp.data;
-
-console.log("📊 Status do PIX:", data);
-
-if (data.paid) {
-pagamentoConfirmado();
-return;
-}
-
-if (data.expired) {
-updatePaymentStatus("error", "PIX expirado!");
-$("payMsg").innerText = "O prazo para pagamento expirou. Gere um novo PIX.";
-cancelarPolling();
-return;
-}
-
-// Status em andamento
-if (data.status) {
-updatePaymentStatus("pending", `Status: ${data.status}`);
-}
-
-retryCount = 0;
-
-} catch (e) {
-console.error("❌ Erro ao verificar pagamento:", e);
-retryCount++;
-
-if (retryCount >= MAX_RETRIES) {
-updatePaymentStatus("error", "Erro ao verificar. Tente novamente.");
-$("payMsg").innerText = "Problema na conexão. Clique em 'Verificar pagamento'.";
-cancelarPolling();
 } else {
-updatePaymentStatus("processing", "Verificando...");
-}
-}
-}
-
-async function verificarPagamentoManual() {
-if (!currentTxid) {
-abrirModal("aviso", "Nenhum PIX", "Gere um PIX primeiro.");
-return;
+$("statusText").innerText = "❌ Sem acesso";
+$("statusSub").innerText = "Você precisa fazer o teste ou assinar.";
 }
 
-updatePaymentStatus("processing", "Verificando...");
-retryCount = 0;
-await verificarPagamento(currentTxid);
+debug("Login OK! Status: " + status);
 
-// Reinicia polling se ainda não expirou
-if (currentTxid && countdownInterval) {
-iniciarPolling(currentTxid);
-}
-}
-
-function pagamentoConfirmado() {
-cancelarPolling();
-
-updatePaymentStatus("success", "Pagamento confirmado!");
-
-abrirModal(
-"sucesso",
-"🎉 Pagamento realizado!",
-"Seu acesso premium foi ativado com sucesso. Você pode acessar agora.",
-[
-{
-text: "Acessar o App",
-primary: true,
-onclick: () => {
-window.location.href = FRONT_URL;
-}
-},
-{
-text: "Ver meu acesso",
-primary: false,
-onclick: () => {
-carregarStatus();
-fecharModal();
-}
-}
-]
-);
-
-// Limpa campos do PIX
-$("pixCopia").value = "";
-$("qrImg").src = "";
-$("qrBox").classList.add("hide");
-}
-
-async function copiarPix() {
-const txt = $("pixCopia").value || "";
-if (!txt) return;
-
-try {
-await navigator.clipboard.writeText(txt);
-$("payMsg").innerHTML = "<span class='ok'>✅ Código PIX copiado!</span>";
 } catch (e) {
-$("pixCopia").focus();
-$("pixCopia").select();
-document.execCommand("copy");
-$("payMsg").innerHTML = "<span class='ok'>✅ Código PIX copiado!</span>";
+console.error("Erro completo:", e);
+debug("ERRO: " + e.message + " (código: " + e.code + ")", true);
+setMsg(e?.message || "Erro ao fazer login");
+} finally {
+$("btnEntrar").innerText = "Entrar";
+$("btnEntrar").disabled = false;
 }
 }
 
-function cancelarPix() {
-cancelarPolling();
+/* ===== CRIAR CONTA ===== */
+async function criarConta(){
+const email = $("email").value.trim();
+const senha = $("senha").value;
 
-$("qrBox").classList.add("hide");
-$("payMsg").innerText = "";
+if(!email || !senha){ setMsg("Preencha email e senha."); return; }
 
-abrirModal(
-"info",
-"PIX cancelado",
-"Você pode gerar um novo PIX quando quiser.",
-[
-{
-text: "OK",
-primary: true,
-onclick: () => fecharModal()
+debug("Criando conta: " + email);
+$("btnCriar").innerText = "Carregando...";
+$("btnCriar").disabled = true;
+
+try{
+await createUserWithEmailAndPassword(auth, email, senha);
+await sendEmailVerification(auth.currentUser);
+debug("Conta criada! Verifique seu e-mail.");
+setMsg("Enviamos um e-mail de verificação. Confirme antes de comprar.");
+}catch(e){
+console.error("Erro criar conta:", e);
+debug("ERRO: " + e.message, true);
+setMsg(e?.message || "Erro ao criar conta");
+} finally {
+$("btnCriar").innerText = "Criar conta gratuita";
+$("btnCriar").disabled = false;
 }
-]
-);
 }
 
 /* ===== START ===== */
@@ -1068,39 +359,13 @@ if (!user) {
 show("loginBox");
 return;
 }
-carregarStatus();
+// Se já está logado, verificar status
+entrar();
 });
 
-async function recuperarSenha() {
-const email = $("email").value.trim();
-if (!email) {
-abrirModal(
-"aviso",
-"E-mail obrigatório",
-"Digite seu e-mail para receber o link de redefinição de senha."
-);
-return;
-}
-
-try {
-await sendPasswordResetEmail(auth, email);
-abrirModal(
-"sucesso",
-"E-mail enviado",
-"Se este e-mail estiver cadastrado, você receberá um link para redefinir a senha."
-);
-} catch (e) {
-abrirModal(
-"erro",
-"Erro",
-"Não foi possível enviar o e-mail. Verifique o endereço informado."
-);
-}
-}
-
-// estado inicial SEMPRE é login
+// estado inicial
 show("loginBox");
-
+debug("Página carregada. Ready!");
 </script>
 </body>
 </html>
