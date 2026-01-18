@@ -417,6 +417,9 @@ Cancelar
 </div>
 </div>
 
+</div>
+</div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 import {
@@ -678,7 +681,8 @@ return;
 
 setButtonLoading("btnEntrar", true);
 await signInWithEmailAndPassword(auth, email, senha);
-// NÃO chama carregarStatus aqui
+// ✅ IMPORTANTE: Carregar status após login bem-sucedido
+await carregarStatus();
 
 } catch (e) {
 console.error("Erro ao entrar:", e);
