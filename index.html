@@ -5,9 +5,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Simulados de Concursos</title>
 
-<!-- =========================
-  CSS GLOBAL – LIMPO E VÁLIDO
-========================= -->
 <style>
 :root{
   --primary:#2563eb;
@@ -19,17 +16,17 @@
   --success:#16a34a;
   --warning:#f59e0b;
   --danger:#dc2626;
+  --shadow: 0 40px 80px rgba(0,0,0,.35);
 }
 
 *{box-sizing:border-box}
-
+html,body{height:100%}
 body{
   margin:0;
   font-family:Inter,system-ui,-apple-system,Arial,sans-serif;
-  min-height:100vh;
   color:#fff;
   background:
-    linear-gradient(rgba(15,23,42,.75),rgba(15,23,42,.75)),
+    linear-gradient(rgba(15,23,42,.74), rgba(15,23,42,.74)),
     url("https://images.pexels.com/photos/990432/pexels-photo-990432.jpeg");
   background-size:cover;
   background-position:center;
@@ -37,7 +34,7 @@ body{
 }
 
 .page{
-  min-height:100vh;
+  min-height:100%;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -52,29 +49,29 @@ body{
   gap:40px;
 }
 
-@media(max-width:900px){
+@media (max-width: 900px){
   .container{grid-template-columns:1fr}
 }
 
 .hero h1{
   font-size:40px;
   margin:0 0 14px;
+  line-height:1.08;
 }
-
 .hero p{
   font-size:18px;
   color:#e5e7eb;
+  margin:0 0 16px;
 }
-
 .hero ul{
   list-style:none;
   padding:0;
+  margin:0;
 }
-
 .hero li{
   margin:10px 0;
+  color:#f1f5f9;
 }
-
 .hero li::before{
   content:"✓ ";
   color:#22c55e;
@@ -86,14 +83,14 @@ body{
   color:var(--text);
   border-radius:22px;
   padding:34px;
-  box-shadow:0 40px 80px rgba(0,0,0,.35);
+  box-shadow:var(--shadow);
 }
 
-label{
-  font-size:14px;
-  color:#475569;
-}
+h2{margin:0 0 8px}
+.small{font-size:13px;color:var(--muted);line-height:1.35}
+.hr{height:1px;background:#e2e8f0;margin:18px 0}
 
+label{font-size:14px;color:#475569;display:block}
 input{
   width:100%;
   padding:14px;
@@ -101,8 +98,9 @@ input{
   border-radius:12px;
   border:1px solid var(--border);
   font-size:15px;
+  background:#fff;
+  color:var(--text);
 }
-
 input:focus{
   outline:none;
   border-color:#93c5fd;
@@ -116,63 +114,78 @@ button{
   border:0;
   font-size:15px;
   cursor:pointer;
+  transition:transform .05s ease, background .15s ease;
+}
+button:active{transform:translateY(1px)}
+button:disabled{opacity:.65;cursor:not-allowed}
+
+.btn-primary{background:var(--primary);color:#fff}
+.btn-primary:hover{background:var(--primary-dark)}
+.btn-sec{background:#f1f5f9;color:#0f172a;margin-top:10px}
+.btn-sec:hover{background:#e2e8f0}
+
+.msg{margin-top:12px;font-size:14px;text-align:center;color:var(--danger)}
+.msg-success{margin-top:12px;font-size:14px;text-align:center;color:var(--success)}
+
+.hide{display:none!important;pointer-events:none!important}
+
+.row{
+  display:flex;
+  gap:10px;
+}
+.row > *{flex:1}
+
+.password-wrap{position:relative}
+.password-toggle{
+  position:absolute;
+  right:14px;
+  top:50%;
+  transform:translateY(-50%);
+  cursor:pointer;
+  font-size:18px;
+  opacity:.65;
+  user-select:none;
 }
 
-.btn-primary{
-  background:var(--primary);
-  color:#fff;
+.status-box{
+  border-radius:14px;
+  padding:14px;
+  border:1px solid #e2e8f0;
+  background:#fff;
 }
-
-.btn-primary:hover{
-  background:var(--primary-dark);
+.status-box.trial{
+  background: linear-gradient(135deg, #fefce8, #fef9c3);
+  border-color:#fde047;
 }
-
-.btn-sec{
-  background:#f1f5f9;
-  color:#0f172a;
-  margin-top:8px;
+.status-box.premium{
+  background: linear-gradient(135deg, #f0f9ff, #bae6fd);
+  border-color:#7dd3fc;
 }
+.status-title{font-weight:900;font-size:18px;margin-bottom:6px}
 
-.hide{display:none!important}
-
-.hr{
-  height:1px;
-  background:#e2e8f0;
-  margin:18px 0;
-}
-
-.small{
-  font-size:13px;
-  color:var(--muted);
-}
-
+.plan-grid{display:grid;grid-template-columns:1fr;gap:12px;margin-top:12px}
 .plan{
   border:1px solid #e2e8f0;
   border-radius:16px;
   padding:16px;
-  margin-top:12px;
+  background:#fff;
 }
-
 .plan.reco{
   border:2px solid var(--primary);
   box-shadow:0 10px 24px rgba(37,99,235,.15);
 }
-
-.price{
-  font-size:24px;
-  font-weight:900;
-  margin-top:6px;
+.plan-top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.badge{
+  background:#e0e7ff;
+  color:#1e40af;
+  padding:6px 10px;
+  border-radius:999px;
+  font-size:13px;
+  font-weight:800;
 }
+.price{font-size:24px;font-weight:900;color:#0f172a;margin:8px 0 0}
 
-.qrImg{
-  max-width:260px;
-  margin:16px auto;
-  display:block;
-  background:#fff;
-  padding:10px;
-  border-radius:12px;
-}
-
+.qrWrap{margin-top:14px}
 .payment-status{
   display:flex;
   align-items:center;
@@ -181,181 +194,850 @@ button{
   padding:12px;
   border-radius:10px;
   margin-top:10px;
-  font-weight:700;
+  font-weight:800;
 }
-
 .payment-status.pending{background:#fef3c7;color:#92400e}
+.payment-status.processing{background:#dbeafe;color:#1e40af}
 .payment-status.success{background:#dcfce7;color:#166534}
 .payment-status.error{background:#fee2e2;color:#991b1b}
 
-.debug{
-  background:#020617;
+.qrImg{
+  width:100%;
+  max-width:260px;
+  border:1px solid #e2e8f0;
+  border-radius:12px;
+  padding:10px;
+  background:#fff;
+  display:block;
+  margin:12px auto 0;
+}
+
+.copyRow{
+  display:flex;
+  gap:8px;
+  margin-top:10px;
+}
+.copyRow input{margin:0;flex:1}
+.copyRow button{
+  width:auto;
+  padding:12px 14px;
+  border-radius:12px;
+  background:#0f172a;
+  color:#fff;
+}
+
+.pix-timer{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  font-size:13px;
+  color:#64748b;
+  margin-top:10px;
+}
+.pix-timer span{font-weight:900;color:#0f172a}
+
+.debug-panel{
+  background:#0b1220;
   border:1px solid #334155;
-  border-radius:10px;
+  border-radius:12px;
   padding:12px;
   margin-bottom:12px;
-  font-family:monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
   font-size:12px;
-  color:#22c55e;
+  color:#93c5fd;
+}
+.debug-panel.error{
+  background:#2b0b0b;
+  border-color:#dc2626;
+  color:#fca5a5;
+}
+.debug-panel.success{
+  background:#052e1a;
+  border-color:#10b981;
+  color:#6ee7b7;
+}
+
+/* MODAL */
+.modal-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(15,23,42,.75);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+}
+.modal-box{
+  background:#fff;
+  color:#0f172a;
+  width:100%;
+  max-width:460px;
+  border-radius:22px;
+  padding:26px;
+  text-align:center;
+  box-shadow:0 40px 80px rgba(0,0,0,.4);
+}
+.modal-icon{font-size:46px;margin-bottom:10px}
+.modal-box h3{margin:0 0 10px;font-size:22px}
+.modal-box p{margin:0 0 16px;color:#475569}
+.modal-actions{display:flex;flex-direction:column;gap:10px}
+.modal-btn{
+  width:100%;
+  padding:14px;
+  border-radius:12px;
+  border:0;
+  font-size:15px;
+  cursor:pointer;
+}
+.modal-btn-primary{background:var(--primary);color:#fff}
+.modal-btn-primary:hover{background:var(--primary-dark)}
+.modal-btn-secondary{background:#f1f5f9;color:#0f172a}
+.modal-btn-secondary:hover{background:#e2e8f0}
+
+@keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+.loading-spinner{
+  width:18px;height:18px;
+  border:2px solid transparent;
+  border-top-color:currentColor;
+  border-radius:50%;
+  display:inline-block;
+  animation:spin .8s linear infinite;
+  vertical-align:middle;
+  margin-right:8px;
 }
 </style>
 </head>
 
 <body>
+
+<!-- MODAL -->
+<div id="modalOverlay" class="modal-overlay hide">
+  <div class="modal-box">
+    <div id="modalIcon" class="modal-icon">ℹ️</div>
+    <h3 id="modalTitle">Título</h3>
+    <p id="modalMessage">Mensagem</p>
+    <div id="modalActions" class="modal-actions"></div>
+  </div>
+</div>
+
 <div class="page">
-<div class="container">
+  <div class="container">
 
-<!-- ================= HERO ================= -->
-<div class="hero">
-  <h1>Estude para concursos<br>com foco em aprovação</h1>
-  <p>Simulados realistas, questões comentadas e acesso imediato.</p>
-  <ul>
-    <li>Conteúdo atualizado</li>
-    <li>Simulados no nível da prova</li>
-    <li>Teste grátis por 48 horas</li>
-  </ul>
-</div>
+    <!-- HERO -->
+    <div class="hero">
+      <h1>Prepare-se para concursos<br>com foco total em aprovação</h1>
+      <p>Simulados atualizados, estudo direto ao ponto e acesso imediato.</p>
+      <ul>
+        <li>Questões comentadas</li>
+        <li>Simulados realistas</li>
+        <li>Conteúdo focado em prova</li>
+        <li>Teste gratuito por 48 horas</li>
+      </ul>
+    </div>
 
-<!-- ================= CARD ================= -->
-<div class="card">
+    <!-- CARD -->
+    <div class="card">
+      <h2>Acesso à plataforma</h2>
+      <p class="small">Entre com sua conta. Se estiver no teste, você verá o tempo restante. Se expirou, você pode assinar.</p>
 
-<div id="debug" class="debug hide"></div>
+      <div id="debugPanel" class="debug-panel hide">
+        <div id="debugContent"></div>
+      </div>
 
-<!-- ===== LOGIN ===== -->
-<div id="loginBox">
-  <label>Email</label>
-  <input id="email" type="email">
+      <!-- LOGIN -->
+      <div id="loginBox">
+        <label>Email</label>
+        <input id="email" type="email" placeholder="seu@email.com">
 
-  <label>Senha</label>
-  <input id="senha" type="password">
+        <label>Senha</label>
+        <div class="password-wrap">
+          <input id="senha" type="password" placeholder="••••••••" style="padding-right:46px">
+          <span id="toggleSenha" class="password-toggle" title="Mostrar/ocultar senha">👁️</span>
+        </div>
 
-  <button id="btnEntrar" class="btn-primary">Entrar</button>
-  <button id="btnCriar" class="btn-sec">Criar conta</button>
-  <button id="btnReset" class="btn-sec">Esqueci minha senha</button>
-</div>
+        <button class="btn-primary" id="btnEntrar">Entrar</button>
+        <button class="btn-sec" id="btnCriar">Criar conta gratuita</button>
+        <button class="btn-sec" id="btnResetSenha" style="margin-top:6px">Esqueci minha senha</button>
+        <div id="msgLogin" class="msg"></div>
+      </div>
 
-<!-- ===== STATUS ===== -->
-<div id="statusBox" class="hide">
-  <div class="hr"></div>
-  <div id="statusTitle" style="font-weight:900;font-size:18px"></div>
-  <div id="statusSub" class="small"></div>
+      <!-- STATUS -->
+      <div id="statusBox" class="hide">
+        <div class="hr"></div>
 
-  <button id="btnApp" class="btn-primary">Acessar App</button>
-  <button id="btnSair" class="btn-sec">Sair</button>
-</div>
+        <div id="statusInfoBox" class="status-box">
+          <div id="statusText" class="status-title"></div>
+          <div id="statusSub" class="small"></div>
+        </div>
 
-<!-- ===== PAYWALL ===== -->
-<div id="payBox" class="hide">
-  <div class="hr"></div>
+        <button class="btn-primary" id="btnAcessarApp" style="margin-top:12px">🚀 Acessar o App</button>
+        <button class="btn-sec" id="btnSair">Sair</button>
+      </div>
 
-  <div class="plan reco">
-    <div style="font-weight:900">Plano 6 meses</div>
-    <div class="price">R$ 29,90</div>
-    <button id="btn6" class="btn-primary">Gerar PIX</button>
+      <!-- PAYWALL -->
+      <div id="payBox" class="hide">
+        <div class="hr"></div>
+
+        <div style="background:#fef3c7;border:1px solid #fde047;border-radius:12px;padding:14px;margin-bottom:14px">
+          <div style="font-weight:900;color:#92400e">⚠️ Seu acesso expirou</div>
+          <div class="small" style="color:#78350f;margin-top:4px">Renove agora para continuar estudando sem interrupções.</div>
+        </div>
+
+        <button class="btn-sec" id="btnTrocarConta" style="margin-bottom:10px">🔄 Trocar conta</button>
+
+        <div class="small">Escolha um plano:</div>
+
+        <div class="plan-grid">
+          <div class="plan reco">
+            <div class="plan-top">
+              <div style="font-weight:900">Plano 6 meses</div>
+              <span class="badge">Recomendado</span>
+            </div>
+            <div class="price">R$ 29,90</div>
+            <div class="small">Acesso completo por 6 meses.</div>
+            <button class="btn-primary" id="btnPlano6">Gerar PIX (6 meses)</button>
+          </div>
+
+          <div class="plan">
+            <div class="plan-top">
+              <div style="font-weight:900">Plano 1 ano</div>
+              <span class="badge">Economia</span>
+            </div>
+            <div class="price">R$ 49,90</div>
+            <div class="small">Acesso completo por 12 meses.</div>
+            <button class="btn-primary" id="btnPlano12">Gerar PIX (1 ano)</button>
+          </div>
+        </div>
+
+        <!-- PIX BOX -->
+        <div id="qrBox" class="qrWrap hide">
+          <div class="hr"></div>
+
+          <div id="paymentStatusBox" class="payment-status pending">
+            <span id="paymentStatusIcon">⏳</span>
+            <span id="paymentStatusText">Aguardando pagamento...</span>
+          </div>
+
+          <div style="text-align:center;margin-top:12px">
+            <div style="font-weight:900" id="qrPlanInfo"></div>
+            <div class="small" id="qrSub" style="margin-top:4px"></div>
+          </div>
+
+          <img id="qrImg" class="qrImg" alt="QR Code PIX">
+
+          <div class="pix-timer" id="pixTimer">
+            ⏰ Expira em: <span id="countdown">--:--</span>
+          </div>
+
+          <div class="copyRow">
+            <input id="pixCopia" readonly>
+            <button id="btnCopiar">📋 Copiar</button>
+          </div>
+
+          <div id="payMsg" class="small" style="margin-top:12px;text-align:center"></div>
+
+          <div class="row" style="margin-top:14px">
+            <button class="btn-sec" id="btnCancelarPix">Cancelar</button>
+            <button class="btn-primary" id="btnRecheck">🔄 Verificar pagamento</button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
   </div>
-
-  <div class="plan">
-    <div style="font-weight:900">Plano 12 meses</div>
-    <div class="price">R$ 49,90</div>
-    <button id="btn12" class="btn-primary">Gerar PIX</button>
-  </div>
-
-  <div id="pixBox" class="hide">
-    <div class="payment-status pending" id="pixStatus">Aguardando pagamento…</div>
-    <img id="qrImg" class="qrImg">
-    <input id="pixCode" readonly>
-  </div>
 </div>
 
-</div>
-</div>
-</div>
-
-<!-- =========================
-  FIREBASE + JS
-========================= -->
 <script type="module">
+/* =========================
+  FIREBASE IMPORTS
+========================= */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 import {
   getAuth,
+  setPersistence,
+  browserLocalPersistence,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  signOut,
   sendEmailVerification,
   sendPasswordResetEmail,
-  signOut,
-  setPersistence,
-  browserLocalPersistence
+  onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-functions.js";
 
+/* =========================
+  CONFIG (SEU PROJETO)
+========================= */
+const FRONT_URL = "https://megaestudos.github.io/Quiz-Guarda-Civil-Premium/";
 const firebaseConfig = {
   apiKey: "AIzaSyB36ZszS8v_DeOn3at7zEo_tFq86WU0sI4",
   authDomain: "simulados-concursos-22c91.firebaseapp.com",
   projectId: "simulados-concursos-22c91"
 };
+const FUNCTIONS_REGION = "us-central1";
+const PROJECT_ID = firebaseConfig.projectId;
 
-const FRONT_URL = "https://megaestudos.github.io/Quiz-Guarda-Civil-Premium/";
-
+/* =========================
+  INIT
+========================= */
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 await setPersistence(auth, browserLocalPersistence);
+const fx = getFunctions(app, FUNCTIONS_REGION);
 
-const fx = getFunctions(app,"us-central1");
-const meCall = httpsCallable(fx,"me");
-const createPix = httpsCallable(fx,"createPixCharge");
-const pixStatus = httpsCallable(fx,"pixStatus");
+/* =========================
+  UI HELPERS
+========================= */
+const $ = (id) => document.getElementById(id);
 
-const $ = id => document.getElementById(id);
-const log = m => { $("debug").classList.remove("hide"); $("debug").innerText=m; console.log(m); };
-
-async function entrar(){
-  const email=$("email").value.trim();
-  const senha=$("senha").value;
-  await signInWithEmailAndPassword(auth,email,senha);
-  await auth.currentUser.getIdToken(true);
-  await carregarStatus();
+function show(boxId){
+  ["loginBox","statusBox","payBox"].forEach((b)=> {
+    const el = $(b);
+    if(!el) return;
+    el.classList.toggle("hide", b !== boxId);
+  });
 }
 
-async function carregarStatus(){
-  const r=await meCall();
-  const d=r.data;
+function setMsg(t){
+  const el = $("msgLogin");
+  if(el) el.innerText = t || "";
+}
 
-  $("loginBox").classList.add("hide");
-
-  if(d.entitled){
-    $("statusBox").classList.remove("hide");
-    $("statusTitle").innerText=d.plan==="trial"?"Teste ativo":"Premium ativo";
-    $("statusSub").innerText=d.expiresAt||"";
+function setButtonLoading(buttonId, loading){
+  const btn = $(buttonId);
+  if(!btn) return;
+  btn.disabled = !!loading;
+  if(loading){
+    btn.dataset.originalText = btn.innerText;
+    btn.innerHTML = `<span class="loading-spinner"></span>Carregando...`;
   }else{
-    $("payBox").classList.remove("hide");
+    btn.innerText = btn.dataset.originalText || btn.innerText || "OK";
   }
 }
 
-$("btnEntrar").onclick=entrar;
-$("btnCriar").onclick=async()=>{
-  const email=$("email").value.trim();
-  const senha=$("senha").value;
-  const c=await createUserWithEmailAndPassword(auth,email,senha);
-  await sendEmailVerification(c.user);
-  log("Conta criada. Confirme o e-mail.");
-};
-$("btnReset").onclick=async()=>{
-  await sendPasswordResetEmail(auth,$("email").value.trim());
-  log("E-mail de redefinição enviado.");
-};
-$("btnSair").onclick=async()=>{await signOut(auth);location.reload()};
-$("btnApp").onclick=()=>location.href=FRONT_URL;
-
-async function gerar(plan){
-  const r=await createPix({plan});
-  const d=r.data;
-  $("pixBox").classList.remove("hide");
-  $("qrImg").src="data:image/png;base64,"+d.qrcodeImage;
-  $("pixCode").value=d.copiaecola;
+function debug(msg, isError=false){
+  const panel = $("debugPanel");
+  const content = $("debugContent");
+  if(!panel || !content) return;
+  panel.classList.remove("hide","error","success");
+  panel.classList.add(isError ? "error" : "success");
+  content.innerHTML = `<strong>${isError ? "❌" : "✅"}</strong> ${msg}`;
+  console.log(isError ? "[DEBUG:ERROR]" : "[DEBUG:OK]", msg);
 }
 
-$("btn6").onclick=()=>gerar("6m");
-$("btn12").onclick=()=>gerar("12m");
+/* =========================
+  MODAL
+========================= */
+function abrirModal(tipo, titulo, mensagem, botoes=null){
+  const overlay = $("modalOverlay");
+  const icon = $("modalIcon");
+  const title = $("modalTitle");
+  const msg = $("modalMessage");
+  const actions = $("modalActions");
+  if(!overlay||!icon||!title||!msg||!actions) return;
+
+  const icons = {
+    sucesso:"✅", erro:"❌", aviso:"⚠️", info:"ℹ️", pagamento:"💳", carregando:"⏳"
+  };
+
+  icon.innerText = icons[tipo] || "ℹ️";
+  title.innerText = titulo || "Aviso";
+  msg.innerText = mensagem || "";
+  actions.innerHTML = "";
+
+  const addBtn = (text, primary, onclick) => {
+    const b = document.createElement("button");
+    b.className = primary ? "modal-btn modal-btn-primary" : "modal-btn modal-btn-secondary";
+    b.innerText = text;
+    b.onclick = () => {
+      try{ onclick && onclick(); } finally { fecharModal(); }
+    };
+    actions.appendChild(b);
+  };
+
+  if(Array.isArray(botoes) && botoes.length){
+    botoes.forEach(btn => addBtn(btn.text||"OK", !!btn.primary, btn.onclick));
+  }else{
+    addBtn("OK", true, null);
+  }
+
+  overlay.classList.remove("hide");
+}
+function fecharModal(){
+  const overlay = $("modalOverlay");
+  if(overlay) overlay.classList.add("hide");
+}
+$("modalOverlay")?.addEventListener("click", (e) => {
+  if(e.target && e.target.id === "modalOverlay") fecharModal();
+});
+
+/* =========================
+  PAYMENT UI
+========================= */
+function updatePaymentStatus(status, message){
+  const box = $("paymentStatusBox");
+  const icon = $("paymentStatusIcon");
+  const text = $("paymentStatusText");
+  if(!box||!icon||!text) return;
+
+  box.className = "payment-status " + (status || "pending");
+  icon.innerText = {pending:"⏳",processing:"🔄",success:"✅",error:"❌"}[status] || "ℹ️";
+  text.innerText = message || "";
+}
+
+/* =========================
+  🔥 CHAMADA DE FUNÇÃO "À PROVA DE 401"
+  - Tenta callable (onCall)
+  - Se falhar com 401/unauthenticated -> fallback HTTP onRequest com Bearer token
+========================= */
+async function callFunctionSmart(name, data = {}){
+  // 1) Tenta callable
+  try{
+    const fn = httpsCallable(fx, name);
+    const resp = await fn(data);
+    return resp.data;
+  }catch(e){
+    const msg = String(e?.message || "");
+    const code = String(e?.code || "");
+    const looks401 = msg.includes("401") || msg.toLowerCase().includes("unauth") || code === "functions/unauthenticated";
+
+    debug(`Callable '${name}' falhou: ${code || ""} ${msg}`.trim(), true);
+
+    if(!looks401){
+      // erro real (invalid-argument, internal, etc.)
+      throw e;
+    }
+
+    // 2) Fallback HTTP (onRequest)
+    const user = auth.currentUser;
+    if(!user) throw e;
+
+    const idToken = await user.getIdToken(true);
+
+    const url = `https://${FUNCTIONS_REGION}-${PROJECT_ID}.cloudfunctions.net/${name}`;
+    const r = await fetch(url, {
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json",
+        "Authorization": "Bearer " + idToken
+      },
+      body: JSON.stringify(data || {})
+    });
+
+    const text = await r.text();
+    let json = null;
+    try{ json = JSON.parse(text); } catch(_){}
+
+    if(!r.ok){
+      const errMsg = json?.error || json?.message || text || `HTTP ${r.status}`;
+      throw new Error(`HTTP fallback '${name}' falhou: ${r.status} ${errMsg}`);
+    }
+
+    // Se backend retornar {data: ...} ou direto
+    return json?.data ?? json;
+  }
+}
+
+/* =========================
+  AUTH / STATUS
+========================= */
+async function carregarStatus(){
+  const user = auth.currentUser;
+  if(!user){
+    show("loginBox");
+    return;
+  }
+
+  let data;
+  try{
+    data = await callFunctionSmart("me", {});
+  }catch(e){
+    console.error("Erro me():", e);
+    debug("Falha ao chamar 'me': " + (e?.message || "erro desconhecido"), true);
+    show("loginBox");
+    setMsg("Falha ao validar sessão. Faça login novamente.");
+    return;
+  }
+
+  debug("me() => " + JSON.stringify(data));
+
+  // Se seu backend usa {authenticated:true/false}
+  if(data && data.authenticated === false){
+    show("loginBox");
+    setMsg("Sessão inválida. Faça login novamente.");
+    return;
+  }
+
+  // Se seu backend não manda authenticated, mas manda entitled/plan/emailVerified
+  // Email não confirmado
+  if(data?.emailVerified === false){
+    show("statusBox");
+    $("statusInfoBox")?.classList.remove("trial","premium");
+    $("statusInfoBox") && ($("statusInfoBox").className = "status-box trial");
+    $("statusText").innerText = "⚠️ E-mail não confirmado";
+    $("statusSub").innerText = "Confirme seu e-mail para liberar compra e acesso.";
+
+    abrirModal("aviso","Confirme seu e-mail","Você precisa confirmar o e-mail antes de comprar. Verifique a caixa de entrada e o spam.");
+    return;
+  }
+
+  const status = data?.entitled ? data?.plan : "none";
+  const fim = data?.expiresAt ? new Date(data.expiresAt) : null;
+
+  if(status === "trial" || status === "premium"){
+    show("statusBox");
+    $("statusInfoBox") && ($("statusInfoBox").className = "status-box " + status);
+    $("statusText").innerText = status === "trial" ? "🕐 Teste grátis ativo" : "✅ Acesso Premium ativo";
+    $("statusSub").innerText = fim ? ("Válido até: " + fim.toLocaleString()) : "";
+    return;
+  }
+
+  // Sem acesso => paywall
+  show("payBox");
+}
+
+/* =========================
+  LOGIN / SIGNUP / RESET / LOGOUT
+========================= */
+async function entrar(){
+  setMsg("");
+  const email = ($("email")?.value || "").trim();
+  const senha = $("senha")?.value || "";
+
+  if(!email || !senha){
+    setMsg("Preencha e-mail e senha.");
+    return;
+  }
+
+  setButtonLoading("btnEntrar", true);
+
+  try{
+    await signInWithEmailAndPassword(auth, email, senha);
+    debug("Auth OK (signInWithEmailAndPassword)");
+    // força token novo para evitar corrida (401 por token não propagado)
+    await auth.currentUser.getIdToken(true);
+    await carregarStatus();
+  }catch(e){
+    console.error("Erro login:", e);
+    debug("Falha no login: " + (e?.message || "erro desconhecido"), true);
+    abrirModal("erro","Erro ao entrar","E-mail ou senha inválidos, ou a conta não existe.");
+  }finally{
+    setButtonLoading("btnEntrar", false);
+  }
+}
+
+async function criarConta(){
+  setMsg("");
+  const email = ($("email")?.value || "").trim();
+  const senha = $("senha")?.value || "";
+
+  if(!email || !senha){
+    setMsg("Preencha e-mail e senha.");
+    return;
+  }
+
+  setButtonLoading("btnCriar", true);
+
+  try{
+    await createUserWithEmailAndPassword(auth, email, senha);
+    debug("Conta criada no Firebase Auth");
+    await sendEmailVerification(auth.currentUser);
+    debug("E-mail de verificação enviado");
+
+    abrirModal("sucesso","Conta criada","Enviamos um e-mail de verificação. Confirme antes de comprar.");
+    setMsg("Confirme o e-mail para liberar compra.");
+  }catch(e){
+    console.error("Erro criar conta:", e);
+    debug("Falha ao criar conta: " + (e?.message || "erro desconhecido"), true);
+    abrirModal("erro","Erro ao criar conta", e?.message || "Não foi possível criar.");
+  }finally{
+    setButtonLoading("btnCriar", false);
+  }
+}
+
+async function recuperarSenha(){
+  const email = ($("email")?.value || "").trim();
+  if(!email){
+    abrirModal("aviso","E-mail obrigatório","Digite seu e-mail para receber o link de redefinição.");
+    return;
+  }
+  try{
+    await sendPasswordResetEmail(auth, email);
+    abrirModal("sucesso","E-mail enviado","Se este e-mail estiver cadastrado, você receberá o link para redefinir a senha.");
+  }catch(e){
+    console.error("Reset senha:", e);
+    abrirModal("erro","Erro","Não foi possível enviar o e-mail. Verifique o endereço.");
+  }
+}
+
+async function sair(){
+  try{ await signOut(auth); } catch(_){}
+  // limpa UI
+  $("email").value = "";
+  $("senha").value = "";
+  setMsg("");
+  cancelarPolling();
+  show("loginBox");
+}
+
+/* =========================
+  PIX FLOW
+========================= */
+let pollingTimer = null;
+let countdownInterval = null;
+let currentTxid = null;
+let retryCount = 0;
+const MAX_RETRIES = 3;
+
+function cancelarPolling(){
+  if(pollingTimer){ clearInterval(pollingTimer); pollingTimer = null; }
+  if(countdownInterval){ clearInterval(countdownInterval); countdownInterval = null; }
+  currentTxid = null;
+  retryCount = 0;
+}
+
+function startCountdown(expiresAtIso){
+  const timer = $("pixTimer");
+  const countdown = $("countdown");
+  if(!timer || !countdown) return null;
+
+  if(!expiresAtIso){
+    timer.style.display = "none";
+    return null;
+  }
+  timer.style.display = "flex";
+
+  const tick = () => {
+    const now = Date.now();
+    const expires = new Date(expiresAtIso).getTime();
+    if(Number.isNaN(expires)){
+      countdown.innerText = "--:--";
+      return;
+    }
+    const diff = expires - now;
+    if(diff <= 0){
+      countdown.innerText = "00:00";
+      updatePaymentStatus("error","PIX expirado! Gere um novo.");
+      cancelarPolling();
+      return;
+    }
+    const mins = Math.floor(diff/60000);
+    const secs = Math.floor((diff%60000)/1000);
+    countdown.innerText = `${String(mins).padStart(2,"0")}:${String(secs).padStart(2,"0")}`;
+  };
+
+  tick();
+  return setInterval(tick, 1000);
+}
+
+async function gerarPix(plan){
+  const user = auth.currentUser;
+  if(!user){
+    show("loginBox");
+    setMsg("Faça login.");
+    return;
+  }
+
+  $("qrBox").classList.remove("hide");
+  $("payMsg").innerText = "";
+  $("qrSub").innerText = "";
+  $("qrImg").src = "";
+  $("pixCopia").value = "";
+
+  updatePaymentStatus("processing","Gerando PIX...");
+
+  $("btnPlano6").disabled = true;
+  $("btnPlano12").disabled = true;
+  const btnId = plan === "6m" ? "btnPlano6" : "btnPlano12";
+  setButtonLoading(btnId, true);
+
+  try{
+    const data = await callFunctionSmart("createPixCharge", { plan });
+
+    debug("createPixCharge => " + JSON.stringify({ txid: data?.txid, price: data?.price, plan: plan }));
+
+    if(data?.alreadyEntitled){
+      abrirModal("sucesso","Acesso ativo","Seu acesso premium já está ativo. Redirecionando…",[
+        {text:"Ir para o app", primary:true, onclick:()=> window.location.href = FRONT_URL}
+      ]);
+      setTimeout(()=> window.location.href = FRONT_URL, 1200);
+      return;
+    }
+
+    if(!data?.txid || !data?.qrcodeImage || !data?.copiaecola){
+      throw new Error("Resposta inválida do servidor ao gerar PIX.");
+    }
+
+    currentTxid = data.txid;
+
+    $("qrPlanInfo").innerText = `Plano ${plan === "6m" ? "6 meses" : "1 ano"} — R$ ${String(data.price).replace(".",",")}`;
+    $("qrSub").innerText = "Escaneie o QR Code ou copie o código";
+    $("qrImg").src = "data:image/png;base64," + data.qrcodeImage;
+    $("pixCopia").value = data.copiaecola;
+
+    updatePaymentStatus("pending","Aguardando pagamento...");
+    $("payMsg").innerHTML = "<span style='color:#64748b'>Escaneie com o app do banco ou cole o código PIX.</span>";
+
+    if(countdownInterval) clearInterval(countdownInterval);
+    countdownInterval = startCountdown(data.expiresAt);
+
+    iniciarPolling(currentTxid);
+
+  }catch(e){
+    console.error("Erro gerarPix:", e);
+    debug("Falha gerar PIX: " + (e?.message || "erro desconhecido"), true);
+
+    let msg = "Erro ao gerar PIX. Tente novamente.";
+    updatePaymentStatus("error", msg);
+    $("payMsg").innerText = msg;
+  }finally{
+    $("btnPlano6").disabled = false;
+    $("btnPlano12").disabled = false;
+    setButtonLoading(btnId, false);
+  }
+}
+
+function iniciarPolling(txid){
+  cancelarPolling();
+  currentTxid = txid;
+  verificarPagamento(txid);
+  pollingTimer = setInterval(()=> verificarPagamento(txid), 5000);
+}
+
+async function verificarPagamento(txid){
+  if(!txid) return;
+
+  try{
+    const data = await callFunctionSmart("pixStatus", { txid });
+    console.log("pixStatus =>", data);
+
+    if(data?.paid){
+      pagamentoConfirmado();
+      return;
+    }
+
+    if(data?.expired){
+      updatePaymentStatus("error","PIX expirado!");
+      $("payMsg").innerText = "O prazo para pagamento expirou. Gere um novo PIX.";
+      cancelarPolling();
+      return;
+    }
+
+    if(data?.status){
+      updatePaymentStatus("pending", `Status: ${data.status}`);
+    }
+
+    retryCount = 0;
+  }catch(e){
+    console.error("Erro pixStatus:", e);
+    retryCount++;
+
+    if(retryCount >= MAX_RETRIES){
+      updatePaymentStatus("error","Erro ao verificar. Tente novamente.");
+      $("payMsg").innerText = "Problema na conexão. Clique em 'Verificar pagamento'.";
+      cancelarPolling();
+    }else{
+      updatePaymentStatus("processing","Verificando...");
+    }
+  }
+}
+
+async function verificarPagamentoManual(){
+  if(!currentTxid){
+    abrirModal("aviso","Nenhum PIX","Gere um PIX primeiro.");
+    return;
+  }
+  updatePaymentStatus("processing","Verificando...");
+  retryCount = 0;
+  await verificarPagamento(currentTxid);
+  if(currentTxid && !pollingTimer) iniciarPolling(currentTxid);
+}
+
+function pagamentoConfirmado(){
+  cancelarPolling();
+  updatePaymentStatus("success","Pagamento confirmado!");
+
+  abrirModal("sucesso","🎉 Pagamento realizado!","Seu acesso premium foi ativado com sucesso.",[
+    {text:"Acessar o App", primary:true, onclick:()=> window.location.href = FRONT_URL},
+    {text:"Ver meu acesso", primary:false, onclick:()=> carregarStatus()}
+  ]);
+
+  // limpa QR
+  $("pixCopia").value = "";
+  $("qrImg").src = "";
+  $("qrBox").classList.add("hide");
+}
+
+async function copiarPix(){
+  const txt = $("pixCopia").value || "";
+  if(!txt) return;
+
+  try{
+    await navigator.clipboard.writeText(txt);
+    $("payMsg").innerHTML = "<span style='color:#16a34a;font-weight:900'>✅ Código PIX copiado!</span>";
+  }catch(e){
+    // fallback
+    $("pixCopia").focus();
+    $("pixCopia").select();
+    document.execCommand("copy");
+    $("payMsg").innerHTML = "<span style='color:#16a34a;font-weight:900'>✅ Código PIX copiado!</span>";
+  }
+}
+
+function cancelarPix(){
+  cancelarPolling();
+  $("qrBox").classList.add("hide");
+  $("payMsg").innerText = "";
+  $("qrSub").innerText = "";
+  $("pixCopia").value = "";
+  $("qrImg").src = "";
+  updatePaymentStatus("pending","PIX cancelado.");
+  abrirModal("info","PIX cancelado","Você pode gerar um novo PIX quando quiser.");
+}
+
+/* =========================
+  EVENTS (BIND UMA VEZ)
+========================= */
+$("btnEntrar").addEventListener("click", entrar);
+$("btnCriar").addEventListener("click", criarConta);
+$("btnResetSenha").addEventListener("click", recuperarSenha);
+$("btnSair").addEventListener("click", sair);
+$("btnTrocarConta").addEventListener("click", sair);
+
+$("btnAcessarApp").addEventListener("click", ()=> window.location.href = FRONT_URL);
+
+$("btnPlano6").addEventListener("click", ()=> gerarPix("6m"));
+$("btnPlano12").addEventListener("click", ()=> gerarPix("12m"));
+$("btnCopiar").addEventListener("click", copiarPix);
+$("btnCancelarPix").addEventListener("click", cancelarPix);
+$("btnRecheck").addEventListener("click", verificarPagamentoManual);
+
+$("toggleSenha").addEventListener("click", ()=>{
+  const senha = $("senha");
+  const isPwd = senha.type === "password";
+  senha.type = isPwd ? "text" : "password";
+  $("toggleSenha").innerText = isPwd ? "🙈" : "👁️";
+});
+
+/* =========================
+  AUTH STATE
+========================= */
+onAuthStateChanged(auth, async (user)=>{
+  if(!user){
+    debug("Usuário deslogado. Aguardando login...");
+    show("loginBox");
+    return;
+  }
+  debug("Usuário logado. Carregando status...");
+  await user.getIdToken(true);
+  await carregarStatus();
+});
+
+/* START */
+show("loginBox");
+debug("Página carregada. Ready!");
 </script>
 
 </body>
