@@ -454,7 +454,7 @@ button:active{
   font-weight:600;
   color:#0f172a;
 }
-<style>
+</style>
 /* ===== MODAL ===== */
 .modal-overlay{
   position:fixed;
@@ -1146,9 +1146,11 @@ async function entrar() {
   setButtonLoading("btnEntrar", true);
 
   try {
-    await signInWithEmailAndPassword(auth, email, senha);
-    debug("Auth OK (signInWithEmailAndPassword)");
-    await carregarStatus();
+   await signInWithEmailAndPassword(auth, email, senha);
+
+await auth.currentUser.getIdToken(true); // 🔑 força token
+
+await carregarStatus();
   } catch (e) {
     console.error("Erro ao entrar:", e);
     debug("Falha no login: " + (e?.message || "erro desconhecido"), true);
@@ -1525,6 +1527,7 @@ debug("Página carregada. Ready!");
 
 </body>
 </html>
+
 
 
 
