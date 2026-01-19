@@ -4,7 +4,6 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Simulados de Concursos</title>
-<title>Simulados de Concursos - DEBUG</title>
 
 <style>
 :root{
@@ -823,71 +822,6 @@ async function carregarStatus() {
   show("payBox");
 }
 
-
-/* ===== TRATAMENTO DE E-MAIL NÃO CONFIRMADO ===== */
-if (data.emailVerified === false) {
-abrirModal(
-"aviso",
-"Confirme seu e-mail",
-"Você precisa confirmar o e-mail antes de comprar. Verifique sua caixa de entrada e spam."
-);
-
-debug("E-mail não confirmado", true);
-show("statusBox");
-$("statusText").innerText = "E-mail não confirmado";
-$("statusSub").innerText = "Confirme o e-mail para liberar compra e acesso.";
-return;
-}
-/* ===== FIM ===== */
-
-if(!data.authenticated){
-show("loginBox");
-setMsg("Sessão inválida. Faça login novamente.");
-$("statusText").innerText = "⚠️ E-mail não confirmado";
-$("statusSub").innerText = "Verifique sua caixa de entrada e spam.";
-$("btnEntrar").innerText = "Entrar";
-$("btnEntrar").disabled = false;
-return;
-}
-
-const status = data.entitled ? data.plan : "none";
-const expiresIso = data.expiresAt || null;
-const fim = expiresIso ? new Date(expiresIso) : null;
-const fim = data.expiresAt ? new Date(data.expiresAt) : null;
-
-if (status === "trial" || status === "premium") {
-show("statusBox");
-
-// Atualiza status box
-const statusBox = $("statusInfoBox");
-statusBox.className = "status-box " + (status === "trial" ? "trial" : "premium");
-
-if (status === "trial") {
-$("statusText").innerText = "🕐 Teste grátis ativo";
-$("statusSub").innerText = fim ? ("Válido até: " + fim.toLocaleString()) : "";
-} else {
-} else if (status === "premium") {
-$("statusText").innerText = "✅ Acesso Premium ativo";
-$("statusSub").innerText = fim ? ("Válido até: " + fim.toLocaleString()) : "";
-}
-return;
-}
-
-// Sem acesso - mostra paywall
-$("qrBox").classList.add("hide");
-$("payMsg").innerText = "";
-$("qrSub").innerText = "";
-
-abrirModal(
-"aviso",
-"Acesso expirado",
-"Seu período de teste terminou. Faça login com outra conta ou assine."
-);
-
-show("payBox");
-
-} // ← FECHA carregarStatus()
-
 /* ===== PIX ===== */
 let pollingTimer = null;
 let countdownInterval = null;
@@ -1081,7 +1015,7 @@ $("statusSub").innerText = "Você precisa fazer o teste ou assinar.";
 updatePaymentStatus("processing", "Verificando...");
 retryCount = 0;
 await verificarPagamento(currentTxid);
-debug("Login OK! Status: " + status);
+debug("Login OK!");
 
 // Reinicia polling se ainda não expirou
 if (currentTxid && countdownInterval) {
@@ -1145,7 +1079,9 @@ $("btnEntrar").disabled = false;
 }
 
 function cancelarPix() {
-cancelarPolling();
+  cancelarPolling();
+  updatePaymentStatus("pending", "PIX cancelado");
+}
 /* ===== CRIAR CONTA ===== */
 async function criarConta(){
 const email = $("email").value.trim();
@@ -1229,4 +1165,5 @@ debug("Página carregada. Ready!");
 </script>
 </body>
 </html>
+
 
