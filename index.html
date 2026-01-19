@@ -452,22 +452,23 @@ Cancelar
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+
 import {
-getAuth,
-setPersistence,
-browserSessionPersistence,
-signInWithEmailAndPassword,
-createUserWithEmailAndPassword,
-signOut,
-sendEmailVerification
-sendEmailVerification,
-onAuthStateChanged
+  getAuth,
+  setPersistence,
+  browserLocalPersistence,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut,
+  sendEmailVerification,
+  sendPasswordResetEmail,
+  onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-functions.js";
-import { sendPasswordResetEmail } from
-"https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-import { onAuthStateChanged } from
-"https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+import {
+  getFunctions,
+  httpsCallable
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-functions.js";
 
 
 /* ===== CONFIG ===== */
@@ -483,17 +484,8 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 // Persistência (UMA VEZ)
-try {
-import { browserLocalPersistence } from
-"https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-
 await setPersistence(auth, browserLocalPersistence);
-} catch (err) {
-console.error("Erro setPersistence:", err);
-}
 
-const functionsRegion = "us-central1";
-const fx = getFunctions(app, functionsRegion);
 const fx = getFunctions(app, "us-central1");
 
 const meCall = httpsCallable(fx, "me");
@@ -776,26 +768,61 @@ const resp = await meCall();
 const data = resp.data;
 
 /* ===== STATUS ===== */
-async function carregarStatus(){
-const user = auth.currentUser;
-if(!user){ show("loginBox"); return; }
-debug("Cloud Function retornou: " + JSON.stringify(data));
+async function carregarStatus() {
+  const user = auth.currentUser;
+  if (!user) {
+    show("loginBox");
+    return;
+  }
 
-let data;
-try {
-const resp = await meCall();
-data = resp.data;
-} catch (e) {
-console.error("Erro meCall:", e);
-if (!data.authenticated) {
-debug("Sessão inválida", true);
-show("loginBox");
-setMsg(e?.message || "Falha ao validar sessão. Faça login novamente.");
-setMsg("Sessão inválida. Faça login novamente.");
-$("btnEntrar").innerText = "Entrar";
-$("btnEntrar").disabled = false;
-return;
+  let data;
+  try {
+    const resp = await meCall();
+    data = resp.data;
+  } catch (e) {
+    console.error("Erro meCall:", e);
+    setMsg("Falha ao validar sessão.");
+    show("loginBox");
+    return;
+  }
+
+  debug("Cloud Function retornou: " + JSON.stringify(data));
+
+  if (!data.authenticated) {
+    show("loginBox");
+    setMsg("Sessão inválida.");
+    return;
+  }
+
+  if (data.emailVerified === false) {
+    show("statusBox");
+    $("statusText").innerText = "⚠️ E-mail não confirmado";
+    $("statusSub").innerText = "Confirme o e-mail para continuar.";
+    return;
+  }
+
+  const status = data.entitled ? data.plan : "none";
+  const fim = data.expiresAt ? new Date(data.expiresAt) : null;
+
+  if (status === "trial" || status === "premium") {
+    show("statusBox");
+
+    const box = $("statusInfoBox");
+    box.className = "status-box " + status;
+
+    $("statusText").innerText =
+      status === "trial" ? "🕐 Teste grátis ativo" : "✅ Acesso Premium ativo";
+
+    $("statusSub").innerText = fim
+      ? "Válido até: " + fim.toLocaleString()
+      : "";
+
+    return;
+  }
+
+  show("payBox");
 }
+
 
 /* ===== TRATAMENTO DE E-MAIL NÃO CONFIRMADO ===== */
 if (data.emailVerified === false) {
@@ -1160,13 +1187,11 @@ $("btnCriar").disabled = false;
 
 /* ===== START ===== */
 onAuthStateChanged(auth, (user) => {
-if (!user) {
-show("loginBox");
-return;
-}
-carregarStatus();
-// Se já está logado, verificar status
-entrar();
+  if (!user) {
+    show("loginBox");
+    return;
+  }
+  carregarStatus();
 });
 
 async function recuperarSenha() {
@@ -1204,3 +1229,4 @@ debug("Página carregada. Ready!");
 </script>
 </body>
 </html>
+
