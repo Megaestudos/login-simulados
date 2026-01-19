@@ -366,23 +366,28 @@ $("btnCriar").disabled = false;
 }
 
 /* ===== START ===== */
+let isFirstLoad = true;
+
 onAuthStateChanged(auth, (user) => {
   console.log("[AUTH STATE CHANGE]", user ? "Usuário logado: " + user.email : "Sem usuário");
   
   if (!user) {
     show("loginBox");
-    debug("Sem usuário logado (esperando login...)");
+    if (isFirstLoad) {
+      debug("✅ Pronto para fazer login!");
+      isFirstLoad = false;
+    }
     return;
   }
   
-  // Usuário está logado, verificar status
-  debug("Usuário detectado: " + user.email);
-  entrar();
+  // Apenas loga, NÃO chama entrar() automaticamente
+  console.log("[AUTH] Usuário detectado, mas aguardando ação do usuário");
+  // NÃO chama entrar() aqui - usuário deve clicar no botão
 });
 
 // estado inicial
 show("loginBox");
-debug("Página carregada. Ready!");
+debug("✅ Página carregada! Preencha e-mail e senha e clique em Entrar.");
 </script>
 </body>
 </html>
