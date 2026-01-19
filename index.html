@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Simulados de Concursos</title>
 
+<!-- =========================
+  CSS GLOBAL – LIMPO E VÁLIDO
+========================= -->
 <style>
 :root{
   --primary:#2563eb;
@@ -26,7 +29,7 @@ body{
   min-height:100vh;
   color:#fff;
   background:
-    linear-gradient(rgba(15,23,42,.7),rgba(15,23,42,.7)),
+    linear-gradient(rgba(15,23,42,.75),rgba(15,23,42,.75)),
     url("https://images.pexels.com/photos/990432/pexels-photo-990432.jpeg");
   background-size:cover;
   background-position:center;
@@ -43,7 +46,7 @@ body{
 
 .container{
   width:100%;
-  max-width:980px;
+  max-width:1100px;
   display:grid;
   grid-template-columns:1.2fr 1fr;
   gap:40px;
@@ -53,21 +56,43 @@ body{
   .container{grid-template-columns:1fr}
 }
 
-.hero h1{font-size:38px;margin:0 0 12px}
-.hero p{font-size:18px;color:#e5e7eb}
-.hero ul{list-style:none;padding:0}
-.hero li{margin:10px 0}
-.hero li::before{content:"✓ ";color:#22c55e;font-weight:700}
+.hero h1{
+  font-size:40px;
+  margin:0 0 14px;
+}
+
+.hero p{
+  font-size:18px;
+  color:#e5e7eb;
+}
+
+.hero ul{
+  list-style:none;
+  padding:0;
+}
+
+.hero li{
+  margin:10px 0;
+}
+
+.hero li::before{
+  content:"✓ ";
+  color:#22c55e;
+  font-weight:900;
+}
 
 .card{
   background:var(--card);
   color:var(--text);
-  border-radius:20px;
-  padding:32px;
+  border-radius:22px;
+  padding:34px;
   box-shadow:0 40px 80px rgba(0,0,0,.35);
 }
 
-label{font-size:14px;color:#475569}
+label{
+  font-size:14px;
+  color:#475569;
+}
 
 input{
   width:100%;
@@ -75,6 +100,13 @@ input{
   margin:6px 0 16px;
   border-radius:12px;
   border:1px solid var(--border);
+  font-size:15px;
+}
+
+input:focus{
+  outline:none;
+  border-color:#93c5fd;
+  box-shadow:0 0 0 4px rgba(59,130,246,.15);
 }
 
 button{
@@ -82,24 +114,59 @@ button{
   padding:14px;
   border-radius:12px;
   border:0;
+  font-size:15px;
   cursor:pointer;
 }
 
-.btn-primary{background:var(--primary);color:#fff}
-.btn-primary:hover{background:var(--primary-dark)}
-.btn-sec{background:#f1f5f9;color:#0f172a;margin-top:8px}
+.btn-primary{
+  background:var(--primary);
+  color:#fff;
+}
+
+.btn-primary:hover{
+  background:var(--primary-dark);
+}
+
+.btn-sec{
+  background:#f1f5f9;
+  color:#0f172a;
+  margin-top:8px;
+}
 
 .hide{display:none!important}
 
-.hr{height:1px;background:#e2e8f0;margin:18px 0}
+.hr{
+  height:1px;
+  background:#e2e8f0;
+  margin:18px 0;
+}
 
-.small{font-size:13px;color:var(--muted)}
+.small{
+  font-size:13px;
+  color:var(--muted);
+}
 
-.plan{border:1px solid #e2e8f0;border-radius:14px;padding:14px;margin-top:10px}
+.plan{
+  border:1px solid #e2e8f0;
+  border-radius:16px;
+  padding:16px;
+  margin-top:12px;
+}
+
+.plan.reco{
+  border:2px solid var(--primary);
+  box-shadow:0 10px 24px rgba(37,99,235,.15);
+}
+
+.price{
+  font-size:24px;
+  font-weight:900;
+  margin-top:6px;
+}
 
 .qrImg{
   max-width:260px;
-  margin:auto;
+  margin:16px auto;
   display:block;
   background:#fff;
   padding:10px;
@@ -108,24 +175,28 @@ button{
 
 .payment-status{
   display:flex;
+  align-items:center;
   justify-content:center;
   gap:8px;
   padding:12px;
-  border-radius:8px;
+  border-radius:10px;
   margin-top:10px;
+  font-weight:700;
 }
 
-.payment-status.pending{background:#fef3c7}
-.payment-status.success{background:#dcfce7}
-.payment-status.error{background:#fee2e2}
+.payment-status.pending{background:#fef3c7;color:#92400e}
+.payment-status.success{background:#dcfce7;color:#166534}
+.payment-status.error{background:#fee2e2;color:#991b1b}
 
-.debug-panel{
-  background:#1e293b;
-  border:2px solid #f59e0b;
-  border-radius:12px;
-  padding:16px;
-  color:#f59e0b;
+.debug{
+  background:#020617;
+  border:1px solid #334155;
+  border-radius:10px;
+  padding:12px;
+  margin-bottom:12px;
   font-family:monospace;
+  font-size:12px;
+  color:#22c55e;
 }
 </style>
 </head>
@@ -134,47 +205,75 @@ button{
 <div class="page">
 <div class="container">
 
+<!-- ================= HERO ================= -->
 <div class="hero">
-  <h1>Prepare-se para concursos</h1>
-  <p>Simulados atualizados e acesso imediato</p>
+  <h1>Estude para concursos<br>com foco em aprovação</h1>
+  <p>Simulados realistas, questões comentadas e acesso imediato.</p>
   <ul>
-    <li>Questões comentadas</li>
-    <li>Simulados realistas</li>
-    <li>Teste grátis por 48h</li>
+    <li>Conteúdo atualizado</li>
+    <li>Simulados no nível da prova</li>
+    <li>Teste grátis por 48 horas</li>
   </ul>
 </div>
 
+<!-- ================= CARD ================= -->
 <div class="card">
-  <div id="debugPanel" class="debug-panel hide">
-    <div id="debugContent"></div>
+
+<div id="debug" class="debug hide"></div>
+
+<!-- ===== LOGIN ===== -->
+<div id="loginBox">
+  <label>Email</label>
+  <input id="email" type="email">
+
+  <label>Senha</label>
+  <input id="senha" type="password">
+
+  <button id="btnEntrar" class="btn-primary">Entrar</button>
+  <button id="btnCriar" class="btn-sec">Criar conta</button>
+  <button id="btnReset" class="btn-sec">Esqueci minha senha</button>
+</div>
+
+<!-- ===== STATUS ===== -->
+<div id="statusBox" class="hide">
+  <div class="hr"></div>
+  <div id="statusTitle" style="font-weight:900;font-size:18px"></div>
+  <div id="statusSub" class="small"></div>
+
+  <button id="btnApp" class="btn-primary">Acessar App</button>
+  <button id="btnSair" class="btn-sec">Sair</button>
+</div>
+
+<!-- ===== PAYWALL ===== -->
+<div id="payBox" class="hide">
+  <div class="hr"></div>
+
+  <div class="plan reco">
+    <div style="font-weight:900">Plano 6 meses</div>
+    <div class="price">R$ 29,90</div>
+    <button id="btn6" class="btn-primary">Gerar PIX</button>
   </div>
 
-  <div id="loginBox">
-    <label>Email</label>
-    <input id="email" type="email">
-
-    <label>Senha</label>
-    <input id="senha" type="password">
-
-    <button id="btnEntrar" class="btn-primary">Entrar</button>
-    <button id="btnCriar" class="btn-sec">Criar conta</button>
-    <button id="btnResetSenha" class="btn-sec">Esqueci minha senha</button>
-
-    <div id="msgLogin" class="small"></div>
+  <div class="plan">
+    <div style="font-weight:900">Plano 12 meses</div>
+    <div class="price">R$ 49,90</div>
+    <button id="btn12" class="btn-primary">Gerar PIX</button>
   </div>
 
-  <div id="statusBox" class="hide">
-    <div class="hr"></div>
-    <div id="statusText"></div>
-    <div id="statusSub" class="small"></div>
-    <button id="btnAcessarApp" class="btn-primary">Acessar App</button>
-    <button id="btnSair" class="btn-sec">Sair</button>
+  <div id="pixBox" class="hide">
+    <div class="payment-status pending" id="pixStatus">Aguardando pagamento…</div>
+    <img id="qrImg" class="qrImg">
+    <input id="pixCode" readonly>
   </div>
+</div>
 
 </div>
 </div>
 </div>
 
+<!-- =========================
+  FIREBASE + JS
+========================= -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 import {
@@ -201,65 +300,62 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 await setPersistence(auth, browserLocalPersistence);
 
-const fx = getFunctions(app, "us-central1");
-const meCall = httpsCallable(fx, "me");
+const fx = getFunctions(app,"us-central1");
+const meCall = httpsCallable(fx,"me");
+const createPix = httpsCallable(fx,"createPixCharge");
+const pixStatus = httpsCallable(fx,"pixStatus");
 
 const $ = id => document.getElementById(id);
-
-function debug(msg, err=false){
-  $("debugPanel").classList.remove("hide");
-  $("debugContent").innerText = msg;
-  console.log(msg);
-}
+const log = m => { $("debug").classList.remove("hide"); $("debug").innerText=m; console.log(m); };
 
 async function entrar(){
-  const email = $("email").value.trim();
-  const senha = $("senha").value;
+  const email=$("email").value.trim();
+  const senha=$("senha").value;
+  await signInWithEmailAndPassword(auth,email,senha);
+  await auth.currentUser.getIdToken(true);
+  await carregarStatus();
+}
 
-  if(!email || !senha) return;
+async function carregarStatus(){
+  const r=await meCall();
+  const d=r.data;
 
-  try{
-    await signInWithEmailAndPassword(auth,email,senha);
-    await auth.currentUser.getIdToken(true);
-    const resp = await meCall();
-    const data = resp.data;
+  $("loginBox").classList.add("hide");
 
-    if(data.emailVerified === false){
-      $("statusText").innerText = "Confirme seu e-mail";
-      $("statusSub").innerText = "Verifique sua caixa de entrada";
-    }else{
-      $("statusText").innerText = "Acesso liberado";
-      $("statusSub").innerText = data.expiresAt || "";
-    }
-
-    $("loginBox").classList.add("hide");
+  if(d.entitled){
     $("statusBox").classList.remove("hide");
-
-  }catch(e){
-    debug("Erro login: "+e.message,true);
+    $("statusTitle").innerText=d.plan==="trial"?"Teste ativo":"Premium ativo";
+    $("statusSub").innerText=d.expiresAt||"";
+  }else{
+    $("payBox").classList.remove("hide");
   }
 }
 
-$("btnEntrar").onclick = entrar;
-$("btnCriar").onclick = async ()=>{
-  const email = $("email").value.trim();
-  const senha = $("senha").value;
-  const cred = await createUserWithEmailAndPassword(auth,email,senha);
-  await sendEmailVerification(cred.user);
-  debug("Conta criada, verifique o e-mail");
+$("btnEntrar").onclick=entrar;
+$("btnCriar").onclick=async()=>{
+  const email=$("email").value.trim();
+  const senha=$("senha").value;
+  const c=await createUserWithEmailAndPassword(auth,email,senha);
+  await sendEmailVerification(c.user);
+  log("Conta criada. Confirme o e-mail.");
 };
-
-$("btnResetSenha").onclick = async ()=>{
+$("btnReset").onclick=async()=>{
   await sendPasswordResetEmail(auth,$("email").value.trim());
-  debug("E-mail de redefinição enviado");
+  log("E-mail de redefinição enviado.");
 };
+$("btnSair").onclick=async()=>{await signOut(auth);location.reload()};
+$("btnApp").onclick=()=>location.href=FRONT_URL;
 
-$("btnSair").onclick = async ()=>{
-  await signOut(auth);
-  location.reload();
-};
+async function gerar(plan){
+  const r=await createPix({plan});
+  const d=r.data;
+  $("pixBox").classList.remove("hide");
+  $("qrImg").src="data:image/png;base64,"+d.qrcodeImage;
+  $("pixCode").value=d.copiaecola;
+}
 
-$("btnAcessarApp").onclick = ()=>location.href=FRONT_URL;
+$("btn6").onclick=()=>gerar("6m");
+$("btn12").onclick=()=>gerar("12m");
 </script>
 
 </body>
