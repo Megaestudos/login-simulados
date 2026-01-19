@@ -569,26 +569,40 @@ const pixStatusFunc = httpsCallable(fx, "pixStatus");
   AUTH FUNCTIONS
 ========================= */
 async function entrar() {
+  setMsg("");
+
   const email = ($("email")?.value || "").trim();
-  const senha = ($("senha")?.value || "").trim();
+  const senha = $("senha")?.value || "";
 
   if (!email || !senha) {
-    setMsg("Email e senha são obrigatórios");
+    setMsg("Preencha e-mail e senha.");
     return;
   }
 
   setButtonLoading("btnEntrar", true);
+
   try {
-    await signInWithEmailAndPassword(auth, email, senha);
-    debug("Login realizado com sucesso!");
+    // 1️⃣ Login
+    const cred = await signInWithEmailAndPassword(auth, email, senha);
+
+    // 2️⃣ FORÇA emissão do token
+    await cred.user.getIdToken(true);
+
+    // 3️⃣ Aguarda propagação
+    await new Promise(r => setTimeout(r, 400));
+
+    debug("Auth OK + token emitido");
+
+    // 4️⃣ Agora SIM pode chamar o backend
+    await carregarStatus();
+
   } catch (e) {
-    console.error("Erro login:", e);
-    const msg = e.code === "auth/user-not-found" ? "Usuário não encontrado" :
-                e.code === "auth/wrong-password" ? "Senha incorreta" :
-                e.code === "auth/invalid-email" ? "Email inválido" :
-                e.message || "Erro ao fazer login";
-    setMsg(msg);
-    debug("Erro no login: " + msg, true);
+    console.error(e);
+    abrirModal(
+      "erro",
+      "Erro ao entrar",
+      "E-mail ou senha inválidos."
+    );
   } finally {
     setButtonLoading("btnEntrar", false);
   }
@@ -947,3 +961,4 @@ debug("Página carregada. Ready!");
 
 </body>
 </html>
+
