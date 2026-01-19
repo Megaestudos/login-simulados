@@ -588,16 +588,16 @@ async function entrar() {
     // 2️⃣ FORÇA emissão do token
     await cred.user.getIdToken(true);
 
-    // 3️⃣ Aguarda propagação
-    await new Promise(r => setTimeout(r, 400));
+    // 3️⃣ Aguarda propagação do token
+    await new Promise(resolve => setTimeout(resolve, 500));
 
-    debug("Auth OK + token emitido");
+    debug("Login OK + token propagado");
 
-    // 4️⃣ Agora SIM pode chamar o backend
+    // 4️⃣ AGORA SIM chama backend
     await carregarStatus();
 
   } catch (e) {
-    console.error(e);
+    console.error("Erro login:", e);
     abrirModal(
       "erro",
       "Erro ao entrar",
@@ -943,14 +943,14 @@ on("toggleSenha", "click", () => {
 ========================= */
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
-    debug("Usuário deslogado. Aguardando login...");
     show("loginBox");
     return;
   }
-  debug("Usuário logado. Carregando status...");
-  await user.getIdToken(true);
-  await carregarStatus();
+
+  // NÃO chama carregarStatus aqui
+  debug("Auth state mudou, aguardando ação explícita");
 });
+
 
 /* =========================
   INIT
@@ -961,4 +961,5 @@ debug("Página carregada. Ready!");
 
 </body>
 </html>
+
 
