@@ -484,7 +484,11 @@ const PROJECT_ID = firebaseConfig.projectId;
 ========================= */
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-await setPersistence(auth, browserLocalPersistence);
+try{
+  await setPersistence(auth, browserLocalPersistence);
+}catch(e){
+  console.warn("Falha ao definir persistência, seguindo com padrão:", e);
+}
 const fx = getFunctions(app, FUNCTIONS_REGION);
 
 /* =========================
@@ -775,8 +779,8 @@ async function recuperarSenha(){
 async function sair(){
   try{ await signOut(auth); } catch(_){}
   // limpa UI
-  $("email").value = "";
-  $("senha").value = "";
+  if($("email")) $("email").value = "";
+  if($("senha")) $("senha").value = "";
   setMsg("");
   cancelarPolling();
   show("loginBox");
@@ -1000,25 +1004,32 @@ function cancelarPix(){
 /* =========================
   EVENTS (BIND UMA VEZ)
 ========================= */
-$("btnEntrar").addEventListener("click", entrar);
-$("btnCriar").addEventListener("click", criarConta);
-$("btnResetSenha").addEventListener("click", recuperarSenha);
-$("btnSair").addEventListener("click", sair);
-$("btnTrocarConta").addEventListener("click", sair);
+function on(id, event, handler){
+  const el = $(id);
+  if(!el) return;
+  el.addEventListener(event, handler);
+}
 
-$("btnAcessarApp").addEventListener("click", ()=> window.location.href = FRONT_URL);
+on("btnEntrar", "click", entrar);
+on("btnCriar", "click", criarConta);
+on("btnResetSenha", "click", recuperarSenha);
+on("btnSair", "click", sair);
+on("btnTrocarConta", "click", sair);
 
-$("btnPlano6").addEventListener("click", ()=> gerarPix("6m"));
-$("btnPlano12").addEventListener("click", ()=> gerarPix("12m"));
-$("btnCopiar").addEventListener("click", copiarPix);
-$("btnCancelarPix").addEventListener("click", cancelarPix);
-$("btnRecheck").addEventListener("click", verificarPagamentoManual);
+on("btnAcessarApp", "click", ()=> window.location.href = FRONT_URL);
 
-$("toggleSenha").addEventListener("click", ()=>{
+on("btnPlano6", "click", ()=> gerarPix("6m"));
+on("btnPlano12", "click", ()=> gerarPix("12m"));
+on("btnCopiar", "click", copiarPix);
+on("btnCancelarPix", "click", cancelarPix);
+on("btnRecheck", "click", verificarPagamentoManual);
+
+on("toggleSenha", "click", ()=>{
   const senha = $("senha");
+  if(!senha) return;
   const isPwd = senha.type === "password";
   senha.type = isPwd ? "text" : "password";
-  $("toggleSenha").innerText = isPwd ? "🙈" : "👁️";
+  if($("toggleSenha")) $("toggleSenha").innerText = isPwd ? "🙈" : "👁️";
 });
 
 /* =========================
