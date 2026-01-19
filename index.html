@@ -257,74 +257,86 @@ toggleSenha.innerText = isPassword ? "🙈" : "👁️";
 
 /* ===== LOGIN ===== */
 async function entrar() {
-const email = $("email").value.trim();
-const senha = $("senha").value;
+  // 🔒 PROTEÇÃO: Verificar se há usuário logado
+  const currentUser = auth.currentUser;
+  console.log("[ENTRAR] auth.currentUser:", currentUser);
+  
+  if (!currentUser) {
+    debug("auth.currentUser é null - ignornando (aguardando usuário fazer login)", true);
+    // NÃO mostra erro, apenas ignora
+    $("btnEntrar").innerText = "Entrar";
+    $("btnEntrar").disabled = false;
+    return;
+  }
+  
+  const email = $("email").value.trim();
+  const senha = $("senha").value;
 
-if (!email || !senha) {
-setMsg("Preencha e-mail e senha.");
-return;
-}
+  if (!email || !senha) {
+    setMsg("Preencha e-mail e senha.");
+    return;
+  }
 
-debug("Tentando fazer login com: " + email);
-$("btnEntrar").innerText = "Carregando...";
-$("btnEntrar").disabled = true;
+  debug("✅ Usuário autenticado! Prosseguindo com login: " + email);
+  $("btnEntrar").innerText = "Carregando...";
+  $("btnEntrar").disabled = true;
 
-try {
-debug("Chamando Firebase Auth...");
-await signInWithEmailAndPassword(auth, email, senha);
-debug("Firebase Auth OK!");
+  try {
+    debug("Chamando Firebase Auth...");
+    await signInWithEmailAndPassword(auth, email, senha);
+    debug("Firebase Auth OK!");
 
-debug("Chamando Cloud Function 'me'...");
-const resp = await meCall();
-const data = resp.data;
+    debug("Chamando Cloud Function 'me'...");
+    const resp = await meCall();
+    const data = resp.data;
 
-debug("Cloud Function retornou: " + JSON.stringify(data));
+    debug("Cloud Function retornou: " + JSON.stringify(data));
 
-if (!data.authenticated) {
-debug("Sessão inválida", true);
-show("loginBox");
-setMsg("Sessão inválida. Faça login novamente.");
-$("btnEntrar").innerText = "Entrar";
-$("btnEntrar").disabled = false;
-return;
-}
+    if (!data.authenticated) {
+      debug("Sessão inválida", true);
+      show("loginBox");
+      setMsg("Sessão inválida. Faça login novamente.");
+      $("btnEntrar").innerText = "Entrar";
+      $("btnEntrar").disabled = false;
+      return;
+    }
 
-if (data.emailVerified === false) {
-debug("E-mail não confirmado", true);
-show("statusBox");
-$("statusText").innerText = "⚠️ E-mail não confirmado";
-$("statusSub").innerText = "Verifique sua caixa de entrada e spam.";
-$("btnEntrar").innerText = "Entrar";
-$("btnEntrar").disabled = false;
-return;
-}
+    if (data.emailVerified === false) {
+      debug("E-mail não confirmado", true);
+      show("statusBox");
+      $("statusText").innerText = "⚠️ E-mail não confirmado";
+      $("statusSub").innerText = "Verifique sua caixa de entrada e spam.";
+      $("btnEntrar").innerText = "Entrar";
+      $("btnEntrar").disabled = false;
+      return;
+    }
 
-const status = data.entitled ? data.plan : "none";
-const fim = data.expiresAt ? new Date(data.expiresAt) : null;
+    const status = data.entitled ? data.plan : "none";
+    const fim = data.expiresAt ? new Date(data.expiresAt) : null;
 
-show("statusBox");
+    show("statusBox");
 
-if (status === "trial") {
-$("statusText").innerText = "🕐 Teste grátis ativo";
-$("statusSub").innerText = fim ? ("Válido até: " + fim.toLocaleString()) : "";
-} else if (status === "premium") {
-$("statusText").innerText = "✅ Acesso Premium ativo";
-$("statusSub").innerText = fim ? ("Válido até: " + fim.toLocaleString()) : "";
-} else {
-$("statusText").innerText = "❌ Sem acesso";
-$("statusSub").innerText = "Você precisa fazer o teste ou assinar.";
-}
+    if (status === "trial") {
+      $("statusText").innerText = "🕐 Teste grátis ativo";
+      $("statusSub").innerText = fim ? ("Válido até: " + fim.toLocaleString()) : "";
+    } else if (status === "premium") {
+      $("statusText").innerText = "✅ Acesso Premium ativo";
+      $("statusSub").innerText = fim ? ("Válido até: " + fim.toLocaleString()) : "";
+    } else {
+      $("statusText").innerText = "❌ Sem acesso";
+      $("statusSub").innerText = "Você precisa fazer o teste ou assinar.";
+    }
 
-debug("Login OK! Status: " + status);
+    debug("Login OK! Status: " + status);
 
-} catch (e) {
-console.error("Erro completo:", e);
-debug("ERRO: " + e.message + " (código: " + e.code + ")", true);
-setMsg(e?.message || "Erro ao fazer login");
-} finally {
-$("btnEntrar").innerText = "Entrar";
-$("btnEntrar").disabled = false;
-}
+  } catch (e) {
+    console.error("Erro completo:", e);
+    debug("ERRO: " + e.message + " (código: " + e.code + ")", true);
+    setMsg(e?.message || "Erro ao fazer login");
+  } finally {
+    $("btnEntrar").innerText = "Entrar";
+    $("btnEntrar").disabled = false;
+  }
 }
 
 /* ===== CRIAR CONTA ===== */
