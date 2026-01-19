@@ -7,780 +7,260 @@
 
 <style>
 :root{
---primary:#2563eb;
---primary-dark:#1e40af;
---card:#ffffff;
---text:#0f172a;
---muted:#cbd5f5;
---border:#e2e8f0;
---success:#16a34a;
+  --primary:#2563eb;
+  --primary-dark:#1e40af;
+  --card:#ffffff;
+  --text:#0f172a;
+  --muted:#64748b;
+  --border:#e2e8f0;
+  --success:#16a34a;
+  --warning:#f59e0b;
+  --danger:#dc2626;
 }
+
 *{box-sizing:border-box}
+
 body{
-margin:0;
-font-family: Inter, system-ui, -apple-system, Arial, sans-serif;
-min-height:100vh;
-color:#fff;
-background:
-linear-gradient(rgba(15,23,42,0.70), rgba(15,23,42,0.70)),
-url("https://images.pexels.com/photos/990432/pexels-photo-990432.jpeg");
-background-size:cover;
-background-position:center;
-background-attachment:fixed;
+  margin:0;
+  font-family:Inter,system-ui,-apple-system,Arial,sans-serif;
+  min-height:100vh;
+  color:#fff;
+  background:
+    linear-gradient(rgba(15,23,42,.7),rgba(15,23,42,.7)),
+    url("https://images.pexels.com/photos/990432/pexels-photo-990432.jpeg");
+  background-size:cover;
+  background-position:center;
+  background-attachment:fixed;
 }
+
 .page{
-min-height:100vh;
-display:flex;
-align-items:center;
-justify-content:center;
-padding:24px;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
 }
+
 .container{
-width:100%;
-max-width:980px;
-display:grid;
-grid-template-columns:1.2fr 1fr;
-gap:40px;
+  width:100%;
+  max-width:980px;
+  display:grid;
+  grid-template-columns:1.2fr 1fr;
+  gap:40px;
 }
+
 @media(max-width:900px){
-.container{grid-template-columns:1fr}
+  .container{grid-template-columns:1fr}
 }
+
 .hero h1{font-size:38px;margin:0 0 12px}
 .hero p{font-size:18px;color:#e5e7eb}
 .hero ul{list-style:none;padding:0}
 .hero li{margin:10px 0}
-.hero li::before{content:"✓ ";color:#22c55e}
+.hero li::before{content:"✓ ";color:#22c55e;font-weight:700}
 
 .card{
-background:var(--card);
-color:var(--text);
-border-radius:20px;
-padding:32px;
-box-shadow:0 40px 80px rgba(0,0,0,.35);
+  background:var(--card);
+  color:var(--text);
+  border-radius:20px;
+  padding:32px;
+  box-shadow:0 40px 80px rgba(0,0,0,.35);
 }
+
 label{font-size:14px;color:#475569}
+
 input{
-width:100%;
-padding:14px;
-margin:6px 0 16px;
-border-radius:12px;
-border:1px solid var(--border);
-font-size:15px;
+  width:100%;
+  padding:14px;
+  margin:6px 0 16px;
+  border-radius:12px;
+  border:1px solid var(--border);
 }
+
 button{
-width:100%;
-padding:14px;
-border-radius:12px;
-border:0;
-font-size:15px;
-cursor:pointer;
+  width:100%;
+  padding:14px;
+  border-radius:12px;
+  border:0;
+  cursor:pointer;
 }
+
 .btn-primary{background:var(--primary);color:#fff}
 .btn-primary:hover{background:var(--primary-dark)}
-.btn-sec{background:#f1f5f9;margin-top:10px}
-.msg{margin-top:14px;font-size:14px;text-align:center;color:#dc2626}
-.hide{
-display:none !important;
-pointer-events:none !important;
-}
+.btn-sec{background:#f1f5f9;color:#0f172a;margin-top:8px}
+
+.hide{display:none!important}
 
 .hr{height:1px;background:#e2e8f0;margin:18px 0}
-.small{font-size:13px;color:#64748b;line-height:1.35}
 
-.plan-grid{display:grid;grid-template-columns:1fr;gap:10px;margin-top:10px}
-.plan{
-border:1px solid #e2e8f0;
-border-radius:14px;
-padding:14px;
-background:#fff;
-}
-.plan .top{display:flex;justify-content:space-between;align-items:center;gap:10px}
-.badge{
-background:#e0e7ff;
-color:#1e40af;
-padding:6px 10px;
-border-radius:999px;
-font-size:13px;
-font-weight:700;
-}
-.reco{
-border:2px solid #2563eb;
-box-shadow:0 10px 24px rgba(37,99,235,.15);
-}
-.price{font-size:22px;font-weight:900;color:#0f172a;margin:8px 0 0}
-.plan button{margin-top:10px}
+.small{font-size:13px;color:var(--muted)}
 
-.qrWrap{margin-top:10px}
-.qrImg{width:100%;max-width:260px;border:1px solid #e2e8f0;border-radius:12px;padding:10px;background:#fff}
-.copyRow{display:flex;gap:8px;margin-top:10px}
-.copyRow input{margin:0;flex:1}
-.copyRow button{width:auto;padding:12px 14px;border-radius:12px;background:#0f172a;color:#fff}
-.ok{color:#16a34a}
-/* === BOTÃO TROCAR CONTA (FORÇA AZUL) === */
-.btn-primary-force{
-background: var(--primary) !important;
-color:#fff !important;
-}
-.btn-primary-force:hover{
-background: var(--primary-dark) !important;
+.plan{border:1px solid #e2e8f0;border-radius:14px;padding:14px;margin-top:10px}
+
+.qrImg{
+  max-width:260px;
+  margin:auto;
+  display:block;
+  background:#fff;
+  padding:10px;
+  border-radius:12px;
 }
 
-/* ===== MODAL ===== */
-.modal-overlay{
-position:fixed;
-inset:0;
-background:rgba(15,23,42,0.75);
-display:flex;
-align-items:center;
-justify-content:center;
-z-index:9999;
+.payment-status{
+  display:flex;
+  justify-content:center;
+  gap:8px;
+  padding:12px;
+  border-radius:8px;
+  margin-top:10px;
 }
 
-.modal-box{
-background:#fff;
-color:#0f172a;
-width:100%;
-max-width:420px;
-border-radius:20px;
-padding:28px;
-text-align:center;
-box-shadow:0 40px 80px rgba(0,0,0,.4);
-animation:pop .2s ease-out;
-}
+.payment-status.pending{background:#fef3c7}
+.payment-status.success{background:#dcfce7}
+.payment-status.error{background:#fee2e2}
 
-.modal-icon{
-font-size:40px;
-margin-bottom:10px;
+.debug-panel{
+  background:#1e293b;
+  border:2px solid #f59e0b;
+  border-radius:12px;
+  padding:16px;
+  color:#f59e0b;
+  font-family:monospace;
 }
-
-.modal-box h3{
-margin:0 0 10px;
-font-size:22px;
-}
-
-.modal-box p{
-font-size:15px;
-color:#475569;
-margin-bottom:18px;
-}
-
-@keyframes pop{
-from{ transform:scale(.9); opacity:0 }
-to{ transform:scale(1); opacity:1 }
-}
-
-/* === BOTÃO TROCAR CONTA === */
-.btn-trocar{
-background:#e0e7ff;
-color:#1e40af;
-font-weight:600;
-}
-.btn-trocar:hover{
-background:#c7d2fe;
-}
-
-.hide{
-display:none !important;
-pointer-events:none !important;
-}
-
 </style>
 </head>
-<!-- ===== MODAL GLOBAL ===== -->
-<div id="modalOverlay" class="modal-overlay hide">
-<div class="modal-box">
-<div id="modalIcon" class="modal-icon">ℹ️</div>
-<h3 id="modalTitle">Título</h3>
-<p id="modalMessage">Mensagem</p>
-<button id="modalBtn" class="btn-primary">OK</button>
-</div>
-</div>
 
 <body>
 <div class="page">
 <div class="container">
 
-<!-- HERO -->
 <div class="hero">
-<h1>Prepare-se para concursos<br>com foco total em aprovação</h1>
-<p>Simulados atualizados, estudo direto ao ponto e acesso imediato.</p>
-<ul>
-<li>Questões comentadas</li>
-<li>Simulados realistas</li>
-<li>Conteúdo focado em prova</li>
-<li>Teste gratuito por 48 horas</li>
-</ul>
+  <h1>Prepare-se para concursos</h1>
+  <p>Simulados atualizados e acesso imediato</p>
+  <ul>
+    <li>Questões comentadas</li>
+    <li>Simulados realistas</li>
+    <li>Teste grátis por 48h</li>
+  </ul>
 </div>
 
-<!-- CARD -->
 <div class="card">
-<h2>Acesso à plataforma</h2>
-<p class="small">Entre com sua conta. Se estiver no teste, você verá o tempo restante. Se expirou, você pode assinar.</p>
+  <div id="debugPanel" class="debug-panel hide">
+    <div id="debugContent"></div>
+  </div>
 
-<!-- LOGIN FORM -->
-<div id="loginBox">
-<label>Email</label>
-<input id="email" type="email" placeholder="seu@email.com">
+  <div id="loginBox">
+    <label>Email</label>
+    <input id="email" type="email">
 
-<label>Senha</label>
-<div style="position:relative">
-<input
-id="senha"
-type="password"
-placeholder="••••••••"
-style="padding-right:44px"
->
-<span
-id="toggleSenha"
-style="
-   position:absolute;
-   right:14px;
-   top:50%;
-   transform:translateY(-50%);
-   cursor:pointer;
-   font-size:18px;
-   opacity:.6;
- "
-title="Mostrar senha"
->👁️</span>
-</div>
+    <label>Senha</label>
+    <input id="senha" type="password">
 
-<button class="btn-primary" id="btnEntrar">Entrar</button>
-<button class="btn-sec" id="btnCriar">Criar conta gratuita</button>
-<button
-class="btn-sec"
-id="btnResetSenha"
-style="margin-top:6px"
->
-Esqueci minha senha
-</button>
+    <button id="btnEntrar" class="btn-primary">Entrar</button>
+    <button id="btnCriar" class="btn-sec">Criar conta</button>
+    <button id="btnResetSenha" class="btn-sec">Esqueci minha senha</button>
 
-<div id="msgLogin" class="msg"></div>
-</div>
+    <div id="msgLogin" class="small"></div>
+  </div>
 
-<!-- STATUS -->
-<div id="statusBox" class="hide">
-<div class="hr"></div>
-<div id="statusText" style="font-weight:900"></div>
-<div id="statusSub" class="small" style="margin-top:6px"></div>
-
-<button class="btn-primary" id="btnAcessarApp">
-Acessar o App
-</button>
-
-<button class="btn-sec" id="btnSair">
-Sair
-</button>
-</div>
-
-<!-- PAYWALL -->
-<div id="payBox" class="hide">
-<div class="hr"></div>
-<div style="font-weight:900">Seu acesso expirou</div>
-<button class="btn-trocar" id="btnTrocarConta" style="margin-top:10px">
-Trocar conta
-</button>
-<div class="small" style="margin-top:6px">Escolha um plano. O de 6 meses fica em destaque (recomendado).</div>
-
-<div class="plan-grid">
-<div class="plan reco">
-<div class="top">
-<div style="font-weight:900">Plano 6 meses</div>
-<span class="badge">Recomendado</span>
-</div>
-<div class="price">R$ 29,90</div>
-<div class="small">Acesso completo por 6 meses (ideal para começar).</div>
-<button class="btn-primary" id="btnPlano6">Gerar PIX (6 meses)</button>
-</div>
-
-<div class="plan">
-<div class="top">
-<div style="font-weight:900">Plano 1 ano</div>
-<span class="badge">Economia</span>
-</div>
-<div class="price">R$ 49,90</div>
-<div class="small">Acesso completo por 12 meses (melhor custo-benefício).</div>
-<button class="btn-primary" id="btnPlano12">Gerar PIX (1 ano)</button>
-</div>
-</div>
-
-<!-- QR -->
-<div id="qrBox" class="qrWrap hide">
-<div class="hr"></div>
-<div style="font-weight:900">Pague com PIX</div>
-<div class="small" id="qrSub" style="margin-top:6px"></div>
-
-<img id="qrImg" class="qrImg" alt="QR Code PIX">
-
-<div class="copyRow">
-<input id="pixCopia" readonly>
-<button id="btnCopiar">Copiar</button>
-</div>
-
-<div id="payMsg" class="small" style="margin-top:10px"></div>
-</div>
+  <div id="statusBox" class="hide">
+    <div class="hr"></div>
+    <div id="statusText"></div>
+    <div id="statusSub" class="small"></div>
+    <button id="btnAcessarApp" class="btn-primary">Acessar App</button>
+    <button id="btnSair" class="btn-sec">Sair</button>
+  </div>
 
 </div>
-</div>
-
 </div>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 import {
-getAuth,
-setPersistence,
-browserSessionPersistence,
-signInWithEmailAndPassword,
-createUserWithEmailAndPassword,
-signOut,
-sendEmailVerification
+  getAuth,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+  sendPasswordResetEmail,
+  signOut,
+  setPersistence,
+  browserLocalPersistence
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-functions.js";
-import { sendPasswordResetEmail } from
-"https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-import { onAuthStateChanged } from
-"https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
-
-/* ===== CONFIG ===== */
-const FRONT_URL = "https://megaestudos.github.io/Quiz-Guarda-Civil-Premium/";
 const firebaseConfig = {
-apiKey: "AIzaSyB36ZszS8v_DeOn3at7zEo_tFq86WU0sI4",
-authDomain: "simulados-concursos-22c91.firebaseapp.com",
-projectId: "simulados-concursos-22c91"
+  apiKey: "AIzaSyB36ZszS8v_DeOn3at7zEo_tFq86WU0sI4",
+  authDomain: "simulados-concursos-22c91.firebaseapp.com",
+  projectId: "simulados-concursos-22c91"
 };
 
-/* ===== INIT ===== */
+const FRONT_URL = "https://megaestudos.github.io/Quiz-Guarda-Civil-Premium/";
+
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+await setPersistence(auth, browserLocalPersistence);
 
-// Persistência (UMA VEZ)
-try {
-await setPersistence(auth, browserSessionPersistence);
-} catch (err) {
-console.error("Erro setPersistence:", err);
-}
-
-const functionsRegion = "us-central1";
-const fx = getFunctions(app, functionsRegion); // NÃO chame isso de "functions" em outros lugares
-
+const fx = getFunctions(app, "us-central1");
 const meCall = httpsCallable(fx, "me");
-const createPixChargeCall = httpsCallable(fx, "createPixCharge");
-const pixStatusCall = httpsCallable(fx, "pixStatus");
 
-/* ===== UI ===== */
-const $ = (id)=>document.getElementById(id);
-const show = (boxId)=>{
-["loginBox","statusBox","payBox"].forEach(x=>$(x).classList.toggle("hide", x!==boxId));
-};
-function setMsg(t){ $("msgLogin").innerText = t || ""; }
+const $ = id => document.getElementById(id);
 
-/* ===== MODAL ===== */
-function abrirModal(tipo, titulo, mensagem) {
-const overlay = $("modalOverlay");
-const icon = $("modalIcon");
-const title = $("modalTitle");
-const msg = $("modalMessage");
-
-const icons = {
-sucesso: "✅",
-erro: "❌",
-aviso: "⚠️",
-info: "ℹ️"
-};
-
-icon.innerText = icons[tipo] || "ℹ️";
-title.innerText = titulo || "Aviso";
-msg.innerText = mensagem || "";
-
-overlay.classList.remove("hide");
+function debug(msg, err=false){
+  $("debugPanel").classList.remove("hide");
+  $("debugContent").innerText = msg;
+  console.log(msg);
 }
 
-$("modalBtn").addEventListener("click", fecharModal);
+async function entrar(){
+  const email = $("email").value.trim();
+  const senha = $("senha").value;
 
-$("modalOverlay").addEventListener("click", (e) => {
-if (e.target.id === "modalOverlay") fecharModal();
-});
+  if(!email || !senha) return;
 
-function fecharModal() {
-$("modalOverlay").classList.add("hide");
-}
-
-// Fecha clicando fora da caixa
-$("modalOverlay").addEventListener("click", (e) => {
-if (e.target.id === "modalOverlay") fecharModal();
-});
-
-/* ===== EVENTS ===== */
-$("btnEntrar").addEventListener("click", entrar);
-$("btnCriar").addEventListener("click", criarConta);
-// ===== PAYWALL / PIX (BOTÕES) =====
-$("btnPlano6").addEventListener("click", () => gerarPix("6m"));
-$("btnPlano12").addEventListener("click", () => gerarPix("12m"));
-
-// Copiar código PIX
-$("btnCopiar").addEventListener("click", async () => {
-const txt = $("pixCopia").value || "";
-if (!txt) return;
-
-try {
-await navigator.clipboard.writeText(txt);
-$("payMsg").innerHTML = "<span class='ok'>Código PIX copiado!</span>";
-} catch (e) {
-// fallback simples
-$("pixCopia").focus();
-$("pixCopia").select();
-document.execCommand("copy");
-$("payMsg").innerHTML = "<span class='ok'>Código PIX copiado!</span>";
-}
-});
-
-$("btnAcessarApp").addEventListener("click", () => {
-console.log("➡️ Acessar app:", FRONT_URL);
-window.location.href = FRONT_URL;
-});
-
-$("btnTrocarConta").addEventListener("click", async () => {
-try {
-await signOut(auth);
-} catch (e) {
-console.warn("Erro ao sair:", e);
-}
-
-// limpa campos
-$("email").value = "";
-$("senha").value = "";
-
-// limpa mensagens
-setMsg("");
-$("payMsg").innerText = "";
-$("qrSub").innerText = "";
-$("qrBox").classList.add("hide");
-
-// cancela polling do PIX
-if (pollingTimer) {
-clearInterval(pollingTimer);
-pollingTimer = null;
-}
-
-// volta para login
-show("loginBox");
-});
-
-// 👁️ Mostrar / esconder senha
-const toggleSenha = document.getElementById("toggleSenha");
-const senhaInput = document.getElementById("senha");
-
-if (toggleSenha && senhaInput) {
-toggleSenha.addEventListener("click", () => {
-const isPassword = senhaInput.type === "password";
-senhaInput.type = isPassword ? "text" : "password";
-toggleSenha.innerText = isPassword ? "🙈" : "👁️";
-});
-}
-document
-.getElementById("btnResetSenha")
-.addEventListener("click", recuperarSenha);
-
-$("btnSair").addEventListener("click", async () => {
-try {
-await signOut(auth);
-} catch (e) {
-console.warn("Erro ao sair:", e);
-}
-
-// limpa campos
-$("email").value = "";
-$("senha").value = "";
-
-// limpa mensagens
-setMsg("");
-$("payMsg").innerText = "";
-$("qrSub").innerText = "";
-$("qrBox").classList.add("hide");
-
-// cancela polling se existir
-if (pollingTimer) {
-clearInterval(pollingTimer);
-pollingTimer = null;
-}
-
-// volta para login
-show("loginBox");
-});
-
-/* ===== LOGIN ===== */
-async function entrar() {
-try {
-setMsg("");
-const email = $("email").value.trim();
-const senha = $("senha").value;
-
-if (!email || !senha) {
-setMsg("Preencha e-mail e senha.");
-return;
-}
-
-await signInWithEmailAndPassword(auth, email, senha);
-await carregarStatus();
-} catch (e) {
-console.error("Erro ao entrar:", e);
-abrirModal(
-"erro",
-"Erro ao entrar",
-"E-mail ou senha inválidos. Verifique os dados e tente novamente."
-);
-
-}
-}
-
-async function criarConta(){
-try{
-setMsg("");
-const email = $("email").value.trim();
-const senha = $("senha").value;
-if(!email || !senha){ setMsg("Preencha email e senha."); return; }
-
-await createUserWithEmailAndPassword(auth, email, senha);
-
-// 🔐 ENVIA E-MAIL DE VERIFICAÇÃO
-await sendEmailVerification(auth.currentUser);
-
-// ⚠️ AVISA O USUÁRIO
-setMsg("Enviamos um e-mail de verificação. Confirme antes de comprar.");
-
-// NÃO chama carregarStatus ainda
-return;
-
-}catch(e){
-console.error("Erro criar conta:", e);
-setMsg(e?.message || "Erro ao criar conta");
-}
-}
-
-/* ===== STATUS ===== */
-async function carregarStatus(){
-const user = auth.currentUser;
-if(!user){ show("loginBox"); return; }
-
-let data;
-try {
-const resp = await meCall();
-data = resp.data;
-} catch (e) {
-console.error("Erro meCall:", e);
-show("loginBox");
-setMsg(e?.message || "Falha ao validar sessão. Faça login novamente.");
-return;
-}
-
-/* ===== TRATAMENTO DE E-MAIL NÃO CONFIRMADO ===== */
-if (data.emailVerified === false) {
-abrirModal(
-"aviso",
-"Confirme seu e-mail",
-"Você precisa confirmar o e-mail antes de comprar. Verifique sua caixa de entrada e spam."
-);
-
-show("statusBox");
-$("statusText").innerText = "E-mail não confirmado";
-$("statusSub").innerText = "Confirme o e-mail para liberar compra e acesso.";
-return;
-}
-/* ===== FIM ===== */
-
-if(!data.authenticated){
-show("loginBox");
-setMsg("Sessão inválida. Faça login novamente.");
-return;
-}
-
-const status = data.entitled ? data.plan : "none";
-const expiresIso = data.expiresAt || null;
-const fim = expiresIso ? new Date(expiresIso) : null;
-
-if (status === "trial" || status === "premium") {
-show("statusBox");
-
-if (status === "trial") {
-$("statusText").innerText = "Teste grátis ativo";
-$("statusSub").innerText = fim ? ("Válido até: " + fim.toLocaleString()) : "";
-} else {
-$("statusText").innerText = "Acesso Premium ativo";
-$("statusSub").innerText = fim ? ("Válido até: " + fim.toLocaleString()) : "";
-}
-return;
-}
-
-$("qrBox").classList.add("hide");
-$("payMsg").innerText = "";
-$("qrSub").innerText = "";
-
-abrirModal(
-"aviso",
-"Acesso expirado",
-"Seu período de teste terminou. Faça login com outra conta ou assine."
-);
-
-// só mostra o paywall, sem bloquear a troca de conta
-show("payBox");
-
-} // ← FECHA carregarStatus()
-
-/* ===== PIX ===== */
-let pollingTimer = null;
-
-async function gerarPix(plan){
-try{
-const user = auth.currentUser;
-if(!user){ show("loginBox"); setMsg("Faça login."); return; }
-
-$("qrBox").classList.add("hide");
-$("payMsg").innerText = "";
-$("qrSub").innerText = "Gerando cobrança PIX...";
-  console.log("🚀 gerarPix chamado:", plan); // 👈 LOG 1 (ENTROU NA FUNÇÃO)
-
-const resp = await createPixChargeCall({ plan });
-const data = resp.data;
   try{
-    const user = auth.currentUser;
-
-    if(!user){
-      console.warn("❌ Sem usuário autenticado"); // 👈 LOG 2
-      show("loginBox");
-      return;
-    }
-
-    $("qrBox").classList.add("hide");
-    $("payMsg").innerText = "";
-    $("qrSub").innerText = "Gerando cobrança PIX...";
-
-    console.log("📡 Chamando createPixCharge..."); // 👈 LOG 3
-
-    const resp = await createPixChargeCall({ plan });
-
-    console.log("✅ Resposta createPixCharge:", resp); // 👈 LOG 4
-
+    await signInWithEmailAndPassword(auth,email,senha);
+    await auth.currentUser.getIdToken(true);
+    const resp = await meCall();
     const data = resp.data;
 
-if(data.alreadyEntitled){
-$("qrSub").innerText = "Seu acesso já está ativo. Abrindo o app...";
-setTimeout(()=>location.href = FRONT_URL, 700);
-return;
-}
+    if(data.emailVerified === false){
+      $("statusText").innerText = "Confirme seu e-mail";
+      $("statusSub").innerText = "Verifique sua caixa de entrada";
+    }else{
+      $("statusText").innerText = "Acesso liberado";
+      $("statusSub").innerText = data.expiresAt || "";
+    }
 
-$("qrBox").classList.remove("hide");
-$("qrSub").innerText = `Plano: ${plan} — Valor: R$ ${String(data.price).replace(".", ",")}`;
+    $("loginBox").classList.add("hide");
+    $("statusBox").classList.remove("hide");
 
-$("qrImg").src = "data:image/png;base64," + data.qrcodeImage;
-$("pixCopia").value = data.copiaecola;
-
-$("payMsg").innerText = "Aguardando pagamento... (deixe esta tela aberta)";
-
-if(pollingTimer) clearInterval(pollingTimer);
-pollingTimer = setInterval(()=> checarPagamento(data.txid), 5000);
-
-await checarPagamento(data.txid);
-
-}catch(e){
-console.error("ERRO createPixCharge:", e);
-const msg = e?.details || e?.message || "Erro ao gerar PIX";
-$("payMsg").innerText = msg;
-}
-catch (e) {
-  console.error("❌ ERRO createPixCharge:", e);
-
-  let msg = "Erro ao gerar PIX.";
-
-  if (e?.code === "functions/unauthenticated") {
-    msg = "Sua sessão expirou. Faça login novamente.";
-    show("loginBox");
-  } 
-  else if (e?.code === "functions/failed-precondition") {
-    msg = e.message || "Verifique seu e-mail antes de comprar.";
+  }catch(e){
+    debug("Erro login: "+e.message,true);
   }
-  else if (e?.code === "functions/invalid-argument") {
-    msg = "Plano inválido. Atualize a página.";
-  }
-  else if (e?.code === "functions/internal") {
-    msg = "Erro interno no servidor. Tente novamente em instantes.";
-  }
-  else if (e?.message) {
-    msg = e.message;
-  }
-
-  $("payMsg").innerText = msg;
 }
 
-async function checarPagamento(txid){
-try{
-if (!auth.currentUser) return; // SEM USUÁRIO, NÃO POLLA
+$("btnEntrar").onclick = entrar;
+$("btnCriar").onclick = async ()=>{
+  const email = $("email").value.trim();
+  const senha = $("senha").value;
+  const cred = await createUserWithEmailAndPassword(auth,email,senha);
+  await sendEmailVerification(cred.user);
+  debug("Conta criada, verifique o e-mail");
+};
 
-const resp = await pixStatusCall({ txid });
-const data = resp.data;
+$("btnResetSenha").onclick = async ()=>{
+  await sendPasswordResetEmail(auth,$("email").value.trim());
+  debug("E-mail de redefinição enviado");
+};
 
-if (data.paid) {
-if(pollingTimer) { clearInterval(pollingTimer); pollingTimer = null; }
-$("payMsg").innerHTML = "<span class='ok'>Pagamento confirmado. Liberando acesso...</span>";
-setTimeout(()=> location.href = FRONT_URL, 600);
-return;
-}
+$("btnSair").onclick = async ()=>{
+  await signOut(auth);
+  location.reload();
+};
 
-if (data.expired) {
-if(pollingTimer) { clearInterval(pollingTimer); pollingTimer = null; }
-$("payMsg").innerText = "Cobrança expirada. Gere um novo PIX.";
-return;
-}
-
-$("payMsg").innerText = "Aguardando pagamento... (atualiza automaticamente)";
-} catch(e){
-console.warn("checarPagamento falhou:", e?.message || e);
-}
-}
-
-/* ===== START ===== */
-onAuthStateChanged(auth, (user) => {
-if (!user) {
-show("loginBox");
-return;
-}
-carregarStatus();
-});
-
-async function recuperarSenha() {
-const email = $("email").value.trim();
-if (!email) {
-abrirModal(
-"aviso",
-"E-mail obrigatório",
-"Digite seu e-mail para receber o link de redefinição de senha."
-);
-return;
-}
-
-try {
-await sendPasswordResetEmail(auth, email);
-abrirModal(
-"sucesso",
-"E-mail enviado",
-"Se este e-mail estiver cadastrado, você receberá um link para redefinir a senha."
-);
-} catch (e) {
-abrirModal(
-"erro",
-"Erro",
-"Não foi possível enviar o e-mail. Verifique o endereço informado."
-);
-}
-}
-
-// estado inicial SEMPRE é login
-show("loginBox");
-
+$("btnAcessarApp").onclick = ()=>location.href=FRONT_URL;
 </script>
 
 </body>
 </html>
-
