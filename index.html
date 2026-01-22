@@ -843,7 +843,12 @@ async function carregarStatus(){
       if (statusSub) statusSub.innerText = "";
     }
 
-    showOnly("status");
+        // OPÇÃO 1 — redireciona automaticamente se tem acesso
+    console.log("Acesso válido (" + data.plan + "). Redirecionando para o app...");
+    setTimeout(() => {
+      window.location.href = FRONT_URL;
+    }, 500);
+
   } catch (e) {
     console.error("Erro ao carregar status:", e);
     const code = e?.code || "";
@@ -1245,3 +1250,4 @@ showOnly("login");
 
 </body>
 </html>
+
