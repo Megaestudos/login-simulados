@@ -9,6 +9,8 @@
 :root{
   --primary:#2563eb;
   --primary-dark:#1e40af;
+  --bg1:#0b1220;
+  --bg2:#0f172a;
   --card:#ffffff;
   --text:#0f172a;
   --muted:#64748b;
@@ -16,17 +18,21 @@
   --success:#16a34a;
   --warning:#f59e0b;
   --danger:#dc2626;
-  --shadow: 0 40px 80px rgba(0,0,0,.35);
+  --shadow: 0 40px 90px rgba(0,0,0,.40);
+  --radius:22px;
 }
 
 *{box-sizing:border-box}
 html,body{height:100%}
+
 body{
   margin:0;
-  font-family:Inter,system-ui,-apple-system,Arial,sans-serif;
+  font-family: Inter, system-ui, -apple-system, Arial, sans-serif;
   color:#fff;
   background:
-    linear-gradient(rgba(15,23,42,.74), rgba(15,23,42,.74)),
+    radial-gradient(1200px 800px at 20% 20%, rgba(37,99,235,.22), transparent 60%),
+    radial-gradient(900px 700px at 80% 30%, rgba(16,185,129,.18), transparent 60%),
+    linear-gradient(rgba(11,18,32,.78), rgba(15,23,42,.78)),
     url("https://images.pexels.com/photos/990432/pexels-photo-990432.jpeg");
   background-size:cover;
   background-position:center;
@@ -38,102 +44,217 @@ body{
   display:flex;
   align-items:center;
   justify-content:center;
-  padding:24px;
+  padding:28px;
 }
 
 .container{
   width:100%;
-  max-width:1100px;
+  max-width:1180px;
   display:grid;
-  grid-template-columns:1.2fr 1fr;
-  gap:40px;
+  grid-template-columns: 1.15fr 1fr;
+  gap:44px;
+  align-items:start;
 }
 
-@media (max-width: 900px){
-  .container{grid-template-columns:1fr}
+@media (max-width: 980px){
+  .container{grid-template-columns:1fr; gap:22px}
+  .page{padding:18px}
 }
 
+/* HERO */
+.hero{
+  padding:8px 6px;
+}
 .hero h1{
-  font-size:40px;
+  font-size:42px;
   margin:0 0 14px;
-  line-height:1.08;
+  line-height:1.06;
+  letter-spacing:-.02em;
 }
 .hero p{
   font-size:18px;
+  margin:0 0 18px;
   color:#e5e7eb;
-  margin:0 0 16px;
+  max-width:46ch;
 }
 .hero ul{
   list-style:none;
   padding:0;
   margin:0;
+  display:grid;
+  gap:10px;
 }
 .hero li{
-  margin:10px 0;
   color:#f1f5f9;
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
 }
 .hero li::before{
-  content:"✓ ";
+  content:"✓";
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:22px;
+  height:22px;
+  border-radius:999px;
+  background:rgba(34,197,94,.18);
   color:#22c55e;
   font-weight:900;
+  margin-top:1px;
+  flex:0 0 22px;
 }
 
+.brand-chip{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 14px;
+  border:1px solid rgba(226,232,240,.22);
+  border-radius:999px;
+  background:rgba(15,23,42,.35);
+  backdrop-filter: blur(10px);
+  margin-bottom:14px;
+}
+.brand-dot{
+  width:10px;height:10px;border-radius:999px;
+  background:linear-gradient(135deg, #60a5fa, #2563eb);
+  box-shadow:0 0 0 4px rgba(37,99,235,.18);
+}
+.brand-chip span{color:#e5e7eb;font-size:13px}
+
+/* RIGHT COLUMN */
+.stack{
+  display:grid;
+  gap:14px;
+}
+
+/* CARD */
 .card{
   background:var(--card);
   color:var(--text);
-  border-radius:22px;
-  padding:34px;
+  border-radius:var(--radius);
   box-shadow:var(--shadow);
+  border:1px solid rgba(226,232,240,.85);
+  overflow:hidden;
 }
 
-h2{margin:0 0 8px}
-.small{font-size:13px;color:var(--muted);line-height:1.35}
-.hr{height:1px;background:#e2e8f0;margin:18px 0}
+.card-header{
+  padding:18px 20px;
+  border-bottom:1px solid var(--border);
+  background:linear-gradient(180deg, rgba(37,99,235,.08), rgba(255,255,255,0));
+}
+.card-title{
+  margin:0;
+  font-size:16px;
+  font-weight:900;
+  letter-spacing:-.01em;
+}
+.card-sub{
+  margin:6px 0 0;
+  font-size:13px;
+  color:var(--muted);
+  line-height:1.35;
+}
+.card-body{
+  padding:18px 20px 20px;
+}
 
-label{font-size:14px;color:#475569;display:block}
+.hr{height:1px;background:var(--border);margin:16px 0}
+.small{font-size:13px;color:var(--muted);line-height:1.35}
+
+label{
+  display:block;
+  font-size:13px;
+  color:#475569;
+  margin-bottom:6px;
+  font-weight:700;
+}
+.field{
+  margin-bottom:12px;
+}
 input{
   width:100%;
-  padding:14px;
-  margin:6px 0 16px;
-  border-radius:12px;
+  padding:13px 14px;
+  border-radius:14px;
   border:1px solid var(--border);
   font-size:15px;
   background:#fff;
   color:var(--text);
+  outline:none;
 }
 input:focus{
-  outline:none;
   border-color:#93c5fd;
   box-shadow:0 0 0 4px rgba(59,130,246,.15);
 }
-
-button{
-  width:100%;
-  padding:14px;
-  border-radius:12px;
-  border:0;
-  font-size:15px;
-  cursor:pointer;
-  transition:transform .05s ease, background .15s ease;
-}
-button:active{transform:translateY(1px)}
-button:disabled{opacity:.65;cursor:not-allowed}
-
-.btn-primary{background:var(--primary);color:#fff}
-.btn-primary:hover{background:var(--primary-dark)}
-.btn-sec{background:#f1f5f9;color:#0f172a;margin-top:10px}
-.btn-sec:hover{background:#e2e8f0}
-
-.msg{margin-top:12px;font-size:14px;text-align:center;color:var(--danger)}
-.msg-success{margin-top:12px;font-size:14px;text-align:center;color:var(--success)}
-
-.hide{display:none!important;pointer-events:none!important}
 
 .row{
   display:flex;
   gap:10px;
 }
 .row > *{flex:1}
+
+/* BUTTONS */
+button{
+  width:100%;
+  padding:13px 14px;
+  border-radius:14px;
+  border:0;
+  font-size:15px;
+  cursor:pointer;
+  transition:transform .05s ease, background .15s ease, opacity .15s ease;
+  font-weight:800;
+}
+button:active{transform:translateY(1px)}
+button:disabled{opacity:.65; cursor:not-allowed}
+
+.btn-primary{
+  background:linear-gradient(135deg, #2563eb, #1d4ed8);
+  color:#fff;
+}
+.btn-primary:hover{
+  background:linear-gradient(135deg, #1d4ed8, #1e40af);
+}
+.btn-sec{
+  background:#f1f5f9;
+  color:#0f172a;
+}
+.btn-sec:hover{background:#e2e8f0}
+
+.link-row{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  margin-top:10px;
+}
+.link{
+  background:transparent;
+  border:0;
+  padding:0;
+  width:auto;
+  color:#2563eb;
+  font-weight:800;
+  cursor:pointer;
+  font-size:13px;
+}
+.link:hover{text-decoration:underline}
+
+.msg{
+  margin-top:12px;
+  font-size:13px;
+  text-align:center;
+  color:var(--danger);
+  font-weight:700;
+}
+.msg-success{
+  margin-top:12px;
+  font-size:13px;
+  text-align:center;
+  color:var(--success);
+  font-weight:700;
+}
+
+.hide{display:none!important; pointer-events:none!important}
 
 .password-wrap{position:relative}
 .password-toggle{
@@ -147,10 +268,11 @@ button:disabled{opacity:.65;cursor:not-allowed}
   user-select:none;
 }
 
+/* STATUS BOX */
 .status-box{
-  border-radius:14px;
+  border:1px solid var(--border);
+  border-radius:16px;
   padding:14px;
-  border:1px solid #e2e8f0;
   background:#fff;
 }
 .status-box.trial{
@@ -161,40 +283,66 @@ button:disabled{opacity:.65;cursor:not-allowed}
   background: linear-gradient(135deg, #f0f9ff, #bae6fd);
   border-color:#7dd3fc;
 }
-.status-title{font-weight:900;font-size:18px;margin-bottom:6px}
+.status-title{
+  font-weight:900;
+  font-size:16px;
+  margin-bottom:6px;
+}
 
-.plan-grid{display:grid;grid-template-columns:1fr;gap:12px;margin-top:12px}
+/* PLANS */
+.plan-grid{
+  display:grid;
+  gap:12px;
+  margin-top:10px;
+}
 .plan{
-  border:1px solid #e2e8f0;
+  border:1px solid var(--border);
   border-radius:16px;
-  padding:16px;
+  padding:14px;
   background:#fff;
 }
 .plan.reco{
   border:2px solid var(--primary);
-  box-shadow:0 10px 24px rgba(37,99,235,.15);
+  box-shadow:0 12px 28px rgba(37,99,235,.14);
 }
-.plan-top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.plan-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+}
 .badge{
   background:#e0e7ff;
   color:#1e40af;
   padding:6px 10px;
   border-radius:999px;
-  font-size:13px;
-  font-weight:800;
+  font-size:12px;
+  font-weight:900;
 }
-.price{font-size:24px;font-weight:900;color:#0f172a;margin:8px 0 0}
+.price{
+  font-size:22px;
+  font-weight:900;
+  color:#0f172a;
+  margin:8px 0 0;
+}
 
-.qrWrap{margin-top:14px}
+/* PAYMENT / QR PANEL (ÁREA EXCLUSIVA) */
+.qr-panel{
+  margin-top:14px;
+  border:1px solid var(--border);
+  border-radius:18px;
+  background:linear-gradient(180deg, rgba(2,6,23,.03), rgba(2,6,23,0));
+  padding:14px;
+}
 .payment-status{
   display:flex;
   align-items:center;
   justify-content:center;
   gap:8px;
-  padding:12px;
-  border-radius:10px;
-  margin-top:10px;
-  font-weight:800;
+  padding:11px;
+  border-radius:12px;
+  font-weight:900;
+  font-size:13px;
 }
 .payment-status.pending{background:#fef3c7;color:#92400e}
 .payment-status.processing{background:#dbeafe;color:#1e40af}
@@ -204,26 +352,12 @@ button:disabled{opacity:.65;cursor:not-allowed}
 .qrImg{
   width:100%;
   max-width:260px;
-  border:1px solid #e2e8f0;
-  border-radius:12px;
+  border:1px solid var(--border);
+  border-radius:14px;
   padding:10px;
   background:#fff;
   display:block;
   margin:12px auto 0;
-}
-
-.copyRow{
-  display:flex;
-  gap:8px;
-  margin-top:10px;
-}
-.copyRow input{margin:0;flex:1}
-.copyRow button{
-  width:auto;
-  padding:12px 14px;
-  border-radius:12px;
-  background:#0f172a;
-  color:#fff;
 }
 
 .pix-timer{
@@ -237,28 +371,21 @@ button:disabled{opacity:.65;cursor:not-allowed}
 }
 .pix-timer span{font-weight:900;color:#0f172a}
 
-.debug-panel{
-  background:#0b1220;
-  border:1px solid #334155;
-  border-radius:12px;
-  padding:12px;
-  margin-bottom:12px;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
-  font-size:12px;
-  color:#93c5fd;
+.copyRow{
+  display:flex;
+  gap:8px;
+  margin-top:10px;
 }
-.debug-panel.error{
-  background:#2b0b0b;
-  border-color:#dc2626;
-  color:#fca5a5;
-}
-.debug-panel.success{
-  background:#052e1a;
-  border-color:#10b981;
-  color:#6ee7b7;
+.copyRow input{margin:0;flex:1}
+.copyRow button{
+  width:auto;
+  padding:12px 14px;
+  border-radius:14px;
+  background:#0f172a;
+  color:#fff;
 }
 
-/* MODAL */
+/* MODAL (global) */
 .modal-overlay{
   position:fixed;
   inset:0;
@@ -267,34 +394,46 @@ button:disabled{opacity:.65;cursor:not-allowed}
   align-items:center;
   justify-content:center;
   z-index:9999;
+  padding:18px;
 }
-.modal-box{
+.modal{
+  width:100%;
+  max-width:520px;
   background:#fff;
   color:#0f172a;
-  width:100%;
-  max-width:460px;
   border-radius:22px;
-  padding:26px;
-  text-align:center;
-  box-shadow:0 40px 80px rgba(0,0,0,.4);
+  box-shadow:0 50px 110px rgba(0,0,0,.45);
+  overflow:hidden;
+  border:1px solid rgba(226,232,240,.9);
 }
-.modal-icon{font-size:46px;margin-bottom:10px}
-.modal-box h3{margin:0 0 10px;font-size:22px}
-.modal-box p{margin:0 0 16px;color:#475569}
-.modal-actions{display:flex;flex-direction:column;gap:10px}
-.modal-btn{
-  width:100%;
-  padding:14px;
-  border-radius:12px;
-  border:0;
+.modal-head{
+  padding:16px 18px;
+  border-bottom:1px solid var(--border);
+  background:linear-gradient(180deg, rgba(37,99,235,.08), rgba(255,255,255,0));
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+.modal-title{
+  margin:0;
   font-size:15px;
-  cursor:pointer;
+  font-weight:900;
 }
-.modal-btn-primary{background:var(--primary);color:#fff}
-.modal-btn-primary:hover{background:var(--primary-dark)}
-.modal-btn-secondary{background:#f1f5f9;color:#0f172a}
-.modal-btn-secondary:hover{background:#e2e8f0}
+.modal-close{
+  width:auto;
+  padding:8px 10px;
+  border-radius:12px;
+  background:#f1f5f9;
+  color:#0f172a;
+  font-size:13px;
+  font-weight:900;
+}
+.modal-body{padding:16px 18px 18px}
+.modal-actions{display:flex; gap:10px; margin-top:12px}
+.modal-actions > *{flex:1}
 
+/* Loading spinner */
 @keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
 .loading-spinner{
   width:18px;height:18px;
@@ -311,13 +450,57 @@ button:disabled{opacity:.65;cursor:not-allowed}
 
 <body>
 
-<!-- MODAL -->
+<!-- MODAL: CRIAR CONTA (CAIXA EXCLUSIVA) -->
+<div id="signupOverlay" class="modal-overlay hide">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="signupTitle">
+    <div class="modal-head">
+      <h3 id="signupTitle" class="modal-title">Criar conta gratuita</h3>
+      <button id="btnCloseSignup" class="modal-close" type="button">Fechar</button>
+    </div>
+    <div class="modal-body">
+      <div class="small" style="margin-bottom:12px">
+        Crie sua conta e confirme o e-mail. O trial de 48h é liberado após o e-mail confirmado (controle no backend).
+      </div>
+
+      <div class="field">
+        <label for="signupEmail">E-mail</label>
+        <input id="signupEmail" type="email" placeholder="seu@email.com" autocomplete="email">
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label for="signupPass">Senha</label>
+          <input id="signupPass" type="password" placeholder="mín. 6 caracteres" autocomplete="new-password">
+        </div>
+        <div class="field">
+          <label for="signupPass2">Confirmar senha</label>
+          <input id="signupPass2" type="password" placeholder="repita a senha" autocomplete="new-password">
+        </div>
+      </div>
+
+      <div id="signupMsg" class="msg hide"></div>
+
+      <div class="modal-actions">
+        <button id="btnSignupCreate" class="btn-primary" type="button">Criar conta</button>
+        <button id="btnSignupCancel" class="btn-sec" type="button">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: MENSAGENS -->
 <div id="modalOverlay" class="modal-overlay hide">
-  <div class="modal-box">
-    <div id="modalIcon" class="modal-icon">ℹ️</div>
-    <h3 id="modalTitle">Título</h3>
-    <p id="modalMessage">Mensagem</p>
-    <div id="modalActions" class="modal-actions"></div>
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <h3 id="modalTitle" class="modal-title">Aviso</h3>
+      <button id="btnCloseModal" class="modal-close" type="button">Fechar</button>
+    </div>
+    <div class="modal-body">
+      <div id="modalMessage" class="small" style="color:#334155"></div>
+      <div style="margin-top:14px">
+        <button id="btnModalOk" class="btn-primary" type="button">OK</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -326,8 +509,13 @@ button:disabled{opacity:.65;cursor:not-allowed}
 
     <!-- HERO -->
     <div class="hero">
+      <div class="brand-chip">
+        <div class="brand-dot"></div>
+        <span>Plataforma de simulados — acesso por trial e premium via PIX</span>
+      </div>
+
       <h1>Prepare-se para concursos<br>com foco total em aprovação</h1>
-      <p>Simulados atualizados, estudo direto ao ponto e acesso imediato.</p>
+      <p>Simulados atualizados, estudo direto ao ponto e acesso imediato. Seu acesso é validado no backend.</p>
       <ul>
         <li>Questões comentadas</li>
         <li>Simulados realistas</li>
@@ -336,113 +524,128 @@ button:disabled{opacity:.65;cursor:not-allowed}
       </ul>
     </div>
 
-    <!-- CARD -->
-    <div class="card">
-      <h2>Acesso à plataforma</h2>
-      <p class="small">Entre com sua conta. Se estiver no teste, você verá o tempo restante. Se expirou, você pode assinar.</p>
+    <!-- RIGHT: STACK -->
+    <div class="stack">
 
-      <div id="debugPanel" class="debug-panel hide">
-        <div id="debugContent"></div>
-      </div>
-
-      <!-- LOGIN -->
-      <div id="loginBox">
-        <label>Email</label>
-        <input id="email" type="email" placeholder="seu@email.com">
-
-        <label>Senha</label>
-        <div class="password-wrap">
-          <input id="senha" type="password" placeholder="••••••••" style="padding-right:46px">
-          <span id="toggleSenha" class="password-toggle" title="Mostrar/ocultar senha">👁️</span>
+      <!-- LOGIN CARD (CAIXA BONITA) -->
+      <div class="card" id="loginCard">
+        <div class="card-header">
+          <h2 class="card-title">Acesso à plataforma</h2>
+          <p class="card-sub">Entre com sua conta. O status (trial/premium) vem do backend.</p>
         </div>
+        <div class="card-body">
 
-        <button class="btn-primary" id="btnEntrar">Entrar</button>
-        <button class="btn-sec" id="btnCriar">Criar conta gratuita</button>
-        <button class="btn-sec" id="btnResetSenha" style="margin-top:6px">Esqueci minha senha</button>
-        <div id="msgLogin" class="msg"></div>
-      </div>
-
-      <!-- STATUS -->
-      <div id="statusBox" class="hide">
-        <div class="hr"></div>
-
-        <div id="statusInfoBox" class="status-box">
-          <div id="statusText" class="status-title"></div>
-          <div id="statusSub" class="small"></div>
-        </div>
-
-        <button class="btn-primary" id="btnAcessarApp" style="margin-top:12px">🚀 Acessar o App</button>
-        <button class="btn-sec" id="btnSair">Sair</button>
-      </div>
-
-      <!-- PAYWALL -->
-      <div id="payBox" class="hide">
-        <div class="hr"></div>
-
-        <div style="background:#fef3c7;border:1px solid #fde047;border-radius:12px;padding:14px;margin-bottom:14px">
-          <div style="font-weight:900;color:#92400e">⚠️ Seu acesso expirou</div>
-          <div class="small" style="color:#78350f;margin-top:4px">Renove agora para continuar estudando sem interrupções.</div>
-        </div>
-
-        <button class="btn-sec" id="btnTrocarConta" style="margin-bottom:10px">🔄 Trocar conta</button>
-
-        <div class="small">Escolha um plano:</div>
-
-        <div class="plan-grid">
-          <div class="plan reco">
-            <div class="plan-top">
-              <div style="font-weight:900">Plano 6 meses</div>
-              <span class="badge">Recomendado</span>
+          <div id="loginBox">
+            <div class="field">
+              <label for="email">E-mail</label>
+              <input id="email" type="email" placeholder="seu@email.com" autocomplete="email">
             </div>
-            <div class="price">R$ 29,90</div>
-            <div class="small">Acesso completo por 6 meses.</div>
-            <button class="btn-primary" id="btnPlano6">Gerar PIX (6 meses)</button>
-          </div>
 
-          <div class="plan">
-            <div class="plan-top">
-              <div style="font-weight:900">Plano 1 ano</div>
-              <span class="badge">Economia</span>
+            <div class="field">
+              <label for="senha">Senha</label>
+              <div class="password-wrap">
+                <input id="senha" type="password" placeholder="••••••••" style="padding-right:46px" autocomplete="current-password">
+                <span id="toggleSenha" class="password-toggle" title="Mostrar/ocultar senha">👁️</span>
+              </div>
             </div>
-            <div class="price">R$ 49,90</div>
-            <div class="small">Acesso completo por 12 meses.</div>
-            <button class="btn-primary" id="btnPlano12">Gerar PIX (1 ano)</button>
+
+            <button class="btn-primary" id="btnEntrar" type="button">Entrar</button>
+
+            <div class="link-row">
+              <button class="link" id="btnOpenSignup" type="button">Criar conta</button>
+              <button class="link" id="btnResetSenha" type="button">Esqueci a senha</button>
+            </div>
+
+            <div id="msgLogin" class="msg"></div>
           </div>
+
+          <!-- STATUS CARD AREA -->
+          <div id="statusBox" class="hide">
+            <div class="hr"></div>
+
+            <div id="statusInfoBox" class="status-box">
+              <div id="statusText" class="status-title"></div>
+              <div id="statusSub" class="small"></div>
+            </div>
+
+            <div class="row" style="margin-top:12px">
+              <button class="btn-primary" id="btnAcessarApp" type="button">🚀 Acessar o App</button>
+              <button class="btn-sec" id="btnSair" type="button">Sair</button>
+            </div>
+          </div>
+
         </div>
+      </div>
 
-        <!-- PIX BOX -->
-        <div id="qrBox" class="qrWrap hide">
-          <div class="hr"></div>
-
-          <div id="paymentStatusBox" class="payment-status pending">
-            <span id="paymentStatusIcon">⏳</span>
-            <span id="paymentStatusText">Aguardando pagamento...</span>
-          </div>
-
-          <div style="text-align:center;margin-top:12px">
-            <div style="font-weight:900" id="qrPlanInfo"></div>
-            <div class="small" id="qrSub" style="margin-top:4px"></div>
-          </div>
-
-          <img id="qrImg" class="qrImg" alt="QR Code PIX">
-
-          <div class="pix-timer" id="pixTimer">
-            ⏰ Expira em: <span id="countdown">--:--</span>
-          </div>
-
-          <div class="copyRow">
-            <input id="pixCopia" readonly>
-            <button id="btnCopiar">📋 Copiar</button>
-          </div>
-
-          <div id="payMsg" class="small" style="margin-top:12px;text-align:center"></div>
-
-          <div class="row" style="margin-top:14px">
-            <button class="btn-sec" id="btnCancelarPix">Cancelar</button>
-            <button class="btn-primary" id="btnRecheck">🔄 Verificar pagamento</button>
-          </div>
+      <!-- PAYMENT CARD (CAIXA PRÓPRIA E PROFISSIONAL) -->
+      <div class="card hide" id="payCard">
+        <div class="card-header">
+          <h2 class="card-title">Assinatura e pagamento</h2>
+          <p class="card-sub">Escolha um plano. Ao gerar, o QR Code aparece em uma área exclusiva.</p>
         </div>
+        <div class="card-body">
+          <div style="background:#fef3c7;border:1px solid #fde047;border-radius:16px;padding:14px;margin-bottom:14px">
+            <div style="font-weight:900;color:#92400e">⚠️ Seu acesso não está ativo</div>
+            <div class="small" style="color:#78350f;margin-top:4px">Renove para continuar estudando sem interrupções.</div>
+          </div>
 
+          <button class="btn-sec" id="btnTrocarConta" type="button" style="margin-bottom:10px">🔄 Trocar conta</button>
+
+          <div class="small">Escolha um plano:</div>
+          <div class="plan-grid">
+            <div class="plan reco">
+              <div class="plan-top">
+                <div style="font-weight:900">Plano 6 meses</div>
+                <span class="badge">Recomendado</span>
+              </div>
+              <div class="price">R$ 29,90</div>
+              <div class="small">Acesso completo por 6 meses.</div>
+              <button class="btn-primary" id="btnPlano6" type="button" style="margin-top:10px">Gerar PIX (6 meses)</button>
+            </div>
+
+            <div class="plan">
+              <div class="plan-top">
+                <div style="font-weight:900">Plano 1 ano</div>
+                <span class="badge">Economia</span>
+              </div>
+              <div class="price">R$ 49,90</div>
+              <div class="small">Acesso completo por 12 meses.</div>
+              <button class="btn-primary" id="btnPlano12" type="button" style="margin-top:10px">Gerar PIX (1 ano)</button>
+            </div>
+          </div>
+
+          <!-- QR EXCLUSIVO -->
+          <div id="qrBox" class="qr-panel hide">
+            <div id="paymentStatusBox" class="payment-status pending">
+              <span id="paymentStatusIcon">⏳</span>
+              <span id="paymentStatusText">Aguardando pagamento...</span>
+            </div>
+
+            <div style="text-align:center;margin-top:12px">
+              <div style="font-weight:900" id="qrPlanInfo"></div>
+              <div class="small" id="qrSub" style="margin-top:4px"></div>
+            </div>
+
+            <img id="qrImg" class="qrImg" alt="QR Code PIX">
+
+            <div class="pix-timer" id="pixTimer">
+              ⏰ Expira em: <span id="countdown">--:--</span>
+            </div>
+
+            <div class="copyRow">
+              <input id="pixCopia" readonly>
+              <button id="btnCopiar" type="button">📋 Copiar</button>
+            </div>
+
+            <div id="payMsg" class="small" style="margin-top:12px;text-align:center"></div>
+
+            <div class="row" style="margin-top:14px">
+              <button class="btn-sec" id="btnCancelarPix" type="button">Cancelar</button>
+              <button class="btn-primary" id="btnRecheck" type="button">🔄 Verificar pagamento</button>
+            </div>
+          </div>
+
+        </div>
       </div>
 
     </div>
@@ -477,85 +680,19 @@ const firebaseConfig = {
   projectId: "simulados-concursos-22c91"
 };
 const FUNCTIONS_REGION = "us-central1";
-const PROJECT_ID = firebaseConfig.projectId;
 
 /* =========================
-  INIT - CORRIGIDO (SEM DUPLICAÇÃO)
+  INIT
 ========================= */
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const fx = getFunctions(app, FUNCTIONS_REGION);
 
-// Configura persistência
+// Persistência local (mantém login)
 try {
   await setPersistence(auth, browserLocalPersistence);
 } catch (e) {
-  console.warn("Falha ao definir persistência, seguindo com padrão:", e);
-}
-
-/* =========================
-  UI HELPERS
-========================= */
-const $ = (id) => document.getElementById(id);
-
-// CORRIGIDO: Função show() única e sem duplicação
-function show(boxId) {
-  ["loginBox", "statusBox", "payBox"].forEach((b) => {
-    const el = $(b);
-    if (!el) return;
-    el.classList.toggle("hide", b !== boxId);
-  });
-}
-
-function setMsg(t) {
-  const el = $("msgLogin");
-  if (el) el.innerText = t || "";
-}
-
-function setButtonLoading(buttonId, loading) {
-  const btn = $(buttonId);
-  if (!btn) return;
-  btn.disabled = !!loading;
-  if (loading) {
-    btn.dataset.originalText = btn.innerText;
-    btn.innerHTML = `<span class="loading-spinner"></span>Carregando...`;
-  } else {
-    btn.innerText = btn.dataset.originalText || btn.innerText || "OK";
-  }
-}
-
-function debug(msg, isError = false) {
-  const panel = $("debugPanel");
-  const content = $("debugContent");
-  if (!panel || !content) return;
-  panel.classList.remove("hide", "error", "success");
-  panel.classList.add(isError ? "error" : "success");
-  content.innerHTML = `<strong>${isError ? "❌" : "✅"}</strong> ${msg}`;
-}
-
-function abrirModal(tipo, titulo, mensagem) {
-  const overlay = $("modalOverlay");
-  const icon = $("modalIcon");
-  const title = $("modalTitle");
-  const msg = $("modalMessage");
-  const actions = $("modalActions");
-
-  if (!overlay) return;
-
-  const iconMap = {
-    sucesso: "✅",
-    erro: "❌",
-    aviso: "⚠️",
-    info: "ℹ️"
-  };
-
-  icon.innerText = iconMap[tipo] || "ℹ️";
-  title.innerText = titulo;
-  msg.innerText = mensagem;
-
-  actions.innerHTML = `<button class="modal-btn modal-btn-primary" onclick="document.getElementById('modalOverlay').classList.add('hide')">OK</button>`;
-
-  overlay.classList.remove("hide");
+  console.warn("Persistência não aplicada (seguindo padrão):", e);
 }
 
 /* =========================
@@ -566,108 +703,255 @@ const createPixChargeFunc = httpsCallable(fx, "createPixCharge");
 const pixStatusFunc = httpsCallable(fx, "pixStatus");
 
 /* =========================
-  AUTH FUNCTIONS
+  HELPERS
 ========================= */
-async function entrar() {
-  setMsg("");
+const $ = (id) => document.getElementById(id);
 
+function showOnly(section){
+  // sections: loginBox/statusBox/payCard
+  const loginBox = $("loginBox");
+  const statusBox = $("statusBox");
+  const payCard  = $("payCard");
+
+  if (loginBox) loginBox.classList.toggle("hide", section !== "login");
+  if (statusBox) statusBox.classList.toggle("hide", section !== "status");
+  if (payCard) payCard.classList.toggle("hide", section !== "pay");
+}
+
+function setMsg(t){
+  const el = $("msgLogin");
+  if (el) el.innerText = t || "";
+}
+
+function setButtonLoading(buttonId, loading){
+  const btn = $(buttonId);
+  if (!btn) return;
+  btn.disabled = !!loading;
+  if (loading){
+    btn.dataset.originalText = btn.innerText;
+    btn.innerHTML = `<span class="loading-spinner"></span>Carregando...`;
+  } else {
+    btn.innerText = btn.dataset.originalText || btn.innerText || "OK";
+  }
+}
+
+function openModal(title, message){
+  const overlay = $("modalOverlay");
+  const t = $("modalTitle");
+  const m = $("modalMessage");
+  if (!overlay || !t || !m) return;
+  t.innerText = title || "Aviso";
+  m.innerText = message || "";
+  overlay.classList.remove("hide");
+}
+function closeModal(){
+  const overlay = $("modalOverlay");
+  if (overlay) overlay.classList.add("hide");
+}
+
+/* Signup modal */
+function openSignup(){
+  $("signupOverlay")?.classList.remove("hide");
+  $("signupMsg")?.classList.add("hide");
+  if ($("signupMsg")) $("signupMsg").innerText = "";
+  $("signupEmail")?.focus();
+}
+function closeSignup(){
+  $("signupOverlay")?.classList.add("hide");
+  if ($("signupEmail")) $("signupEmail").value = "";
+  if ($("signupPass")) $("signupPass").value = "";
+  if ($("signupPass2")) $("signupPass2").value = "";
+  if ($("signupMsg")) { $("signupMsg").innerText = ""; $("signupMsg").classList.add("hide"); }
+}
+function setSignupMsg(text){
+  const el = $("signupMsg");
+  if (!el) return;
+  el.innerText = text || "";
+  el.classList.toggle("hide", !text);
+}
+
+/* =========================
+  TOKEN/SESSION SAFE CALL
+  (reduz chance de 401 em edge cases)
+========================= */
+async function callMeSafe() {
+  try {
+    return await meFunc();
+  } catch (e) {
+    // Se der "unauthenticated", força refresh do token e tenta 1 vez
+    const code = e?.code || "";
+    if (code === "functions/unauthenticated" && auth.currentUser) {
+      await auth.currentUser.getIdToken(true);
+      await new Promise(r => setTimeout(r, 250));
+      return await meFunc();
+    }
+    throw e;
+  }
+}
+
+/* =========================
+  STATUS & ACCESS (backend manda)
+========================= */
+async function carregarStatus(){
+  if (!auth.currentUser){
+    showOnly("login");
+    return;
+  }
+
+  try {
+    const result = await callMeSafe();
+    const data = result.data || {};
+
+    if (data.authenticated !== true){
+      showOnly("login");
+      setMsg("Sessão inválida. Faça login novamente.");
+      return;
+    }
+
+    if (data.emailVerified === false){
+      showOnly("login");
+      setMsg("Confirme seu e-mail para liberar o acesso e a compra.");
+      openModal("Confirme seu e-mail", "Enviamos a verificação quando você cria a conta. Verifique a caixa de entrada e o spam.");
+      return;
+    }
+
+    // Sem acesso => pagamento
+    if (!data.entitled){
+      showOnly("pay");
+      // limpa QR ao entrar no pay
+      hideQrArea();
+      return;
+    }
+
+    // Acesso ativo => status
+    const statusBox = $("statusInfoBox");
+    const statusText = $("statusText");
+    const statusSub = $("statusSub");
+
+    if (statusBox) statusBox.className = "status-box " + (data.plan || "");
+
+    if (data.plan === "trial"){
+      if (statusText) statusText.innerText = "🎓 Teste grátis ativo";
+      const exp = data.expiresAt ? new Date(data.expiresAt) : null;
+      if (statusSub) statusSub.innerText = exp ? `Válido até: ${exp.toLocaleString("pt-BR")}` : "";
+    } else if (data.plan === "premium"){
+      if (statusText) statusText.innerText = "⭐ Acesso Premium ativo";
+      const exp = data.expiresAt ? new Date(data.expiresAt) : null;
+      if (statusSub) statusSub.innerText = exp ? `Válido até: ${exp.toLocaleString("pt-BR")}` : "";
+    } else {
+      if (statusText) statusText.innerText = "✅ Acesso ativo";
+      if (statusSub) statusSub.innerText = "";
+    }
+
+    showOnly("status");
+  } catch (e) {
+    console.error("Erro ao carregar status:", e);
+    const code = e?.code || "";
+    if (code === "functions/unauthenticated"){
+      showOnly("login");
+      setMsg("Falha ao validar sessão. Faça login novamente.");
+      return;
+    }
+    showOnly("login");
+    setMsg("Erro ao validar sessão. Tente novamente.");
+  }
+}
+
+/* =========================
+  AUTH
+========================= */
+async function entrar(){
+  setMsg("");
   const email = ($("email")?.value || "").trim();
   const senha = $("senha")?.value || "";
 
-  if (!email || !senha) {
+  if (!email || !senha){
     setMsg("Preencha e-mail e senha.");
     return;
   }
 
   setButtonLoading("btnEntrar", true);
-
   try {
-    // 1️⃣ Login
     const cred = await signInWithEmailAndPassword(auth, email, senha);
-
-    // 2️⃣ FORÇA emissão do token
-    await cred.user.getIdToken(true);
-
-    // 3️⃣ Aguarda propagação do token
-    await new Promise(resolve => setTimeout(resolve, 500));
-
-    debug("Login OK + token propagado");
-
-    // 4️⃣ AGORA SIM chama backend
+    await cred.user.getIdToken(true); // força JWT
+    await new Promise(r => setTimeout(r, 250));
     await carregarStatus();
-
   } catch (e) {
     console.error("Erro login:", e);
-    abrirModal(
-      "erro",
-      "Erro ao entrar",
-      "E-mail ou senha inválidos."
-    );
+    openModal("Erro ao entrar", "E-mail ou senha inválidos, ou a conta não existe.");
   } finally {
     setButtonLoading("btnEntrar", false);
   }
 }
 
-async function criarConta() {
-  const email = ($("email")?.value || "").trim();
-  const senha = ($("senha")?.value || "").trim();
+async function criarContaModal(){
+  setSignupMsg("");
 
-  if (!email || !senha) {
-    abrirModal("aviso", "Campos obrigatórios", "Digite email e senha");
+  const email = ($("signupEmail")?.value || "").trim();
+  const p1 = $("signupPass")?.value || "";
+  const p2 = $("signupPass2")?.value || "";
+
+  if (!email || !p1 || !p2){
+    setSignupMsg("Preencha e-mail e senha.");
+    return;
+  }
+  if (p1.length < 6){
+    setSignupMsg("A senha deve ter pelo menos 6 caracteres.");
+    return;
+  }
+  if (p1 !== p2){
+    setSignupMsg("As senhas não conferem.");
     return;
   }
 
-  if (senha.length < 6) {
-    abrirModal("aviso", "Senha fraca", "A senha deve ter pelo menos 6 caracteres");
-    return;
-  }
-
-  setButtonLoading("btnCriar", true);
+  setButtonLoading("btnSignupCreate", true);
   try {
-    const cred = await createUserWithEmailAndPassword(auth, email, senha);
+    const cred = await createUserWithEmailAndPassword(auth, email, p1);
     await sendEmailVerification(cred.user);
-    debug("Conta criada! Verifique seu email.");
-    abrirModal("sucesso", "Conta criada!", "Verifique seu email para confirmar e ativar o trial de 48h.");
-    setMsg("Confirme o e-mail para liberar compra.");
+    closeSignup();
+    openModal("Conta criada", "Enviamos um e-mail de verificação. Confirme para liberar o acesso e a compra.");
+    setMsg("Conta criada. Confirme seu e-mail antes de continuar.");
+    // Mantém no login
+    showOnly("login");
+    // limpa campos login e preenche email para facilitar
+    if ($("email")) $("email").value = email;
+    if ($("senha")) $("senha").value = "";
   } catch (e) {
     console.error("Erro criar conta:", e);
-    debug("Falha ao criar conta: " + (e?.message || "erro desconhecido"), true);
-    abrirModal("erro", "Erro ao criar conta", e?.message || "Não foi possível criar.");
+    setSignupMsg(e?.message || "Não foi possível criar a conta.");
   } finally {
-    setButtonLoading("btnCriar", false);
+    setButtonLoading("btnSignupCreate", false);
   }
 }
 
-async function recuperarSenha() {
+async function recuperarSenha(){
   const email = ($("email")?.value || "").trim();
-  if (!email) {
-    abrirModal("aviso", "E-mail obrigatório", "Digite seu e-mail para receber o link de redefinição.");
+  if (!email){
+    openModal("E-mail obrigatório", "Digite seu e-mail para receber o link de redefinição.");
     return;
   }
   try {
     await sendPasswordResetEmail(auth, email);
-    abrirModal("sucesso", "E-mail enviado", "Se este e-mail estiver cadastrado, você receberá o link para redefinir a senha.");
+    openModal("E-mail enviado", "Se este e-mail estiver cadastrado, você receberá um link para redefinir a senha.");
   } catch (e) {
     console.error("Reset senha:", e);
-    abrirModal("erro", "Erro", "Não foi possível enviar o e-mail. Verifique o endereço.");
+    openModal("Erro", "Não foi possível enviar o e-mail. Verifique o endereço informado.");
   }
 }
 
-// CORRIGIDO: Função sair() única e sem duplicação
-async function sair() {
-  try {
-    await signOut(auth);
-  } catch (_) {}
+async function sair(){
+  try { await signOut(auth); } catch(_){}
   // limpa UI
   if ($("email")) $("email").value = "";
   if ($("senha")) $("senha").value = "";
   setMsg("");
+  hideQrArea();
   cancelarPolling();
-  show("loginBox");
+  showOnly("login");
 }
 
 /* =========================
-  PIX FLOW
+  PAYMENT / PIX
 ========================= */
 let pollingTimer = null;
 let countdownInterval = null;
@@ -675,291 +959,289 @@ let currentTxid = null;
 let retryCount = 0;
 const MAX_RETRIES = 3;
 
-function cancelarPolling() {
-  if (pollingTimer) {
-    clearInterval(pollingTimer);
-    pollingTimer = null;
-  }
-  if (countdownInterval) {
-    clearInterval(countdownInterval);
-    countdownInterval = null;
-  }
+function cancelarPolling(){
+  if (pollingTimer){ clearInterval(pollingTimer); pollingTimer = null; }
+  if (countdownInterval){ clearInterval(countdownInterval); countdownInterval = null; }
+}
+
+function hideQrArea(){
+  if ($("qrBox")) $("qrBox").classList.add("hide");
+  if ($("qrImg")) $("qrImg").src = "";
+  if ($("pixCopia")) $("pixCopia").value = "";
+  if ($("qrSub")) $("qrSub").innerText = "";
+  if ($("qrPlanInfo")) $("qrPlanInfo").innerText = "";
+  if ($("payMsg")) $("payMsg").innerText = "";
+  if ($("countdown")) $("countdown").innerText = "--:--";
+  if ($("pixTimer")) $("pixTimer").style.display = "flex";
   currentTxid = null;
   retryCount = 0;
 }
 
-function startCountdown(expiresAtIso) {
+function updatePaymentStatus(status, text){
+  const box = $("paymentStatusBox");
+  const icon = $("paymentStatusIcon");
+  const msg  = $("paymentStatusText");
+  if (!box) return;
+
+  box.className = "payment-status " + (status || "pending");
+  const map = {
+    pending:   { i:"⏳", t: text || "Aguardando pagamento..." },
+    processing:{ i:"🔄", t: text || "Processando..." },
+    success:   { i:"✅", t: text || "Pagamento confirmado!" },
+    error:     { i:"❌", t: text || "Falha no pagamento." }
+  };
+  const s = map[status] || map.pending;
+  if (icon) icon.innerText = s.i;
+  if (msg)  msg.innerText  = s.t;
+}
+
+function startCountdown(expiresAtIso){
   const timer = $("pixTimer");
   const countdown = $("countdown");
-  if (!timer || !countdown) return null;
+  if (!timer || !countdown) return;
 
-  if (!expiresAtIso) {
+  if (!expiresAtIso){
     timer.style.display = "none";
-    return null;
+    return;
   }
+  timer.style.display = "flex";
 
-  const expiresAt = new Date(expiresAtIso).getTime();
-
+  const expires = new Date(expiresAtIso).getTime();
   if (countdownInterval) clearInterval(countdownInterval);
 
   const tick = () => {
-    const now = Date.now();
-    const diff = expiresAt - now;
-
-    if (diff <= 0) {
-      clearInterval(countdownInterval);
+    const diff = expires - Date.now();
+    if (diff <= 0){
       countdown.innerText = "00:00";
-      timer.style.color = "#dc2626";
+      updatePaymentStatus("error", "PIX expirado! Gere um novo.");
+      cancelarPolling();
       return;
     }
-
     const mins = Math.floor(diff / 60000);
     const secs = Math.floor((diff % 60000) / 1000);
-    countdown.innerText = `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+    countdown.innerText = `${String(mins).padStart(2,"0")}:${String(secs).padStart(2,"0")}`;
   };
 
   tick();
   countdownInterval = setInterval(tick, 1000);
-  return countdownInterval;
 }
 
-function updatePaymentStatus(status, text) {
-  const box = $("paymentStatusBox");
-  const icon = $("paymentStatusIcon");
-  const txt = $("paymentStatusText");
+async function gerarPix(plan){
+  if (!auth.currentUser){
+    showOnly("login");
+    setMsg("Faça login.");
+    return;
+  }
 
-  if (!box) return;
+  const btnId = plan === "6m" ? "btnPlano6" : "btnPlano12";
+  setButtonLoading(btnId, true);
 
-  box.classList.remove("pending", "processing", "success", "error");
-
-  const statusMap = {
-    pending: { class: "pending", icon: "⏳", text: text || "Aguardando pagamento..." },
-    processing: { class: "processing", icon: "⏳", text: text || "Processando..." },
-    success: { class: "success", icon: "✅", text: text || "Pagamento confirmado!" },
-    error: { class: "error", icon: "❌", text: text || "Erro no pagamento" }
-  };
-
-  const s = statusMap[status] || statusMap.pending;
-  box.classList.add(s.class);
-  if (icon) icon.innerText = s.icon;
-  if (txt) txt.innerText = s.text;
-}
-
-async function gerarPix(plan) {
-  setButtonLoading(`btnPlano${plan === "6m" ? "6" : "12"}`, true);
   try {
-    const result = await createPixChargeFunc({ plan });
+    // Mostra área exclusiva do QR
+    if ($("qrBox")) $("qrBox").classList.remove("hide");
+    updatePaymentStatus("processing", "Gerando PIX...");
 
-    if (result.data.alreadyEntitled) {
-      abrirModal("info", "Acesso ativo", "Você já tem acesso premium ativo!");
-      setButtonLoading(`btnPlano${plan === "6m" ? "6" : "12"}`, false);
+    const resp = await createPixChargeFunc({ plan });
+    const data = resp.data || {};
+
+    if (data.alreadyEntitled){
+      openModal("Acesso ativo", "Seu acesso premium já está ativo.");
+      await carregarStatus();
       return;
     }
 
-    const { txid, qrcodeImage, copiaecola, expiresAt } = result.data;
-    currentTxid = txid;
+    if (!data.txid || !data.qrcodeImage || !data.copiaecola){
+      throw new Error("Resposta inválida ao gerar PIX.");
+    }
 
-    $("qrImg").src = qrcodeImage;
-    $("pixCopia").value = copiaecola;
-    $("qrPlanInfo").innerText = plan === "6m" ? "Plano 6 meses - R$ 29,90" : "Plano 1 ano - R$ 49,90";
-    $("qrSub").innerText = "Escaneie o QR Code ou copie o código PIX";
+    currentTxid = data.txid;
 
-    updatePaymentStatus("pending");
-    startCountdown(expiresAt);
+    // IMPORTANTE: backend retorna base64 (imagemQrcode). Precisa do prefixo.
+    if ($("qrImg")) $("qrImg").src = "data:image/png;base64," + data.qrcodeImage;
 
-    $("qrBox").classList.remove("hide");
+    if ($("pixCopia")) $("pixCopia").value = data.copiaecola;
 
-    // Inicia polling
+    if ($("qrPlanInfo")){
+      $("qrPlanInfo").innerText = (plan === "6m")
+        ? "Plano 6 meses — R$ 29,90"
+        : "Plano 1 ano — R$ 49,90";
+    }
+
+    if ($("qrSub")) $("qrSub").innerText = "Escaneie o QR Code ou copie o código PIX.";
+
+    updatePaymentStatus("pending", "Aguardando pagamento...");
+    startCountdown(data.expiresAt);
+
     retryCount = 0;
-    pollingTimer = setInterval(() => verificarPagamento(txid), 5000);
+    cancelarPolling();
+    // checa imediatamente e depois a cada 5s
+    await verificarPagamento(currentTxid);
+    pollingTimer = setInterval(() => verificarPagamento(currentTxid), 5000);
 
-    debug("PIX gerado com sucesso!");
   } catch (e) {
-    console.error("Erro ao gerar PIX:", e);
-    debug("Erro ao gerar PIX: " + (e?.message || "desconhecido"), true);
-    abrirModal("erro", "Erro", e?.message || "Não foi possível gerar o PIX");
+    console.error("Erro gerarPix:", e);
+    const code = e?.code || "";
+    if (code === "functions/unauthenticated"){
+      showOnly("login");
+      setMsg("Sessão expirada. Faça login novamente.");
+      return;
+    }
+    updatePaymentStatus("error", "Erro ao gerar PIX.");
+    if ($("payMsg")) $("payMsg").innerText = (e?.message || "Não foi possível gerar o PIX.");
   } finally {
-    setButtonLoading(`btnPlano${plan === "6m" ? "6" : "12"}`, false);
+    setButtonLoading(btnId, false);
   }
 }
 
-async function verificarPagamento(txid) {
-  try {
-    const result = await pixStatusFunc({ txid });
+async function verificarPagamento(txid){
+  if (!txid) return;
 
-    if (result.data.paid) {
+  try {
+    const resp = await pixStatusFunc({ txid });
+    const data = resp.data || {};
+
+    if (data.paid){
       updatePaymentStatus("success", "Pagamento confirmado!");
       cancelarPolling();
-      setTimeout(() => {
-        abrirModal("sucesso", "Pagamento recebido!", "Seu acesso foi ativado. Clique em 'Acessar o App' para continuar.");
-        carregarStatus();
-      }, 1000);
+      openModal("Pagamento recebido", "Seu acesso foi ativado. Você já pode acessar o app.");
+      // atualiza status do backend
+      await carregarStatus();
+      // fecha área QR
+      hideQrArea();
       return;
     }
 
-    if (result.data.expired) {
-      updatePaymentStatus("error", "PIX expirado");
+    if (data.expired){
+      updatePaymentStatus("error", "PIX expirado!");
       cancelarPolling();
       return;
     }
 
-    retryCount++;
-    if (retryCount > MAX_RETRIES) {
-      console.warn("Máximo de tentativas atingido");
+    if (data.status){
+      updatePaymentStatus("pending", `Status: ${data.status}`);
     }
+    retryCount = 0;
   } catch (e) {
-    console.error("Erro ao verificar pagamento:", e);
+    console.error("Erro verificar pagamento:", e);
     retryCount++;
+
+    if (retryCount >= MAX_RETRIES){
+      updatePaymentStatus("error", "Erro ao verificar. Tente novamente.");
+      cancelarPolling();
+    } else {
+      updatePaymentStatus("processing", "Verificando...");
+    }
   }
 }
 
-async function verificarPagamentoManual() {
-  if (!currentTxid) return;
+async function verificarPagamentoManual(){
+  if (!currentTxid){
+    openModal("Nenhum PIX", "Gere um PIX primeiro.");
+    return;
+  }
   setButtonLoading("btnRecheck", true);
-  try {
+  try{
+    updatePaymentStatus("processing", "Verificando...");
     await verificarPagamento(currentTxid);
+    // se não pagou e não expirou, volta o polling
+    if (currentTxid && !pollingTimer){
+      pollingTimer = setInterval(() => verificarPagamento(currentTxid), 5000);
+    }
   } finally {
     setButtonLoading("btnRecheck", false);
   }
 }
 
-async function copiarPix() {
-  const txt = $("pixCopia")?.value;
+async function copiarPix(){
+  const txt = $("pixCopia")?.value || "";
   if (!txt) return;
 
   try {
     await navigator.clipboard.writeText(txt);
-    $("payMsg").innerHTML = "<span style='color:#16a34a;font-weight:900'>✅ Código PIX copiado!</span>";
+    if ($("payMsg")) $("payMsg").innerText = "✅ Código PIX copiado!";
   } catch (e) {
     // fallback
-    $("pixCopia").focus();
-    $("pixCopia").select();
-    document.execCommand("copy");
-    $("payMsg").innerHTML = "<span style='color:#16a34a;font-weight:900'>✅ Código PIX copiado!</span>";
+    const input = $("pixCopia");
+    if (input){
+      input.focus();
+      input.select();
+      document.execCommand("copy");
+      if ($("payMsg")) $("payMsg").innerText = "✅ Código PIX copiado!";
+    }
   }
 }
 
-function cancelarPix() {
+function cancelarPix(){
   cancelarPolling();
-  $("qrBox").classList.add("hide");
-  $("payMsg").innerText = "";
-  $("qrSub").innerText = "";
-  $("pixCopia").value = "";
-  $("qrImg").src = "";
+  hideQrArea();
   updatePaymentStatus("pending", "PIX cancelado.");
-  abrirModal("info", "PIX cancelado", "Você pode gerar um novo PIX quando quiser.");
+  openModal("PIX cancelado", "Você pode gerar um novo PIX quando quiser.");
 }
 
 /* =========================
-  STATUS & ACCESS
+  EVENTS
 ========================= */
-async function carregarStatus() {
-  try {
-    const result = await meFunc();
-    const data = result.data;
-
-    if (!data.authenticated) {
-      show("loginBox");
-      return;
-    }
-
-    if (!data.emailVerified) {
-      setMsg("Verifique seu email para continuar");
-      show("loginBox");
-      return;
-    }
-
-    if (!data.entitled) {
-      show("payBox");
-      return;
-    }
-
-    // Usuário tem acesso
-    const statusBox = $("statusInfoBox");
-    const statusText = $("statusText");
-    const statusSub = $("statusSub");
-
-    if (data.plan === "trial") {
-      statusBox.classList.add("trial");
-      statusText.innerText = "🎓 Teste Gratuito";
-      const expiresAt = new Date(data.expiresAt);
-      const now = new Date();
-      const hoursLeft = Math.ceil((expiresAt - now) / 3600000);
-      statusSub.innerText = `Seu teste expira em ${hoursLeft} horas`;
-    } else if (data.plan === "premium") {
-      statusBox.classList.add("premium");
-      statusText.innerText = "⭐ Premium";
-      const expiresAt = new Date(data.expiresAt);
-      statusSub.innerText = `Acesso até ${expiresAt.toLocaleDateString("pt-BR")}`;
-    }
-
-    show("statusBox");
-    debug(`Acesso carregado: ${data.plan}`);
-  } catch (e) {
-    console.error("Erro ao carregar status:", e);
-    debug("Erro ao carregar status: " + (e?.message || "desconhecido"), true);
-    show("loginBox");
-  }
-}
-
-/* =========================
-  EVENT LISTENERS - CORRIGIDO (SEM DUPLICAÇÃO)
-========================= */
-function on(id, event, handler) {
+function on(id, evt, handler){
   const el = $(id);
   if (!el) return;
-  el.addEventListener(event, handler);
+  el.addEventListener(evt, handler);
 }
 
-// Botões principais
 on("btnEntrar", "click", entrar);
-on("btnCriar", "click", criarConta);
+on("btnOpenSignup", "click", openSignup);
 on("btnResetSenha", "click", recuperarSenha);
+
+on("btnCloseSignup", "click", closeSignup);
+on("btnSignupCancel", "click", closeSignup);
+on("btnSignupCreate", "click", criarContaModal);
+
+on("btnCloseModal", "click", closeModal);
+on("btnModalOk", "click", closeModal);
+on("modalOverlay", "click", (e)=>{ if (e.target?.id === "modalOverlay") closeModal(); });
+on("signupOverlay", "click", (e)=>{ if (e.target?.id === "signupOverlay") closeSignup(); });
+
 on("btnSair", "click", sair);
 on("btnTrocarConta", "click", sair);
 
-// Navegação
-on("btnAcessarApp", "click", () => window.location.href = FRONT_URL);
-
-// PIX
 on("btnPlano6", "click", () => gerarPix("6m"));
 on("btnPlano12", "click", () => gerarPix("12m"));
+
 on("btnCopiar", "click", copiarPix);
 on("btnCancelarPix", "click", cancelarPix);
 on("btnRecheck", "click", verificarPagamentoManual);
 
-// Toggle senha
+on("btnAcessarApp", "click", () => window.location.href = FRONT_URL);
+
 on("toggleSenha", "click", () => {
-  const senha = $("senha");
-  if (!senha) return;
-  const isPwd = senha.type === "password";
-  senha.type = isPwd ? "text" : "password";
-  const toggle = $("toggleSenha");
-  if (toggle) toggle.innerText = isPwd ? "🙈" : "👁️";
+  const input = $("senha");
+  if (!input) return;
+  const isPwd = input.type === "password";
+  input.type = isPwd ? "text" : "password";
+  const t = $("toggleSenha");
+  if (t) t.innerText = isPwd ? "🙈" : "👁️";
 });
 
 /* =========================
-  AUTH STATE LISTENER
+  AUTH STATE
+  - Quando já estiver logado (persistência), carrega status.
 ========================= */
 onAuthStateChanged(auth, async (user) => {
-  if (!user) {
-    show("loginBox");
+  if (!user){
+    showOnly("login");
     return;
   }
-
-  // NÃO chama carregarStatus aqui
-  debug("Auth state mudou, aguardando ação explícita");
+  try{
+    await user.getIdToken(true);
+    await new Promise(r => setTimeout(r, 200));
+  } catch(_){}
+  await carregarStatus();
 });
-
 
 /* =========================
   INIT
 ========================= */
-show("loginBox");
-debug("Página carregada. Ready!");
+showOnly("login");
 </script>
 
 </body>
 </html>
-
-
