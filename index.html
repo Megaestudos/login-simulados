@@ -793,20 +793,22 @@ async function callMeSafe() {
   STATUS & ACCESS (backend manda)
 ========================= */
 async function carregarStatus(){
-  if (!auth.currentUser){
+
+  // 🔒 BLOQUEIO ABSOLUTO: não chama backend sem usuário autenticado
+  if (!auth.currentUser) {
+    console.log("[INFO] Nenhum usuário autenticado ainda. Abortando me().");
     showOnly("login");
     return;
   }
 
+  // 🔒 Garante que o token já existe
   try {
-    const result = await callMeSafe();
-    const data = result.data || {};
-
-    if (data.authenticated !== true){
-      showOnly("login");
-      setMsg("Sessão inválida. Faça login novamente.");
-      return;
-    }
+    await auth.currentUser.getIdToken();
+  } catch {
+    console.warn("[WARN] Token ainda não disponível. Abortando me().");
+    showOnly("login");
+    return;
+  }
 
     if (data.emailVerified === false){
       showOnly("login");
@@ -1232,13 +1234,17 @@ on("toggleSenha", "click", () => {
 ========================= */
 onAuthStateChanged(auth, async (user) => {
   if (!user){
+    console.log("[AUTH] Usuário não logado");
     showOnly("login");
     return;
   }
-  try{
-    await user.getIdToken(true);
-    await new Promise(r => setTimeout(r, 200));
-  } catch(_){}
+
+  console.log("[AUTH] Usuário detectado:", user.uid);
+
+  // Aguarda token estar pronto antes de QUALQUER backend
+  await user.getIdToken(true);
+  await new Promise(r => setTimeout(r, 300));
+
   await carregarStatus();
 });
 
@@ -1250,4 +1256,5 @@ showOnly("login");
 
 </body>
 </html>
+
 
