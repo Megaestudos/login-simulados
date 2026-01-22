@@ -794,73 +794,75 @@ async function callMeSafe() {
 ========================= */
 async function carregarStatus(){
 
-  // 🔒 BLOQUEIO ABSOLUTO: não chama backend sem usuário autenticado
+  // 🔒 Nunca chama backend sem usuário
   if (!auth.currentUser) {
-    console.log("[INFO] Nenhum usuário autenticado ainda. Abortando me().");
+    console.log("[STATUS] Nenhum usuário logado");
     showOnly("login");
     return;
   }
 
-  // 🔒 Garante que o token já existe
+  // 🔒 Garante token válido
   try {
-    await auth.currentUser.getIdToken();
-  } catch {
-    console.warn("[WARN] Token ainda não disponível. Abortando me().");
+    await auth.currentUser.getIdToken(true);
+  } catch (err) {
+    console.warn("[STATUS] Token indisponível", err);
     showOnly("login");
     return;
   }
 
-    if (data.emailVerified === false){
+  try {
+    const result = await callMeSafe();
+    const data = result.data || {};
+
+    if (data.authenticated !== true){
       showOnly("login");
-      setMsg("Confirme seu e-mail para liberar o acesso e a compra.");
-      openModal("Confirme seu e-mail", "Enviamos a verificação quando você cria a conta. Verifique a caixa de entrada e o spam.");
+      setMsg("Sessão inválida. Faça login novamente.");
       return;
     }
 
-    // Sem acesso => pagamento
+    if (data.emailVerified === false){
+      showOnly("login");
+      setMsg("Confirme seu e-mail para liberar o acesso.");
+      openModal(
+        "Confirme seu e-mail",
+        "Verifique sua caixa de entrada e o spam para confirmar o e-mail."
+      );
+      return;
+    }
+
+    // Sem acesso → pagamento
     if (!data.entitled){
       showOnly("pay");
-      // limpa QR ao entrar no pay
       hideQrArea();
       return;
     }
 
-    // Acesso ativo => status
+    // Acesso ativo
     const statusBox = $("statusInfoBox");
     const statusText = $("statusText");
     const statusSub = $("statusSub");
 
-    if (statusBox) statusBox.className = "status-box " + (data.plan || "");
+    if (statusBox){
+      statusBox.className = "status-box " + (data.plan || "");
+    }
 
     if (data.plan === "trial"){
-      if (statusText) statusText.innerText = "🎓 Teste grátis ativo";
-      const exp = data.expiresAt ? new Date(data.expiresAt) : null;
-      if (statusSub) statusSub.innerText = exp ? `Válido até: ${exp.toLocaleString("pt-BR")}` : "";
-    } else if (data.plan === "premium"){
-      if (statusText) statusText.innerText = "⭐ Acesso Premium ativo";
-      const exp = data.expiresAt ? new Date(data.expiresAt) : null;
-      if (statusSub) statusSub.innerText = exp ? `Válido até: ${exp.toLocaleString("pt-BR")}` : "";
-    } else {
-      if (statusText) statusText.innerText = "✅ Acesso ativo";
-      if (statusSub) statusSub.innerText = "";
+      statusText.innerText = "🎓 Teste grátis ativo";
+      const exp = new Date(data.expiresAt);
+      statusSub.innerText = `Válido até: ${exp.toLocaleString("pt-BR")}`;
+    }
+    else if (data.plan === "premium"){
+      statusText.innerText = "⭐ Acesso Premium ativo";
+      const exp = new Date(data.expiresAt);
+      statusSub.innerText = `Válido até: ${exp.toLocaleString("pt-BR")}`;
     }
 
-        // OPÇÃO 1 — redireciona automaticamente se tem acesso
-    console.log("Acesso válido (" + data.plan + "). Redirecionando para o app...");
-    setTimeout(() => {
-      window.location.href = FRONT_URL;
-    }, 500);
+    showOnly("status");
 
-  } catch (e) {
-    console.error("Erro ao carregar status:", e);
-    const code = e?.code || "";
-    if (code === "functions/unauthenticated"){
-      showOnly("login");
-      setMsg("Falha ao validar sessão. Faça login novamente.");
-      return;
-    }
+  } catch (err) {
+    console.error("Erro ao carregar status:", err);
     showOnly("login");
-    setMsg("Erro ao validar sessão. Tente novamente.");
+    setMsg("Erro ao validar sessão. Faça login novamente.");
   }
 }
 
@@ -1256,5 +1258,6 @@ showOnly("login");
 
 </body>
 </html>
+
 
 
