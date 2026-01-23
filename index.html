@@ -871,27 +871,41 @@ async function carregarStatus(){
 /* =========================
   AUTH
 ========================= */
-async function entrar(){
+async function entrar() {
   setMsg("");
-  const email = ($("email")?.value || "").trim();
-  const senha = $("senha")?.value || "";
 
-  if (!email || !senha){
+  const email = emailInput.value.trim();
+  const senha = senhaInput.value;
+
+  if (!email || !senha) {
     setMsg("Preencha e-mail e senha.");
     return;
   }
 
-  setButtonLoading("btnEntrar", true);
   try {
     const cred = await signInWithEmailAndPassword(auth, email, senha);
-    await cred.user.getIdToken(true); // força JWT
-    await new Promise(r => setTimeout(r, 250));
-    await carregarStatus();
-  } catch (e) {
-    console.error("Erro login:", e);
-    openModal("Erro ao entrar", "E-mail ou senha inválidos, ou a conta não existe.");
-  } finally {
-    setButtonLoading("btnEntrar", false);
+
+    // 🔒 força geração do ID TOKEN
+    await cred.user.getIdToken(true);
+
+    // ⏳ pequeno delay REAL (importantíssimo)
+    await new Promise(r => setTimeout(r, 500));
+
+    // ✅ AGORA SIM pode chamar o backend
+    const result = await meFunc();
+    const data = result.data;
+
+    if (!data.entitled) {
+      showOnly("pay");
+      return;
+    }
+
+    // ✅ ACESSO LIBERADO
+    window.location.href = FRONT_URL;
+
+  } catch (err) {
+    console.error(err);
+    setMsg("Login inválido.");
   }
 }
 
@@ -1238,13 +1252,14 @@ on("toggleSenha", "click", () => {
 ========================= */
 let bootChecked = false;
 
-onIdTokenChanged(auth, async (user) => {
-  // Evita “piscar” e evita chamadas repetidas no boot
-  if (!user) {
-    bootChecked = true;
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    console.log("[AUTH] Usuário detectado:", user.uid);
+    // NÃO chama me()
+  } else {
     showOnly("login");
-    return;
   }
+});
 
   try {
     // Garante token pronto (isso é o ponto crítico)
@@ -1280,6 +1295,7 @@ showOnly("login");
 
 </body>
 </html>
+
 
 
 
