@@ -1248,14 +1248,13 @@ on("toggleSenha", "click", () => {
 
 /* =========================
   AUTH STATE
-  - Quando já estiver logado (persistência), carrega status.
+  - NÃO chama backend no boot
 ========================= */
-let bootChecked = false;
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
     console.log("[AUTH] Usuário detectado:", user.uid);
-    // NÃO chama me()
+    // NÃO chama me() aqui
   } else {
     showOnly("login");
   }
@@ -1295,6 +1294,7 @@ showOnly("login");
 
 </body>
 </html>
+
 
 
 
