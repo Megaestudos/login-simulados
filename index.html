@@ -666,7 +666,8 @@ import {
   signOut,
   sendEmailVerification,
   sendPasswordResetEmail,
-  onAuthStateChanged
+  onAuthStateChanged,
+  onIdTokenChanged
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-functions.js";
 
@@ -778,11 +779,12 @@ async function callMeSafe() {
   try {
     return await meFunc();
   } catch (e) {
-    // Se der "unauthenticated", força refresh do token e tenta 1 vez
     const code = e?.code || "";
+
+    // Se deu unauthenticated mas há usuário, força refresh e tenta novamente
     if (code === "functions/unauthenticated" && auth.currentUser) {
       await auth.currentUser.getIdToken(true);
-      await new Promise(r => setTimeout(r, 250));
+      await new Promise(r => setTimeout(r, 600));
       return await meFunc();
     }
     throw e;
@@ -1234,20 +1236,40 @@ on("toggleSenha", "click", () => {
   AUTH STATE
   - Quando já estiver logado (persistência), carrega status.
 ========================= */
-onAuthStateChanged(auth, async (user) => {
-  if (!user){
-    console.log("[AUTH] Usuário não logado");
+let bootChecked = false;
+
+onIdTokenChanged(auth, async (user) => {
+  // Evita “piscar” e evita chamadas repetidas no boot
+  if (!user) {
+    bootChecked = true;
     showOnly("login");
     return;
   }
 
-  console.log("[AUTH] Usuário detectado:", user.uid);
+  try {
+    // Garante token pronto (isso é o ponto crítico)
+    await user.getIdToken(true);
 
-  // Aguarda token estar pronto antes de QUALQUER backend
-  await user.getIdToken(true);
-  await new Promise(r => setTimeout(r, 300));
+    // Pequeno delay real para evitar primeira chamada 401 (race condition)
+    await new Promise(r => setTimeout(r, 400));
 
-  await carregarStatus();
+    bootChecked = true;
+    await carregarStatus();
+
+  } catch (err) {
+    console.error("[AUTH] Falha ao obter token no boot:", err);
+
+    // Se token falhar, derruba sessão e volta limpo
+    try { await signOut(auth); } catch(_){}
+    bootChecked = true;
+    showOnly("login");
+    setMsg("Sessão inválida. Faça login novamente.");
+  }
+});
+
+// Opcional: mantém o onAuthStateChanged apenas para debug (sem chamar backend)
+onAuthStateChanged(auth, (user) => {
+  if (user) console.log("[AUTH] Usuário detectado:", user.uid);
 });
 
 /* =========================
@@ -1258,6 +1280,7 @@ showOnly("login");
 
 </body>
 </html>
+
 
 
 
