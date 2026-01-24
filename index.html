@@ -321,12 +321,20 @@ if (params.get("choose") === "1") {
 /* LOGIN */
 $("btnLogin").onclick = async () => {
   try {
-    await signInWithEmailAndPassword(auth, $("email").value, $("senha").value);
+    const cred = await signInWithEmailAndPassword(
+      auth,
+      $("email").value,
+      $("senha").value
+    );
 
-    // marca que o usuário escolheu entrar (login consciente)
-    sessionStorage.setItem("login_ok", "1");
+    // 🔐 salva usuário logado (persistente)
+    localStorage.setItem("auth_user", cred.user.email);
 
-    window.location.href = "https://megaestudos.github.io/Quiz-Guarda-Civil-Premium/";
+    // evita loop imediato
+    sessionStorage.setItem("login_redirect", "1");
+
+    window.location.href =
+      "https://megaestudos.github.io/Quiz-Guarda-Civil-Premium/";
   } catch {
     $("msg").innerText = "E-mail ou senha inválidos.";
   }
@@ -366,5 +374,6 @@ $("btnResetSend").onclick=async()=>{
 
 </body>
 </html>
+
 
 
