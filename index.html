@@ -666,20 +666,21 @@ import {
   signOut,
   sendEmailVerification,
   sendPasswordResetEmail,
-  onAuthStateChanged,
-  onIdTokenChanged
+  onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
 /* =========================
-  CONFIG (SEU PROJETO)
+  CONFIG
 ========================= */
 const FRONT_URL = "https://megaestudos.github.io/Quiz-Guarda-Civil-Premium/";
+const CHECK_PREMIUM_URL =
+  "https://us-central1-simulados-concursos-22c91.cloudfunctions.net/checkPremium";
+
 const firebaseConfig = {
   apiKey: "AIzaSyB36ZszS8v_DeOn3at7zEo_tFq86WU0sI4",
   authDomain: "simulados-concursos-22c91.firebaseapp.com",
   projectId: "simulados-concursos-22c91"
 };
-const FUNCTIONS_REGION = "us-central1";
 
 /* =========================
   INIT
@@ -687,18 +688,11 @@ const FUNCTIONS_REGION = "us-central1";
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// Persistência local (mantém login)
 try {
   await setPersistence(auth, browserLocalPersistence);
 } catch (e) {
-  console.warn("Persistência não aplicada (seguindo padrão):", e);
+  console.warn("Persistência padrão aplicada");
 }
-
-/* =========================
-  CALLABLE FUNCTIONS
-========================= */
-const createPixChargeFunc = httpsCallable(fx, "createPixCharge");
-const pixStatusFunc = httpsCallable(fx, "pixStatus");
 
 /* =========================
   HELPERS
@@ -706,582 +700,142 @@ const pixStatusFunc = httpsCallable(fx, "pixStatus");
 const $ = (id) => document.getElementById(id);
 
 function showOnly(section){
-  // sections: loginBox/statusBox/payCard
-  const loginBox = $("loginBox");
-  const statusBox = $("statusBox");
-  const payCard  = $("payCard");
-
-  if (loginBox) loginBox.classList.toggle("hide", section !== "login");
-  if (statusBox) statusBox.classList.toggle("hide", section !== "status");
-  if (payCard) payCard.classList.toggle("hide", section !== "pay");
+  $("loginBox")?.classList.toggle("hide", section !== "login");
+  $("statusBox")?.classList.toggle("hide", section !== "status");
+  $("payCard")?.classList.toggle("hide", section !== "pay");
 }
 
 function setMsg(t){
-  const el = $("msgLogin");
-  if (el) el.innerText = t || "";
+  if ($("msgLogin")) $("msgLogin").innerText = t || "";
 }
 
-function setButtonLoading(buttonId, loading){
-  const btn = $(buttonId);
-  if (!btn) return;
-  btn.disabled = !!loading;
-  if (loading){
-    btn.dataset.originalText = btn.innerText;
-    btn.innerHTML = `<span class="loading-spinner"></span>Carregando...`;
-  } else {
-    btn.innerText = btn.dataset.originalText || btn.innerText || "OK";
-  }
-}
-
-function openModal(title, message){
-  const overlay = $("modalOverlay");
-  const t = $("modalTitle");
-  const m = $("modalMessage");
-  if (!overlay || !t || !m) return;
-  t.innerText = title || "Aviso";
-  m.innerText = message || "";
-  overlay.classList.remove("hide");
-}
-function closeModal(){
-  const overlay = $("modalOverlay");
-  if (overlay) overlay.classList.add("hide");
-}
-
-/* Signup modal */
-function openSignup(){
-  $("signupOverlay")?.classList.remove("hide");
-  $("signupMsg")?.classList.add("hide");
-  if ($("signupMsg")) $("signupMsg").innerText = "";
-  $("signupEmail")?.focus();
-}
-function closeSignup(){
-  $("signupOverlay")?.classList.add("hide");
-  if ($("signupEmail")) $("signupEmail").value = "";
-  if ($("signupPass")) $("signupPass").value = "";
-  if ($("signupPass2")) $("signupPass2").value = "";
-  if ($("signupMsg")) { $("signupMsg").innerText = ""; $("signupMsg").classList.add("hide"); }
-}
-function setSignupMsg(text){
-  const el = $("signupMsg");
-  if (!el) return;
-  el.innerText = text || "";
-  el.classList.toggle("hide", !text);
-}
-
-/* =========================
-  TOKEN/SESSION SAFE CALL
-  (reduz chance de 401 em edge cases)
-========================= */
- callMeSafe() {
-  try {
-    return await meFunc();
-  } catch (e) {
-    const code = e?.code || "";
-
-    // Se deu unauthenticated mas há usuário, força refresh e tenta novamente
-    if (code === "functions/unauthenticated" && auth.currentUser) {
-      await auth.currentUser.getIdToken(true);
-      await new Promise(r => setTimeout(r, 600));
-      return await meFunc();
-    }
-    throw e;
-  }
-}
-
-  async function checkPremiumSafe() {
+async function checkPremiumSafe(){
   const user = auth.currentUser;
   if (!user) return { premium: false };
 
   const token = await user.getIdToken(true);
 
-  const resp = await fetch(
-    "https://us-central1-simulados-concursos-22c91.cloudfunctions.net/checkPremium",
-    {
-      method: "GET",
-      headers: {
-        "Authorization": "Bearer " + token
-      }
-    }
-  );
+  const resp = await fetch(CHECK_PREMIUM_URL, {
+    method: "GET",
+    headers: { Authorization: "Bearer " + token }
+  });
 
   return await resp.json();
 }
 
 /* =========================
-  STATUS & ACCESS (backend manda)
-========================= */
-async function carregarStatus(){
-
-  // 🔒 Nunca chama backend sem usuário
-  if (!auth.currentUser) {
-    console.log("[STATUS] Nenhum usuário logado");
-    showOnly("login");
-    return;
-  }
-
-  // 🔒 Garante token válido
-  try {
-    await auth.currentUser.getIdToken(true);
-  } catch (err) {
-    console.warn("[STATUS] Token indisponível", err);
-    showOnly("login");
-    return;
-  }
-
-  try {
-    const result = await callMeSafe();
-    const data = result.data || {};
-
-    if (data.authenticated !== true){
-      showOnly("login");
-      setMsg("Sessão inválida. Faça login novamente.");
-      return;
-    }
-
-    if (data.emailVerified === false){
-      showOnly("login");
-      setMsg("Confirme seu e-mail para liberar o acesso.");
-      openModal(
-        "Confirme seu e-mail",
-        "Verifique sua caixa de entrada e o spam para confirmar o e-mail."
-      );
-      return;
-    }
-
-    // Sem acesso → pagamento
-    if (!data.entitled){
-      showOnly("pay");
-      hideQrArea();
-      return;
-    }
-
-    // Acesso ativo
-    const statusBox = $("statusInfoBox");
-    const statusText = $("statusText");
-    const statusSub = $("statusSub");
-
-    if (statusBox){
-      statusBox.className = "status-box " + (data.plan || "");
-    }
-
-    if (data.plan === "trial"){
-      statusText.innerText = "🎓 Teste grátis ativo";
-      const exp = new Date(data.expiresAt);
-      statusSub.innerText = `Válido até: ${exp.toLocaleString("pt-BR")}`;
-    }
-    else if (data.plan === "premium"){
-      statusText.innerText = "⭐ Acesso Premium ativo";
-      const exp = new Date(data.expiresAt);
-      statusSub.innerText = `Válido até: ${exp.toLocaleString("pt-BR")}`;
-    }
-
-    showOnly("status");
-
-  } catch (err) {
-    console.error("Erro ao carregar status:", err);
-    showOnly("login");
-    setMsg("Erro ao validar sessão. Faça login novamente.");
-  }
-}
-
-/* =========================
   AUTH
 ========================= */
-async function entrar() {
+async function entrar(){
   setMsg("");
 
-  const emailEl = $("email");
-  const senhaEl = $("senha");
+  const email = $("email")?.value.trim();
+  const senha = $("senha")?.value;
 
-  const email = emailEl?.value.trim();
-  const senha = senhaEl?.value;
-
-  if (!email || !senha) {
+  if (!email || !senha){
     setMsg("Preencha e-mail e senha.");
     return;
   }
 
-  try {
+  try{
     const cred = await signInWithEmailAndPassword(auth, email, senha);
-
-    // força geração do ID TOKEN
     await cred.user.getIdToken(true);
+    await new Promise(r => setTimeout(r, 400));
 
-    // pequeno delay real (evita race condition)
-    await new Promise(r => setTimeout(r, 500));
+    const status = await checkPremiumSafe();
 
-    // chama backend
-    const result = await meFunc();
-    const data = result.data;
-
-    if (!data.entitled) {
+    if (!status.premium){
       showOnly("pay");
       return;
     }
 
-    // acesso liberado
     window.location.href = FRONT_URL;
 
-  } catch (err) {
-    console.error(err);
+  }catch(e){
+    console.error(e);
     setMsg("Login inválido.");
   }
 }
 
 async function criarContaModal(){
-  setSignupMsg("");
-
-  const email = ($("signupEmail")?.value || "").trim();
-  const p1 = $("signupPass")?.value || "";
-  const p2 = $("signupPass2")?.value || "";
+  const email = $("signupEmail")?.value.trim();
+  const p1 = $("signupPass")?.value;
+  const p2 = $("signupPass2")?.value;
 
   if (!email || !p1 || !p2){
-    setSignupMsg("Preencha e-mail e senha.");
-    return;
-  }
-  if (p1.length < 6){
-    setSignupMsg("A senha deve ter pelo menos 6 caracteres.");
-    return;
-  }
-  if (p1 !== p2){
-    setSignupMsg("As senhas não conferem.");
+    $("signupMsg").innerText = "Preencha todos os campos.";
+    $("signupMsg").classList.remove("hide");
     return;
   }
 
-  setButtonLoading("btnSignupCreate", true);
-  try {
+  if (p1.length < 6){
+    $("signupMsg").innerText = "Senha mínima de 6 caracteres.";
+    $("signupMsg").classList.remove("hide");
+    return;
+  }
+
+  if (p1 !== p2){
+    $("signupMsg").innerText = "As senhas não conferem.";
+    $("signupMsg").classList.remove("hide");
+    return;
+  }
+
+  try{
     const cred = await createUserWithEmailAndPassword(auth, email, p1);
     await sendEmailVerification(cred.user);
-    closeSignup();
-    openModal("Conta criada", "Enviamos um e-mail de verificação. Confirme para liberar o acesso e a compra.");
-    setMsg("Conta criada. Confirme seu e-mail antes de continuar.");
-    // Mantém no login
+    $("signupOverlay").classList.add("hide");
+    setMsg("Conta criada. Confirme o e-mail.");
     showOnly("login");
-    // limpa campos login e preenche email para facilitar
-    if ($("email")) $("email").value = email;
-    if ($("senha")) $("senha").value = "";
-  } catch (e) {
-    console.error("Erro criar conta:", e);
-    setSignupMsg(e?.message || "Não foi possível criar a conta.");
-  } finally {
-    setButtonLoading("btnSignupCreate", false);
+    $("email").value = email;
+    $("senha").value = "";
+  }catch(e){
+    console.error(e);
+    $("signupMsg").innerText = e.message || "Erro ao criar conta.";
+    $("signupMsg").classList.remove("hide");
   }
 }
 
 async function recuperarSenha(){
-  const email = ($("email")?.value || "").trim();
+  const email = $("email")?.value.trim();
   if (!email){
-    openModal("E-mail obrigatório", "Digite seu e-mail para receber o link de redefinição.");
+    alert("Digite seu e-mail.");
     return;
   }
-  try {
+  try{
     await sendPasswordResetEmail(auth, email);
-    openModal("E-mail enviado", "Se este e-mail estiver cadastrado, você receberá um link para redefinir a senha.");
-  } catch (e) {
-    console.error("Reset senha:", e);
-    openModal("Erro", "Não foi possível enviar o e-mail. Verifique o endereço informado.");
+    alert("E-mail de redefinição enviado.");
+  }catch(e){
+    alert("Erro ao enviar e-mail.");
   }
 }
 
 async function sair(){
-  try { await signOut(auth); } catch(_){}
-  // limpa UI
-  if ($("email")) $("email").value = "";
-  if ($("senha")) $("senha").value = "";
-  setMsg("");
-  hideQrArea();
-  cancelarPolling();
+  await signOut(auth);
   showOnly("login");
-}
-
-/* =========================
-  PAYMENT / PIX
-========================= */
-let pollingTimer = null;
-let countdownInterval = null;
-let currentTxid = null;
-let retryCount = 0;
-const MAX_RETRIES = 3;
-
-function cancelarPolling(){
-  if (pollingTimer){ clearInterval(pollingTimer); pollingTimer = null; }
-  if (countdownInterval){ clearInterval(countdownInterval); countdownInterval = null; }
-}
-
-function hideQrArea(){
-  if ($("qrBox")) $("qrBox").classList.add("hide");
-  if ($("qrImg")) $("qrImg").src = "";
-  if ($("pixCopia")) $("pixCopia").value = "";
-  if ($("qrSub")) $("qrSub").innerText = "";
-  if ($("qrPlanInfo")) $("qrPlanInfo").innerText = "";
-  if ($("payMsg")) $("payMsg").innerText = "";
-  if ($("countdown")) $("countdown").innerText = "--:--";
-  if ($("pixTimer")) $("pixTimer").style.display = "flex";
-  currentTxid = null;
-  retryCount = 0;
-}
-
-function updatePaymentStatus(status, text){
-  const box = $("paymentStatusBox");
-  const icon = $("paymentStatusIcon");
-  const msg  = $("paymentStatusText");
-  if (!box) return;
-
-  box.className = "payment-status " + (status || "pending");
-  const map = {
-    pending:   { i:"⏳", t: text || "Aguardando pagamento..." },
-    processing:{ i:"🔄", t: text || "Processando..." },
-    success:   { i:"✅", t: text || "Pagamento confirmado!" },
-    error:     { i:"❌", t: text || "Falha no pagamento." }
-  };
-  const s = map[status] || map.pending;
-  if (icon) icon.innerText = s.i;
-  if (msg)  msg.innerText  = s.t;
-}
-
-function startCountdown(expiresAtIso){
-  const timer = $("pixTimer");
-  const countdown = $("countdown");
-  if (!timer || !countdown) return;
-
-  if (!expiresAtIso){
-    timer.style.display = "none";
-    return;
-  }
-  timer.style.display = "flex";
-
-  const expires = new Date(expiresAtIso).getTime();
-  if (countdownInterval) clearInterval(countdownInterval);
-
-  const tick = () => {
-    const diff = expires - Date.now();
-    if (diff <= 0){
-      countdown.innerText = "00:00";
-      updatePaymentStatus("error", "PIX expirado! Gere um novo.");
-      cancelarPolling();
-      return;
-    }
-    const mins = Math.floor(diff / 60000);
-    const secs = Math.floor((diff % 60000) / 1000);
-    countdown.innerText = `${String(mins).padStart(2,"0")}:${String(secs).padStart(2,"0")}`;
-  };
-
-  tick();
-  countdownInterval = setInterval(tick, 1000);
-}
-
-async function gerarPix(plan){
-  if (!auth.currentUser){
-    showOnly("login");
-    setMsg("Faça login.");
-    return;
-  }
-
-  const btnId = plan === "6m" ? "btnPlano6" : "btnPlano12";
-  setButtonLoading(btnId, true);
-
-  try {
-    // Mostra área exclusiva do QR
-    if ($("qrBox")) $("qrBox").classList.remove("hide");
-    updatePaymentStatus("processing", "Gerando PIX...");
-
-    const resp = await createPixChargeFunc({ plan });
-    const data = resp.data || {};
-
-    if (data.alreadyEntitled){
-      openModal("Acesso ativo", "Seu acesso premium já está ativo.");
-      await carregarStatus();
-      return;
-    }
-
-    if (!data.txid || !data.qrcodeImage || !data.copiaecola){
-      throw new Error("Resposta inválida ao gerar PIX.");
-    }
-
-    currentTxid = data.txid;
-
-    // IMPORTANTE: backend retorna base64 (imagemQrcode). Precisa do prefixo.
-    if ($("qrImg")) $("qrImg").src = "data:image/png;base64," + data.qrcodeImage;
-
-    if ($("pixCopia")) $("pixCopia").value = data.copiaecola;
-
-    if ($("qrPlanInfo")){
-      $("qrPlanInfo").innerText = (plan === "6m")
-        ? "Plano 6 meses — R$ 29,90"
-        : "Plano 1 ano — R$ 49,90";
-    }
-
-    if ($("qrSub")) $("qrSub").innerText = "Escaneie o QR Code ou copie o código PIX.";
-
-    updatePaymentStatus("pending", "Aguardando pagamento...");
-    startCountdown(data.expiresAt);
-
-    retryCount = 0;
-    cancelarPolling();
-    // checa imediatamente e depois a cada 5s
-    await verificarPagamento(currentTxid);
-    pollingTimer = setInterval(() => verificarPagamento(currentTxid), 5000);
-
-  } catch (e) {
-    console.error("Erro gerarPix:", e);
-    const code = e?.code || "";
-    if (code === "functions/unauthenticated"){
-      showOnly("login");
-      setMsg("Sessão expirada. Faça login novamente.");
-      return;
-    }
-    updatePaymentStatus("error", "Erro ao gerar PIX.");
-    if ($("payMsg")) $("payMsg").innerText = (e?.message || "Não foi possível gerar o PIX.");
-  } finally {
-    setButtonLoading(btnId, false);
-  }
-}
-
-async function verificarPagamento(txid){
-  if (!txid) return;
-
-  try {
-    const resp = await pixStatusFunc({ txid });
-    const data = resp.data || {};
-
-    if (data.paid){
-      updatePaymentStatus("success", "Pagamento confirmado!");
-      cancelarPolling();
-      openModal("Pagamento recebido", "Seu acesso foi ativado. Você já pode acessar o app.");
-      // atualiza status do backend
-      await carregarStatus();
-      // fecha área QR
-      hideQrArea();
-      return;
-    }
-
-    if (data.expired){
-      updatePaymentStatus("error", "PIX expirado!");
-      cancelarPolling();
-      return;
-    }
-
-    if (data.status){
-      updatePaymentStatus("pending", `Status: ${data.status}`);
-    }
-    retryCount = 0;
-  } catch (e) {
-    console.error("Erro verificar pagamento:", e);
-    retryCount++;
-
-    if (retryCount >= MAX_RETRIES){
-      updatePaymentStatus("error", "Erro ao verificar. Tente novamente.");
-      cancelarPolling();
-    } else {
-      updatePaymentStatus("processing", "Verificando...");
-    }
-  }
-}
-
-async function verificarPagamentoManual(){
-  if (!currentTxid){
-    openModal("Nenhum PIX", "Gere um PIX primeiro.");
-    return;
-  }
-  setButtonLoading("btnRecheck", true);
-  try{
-    updatePaymentStatus("processing", "Verificando...");
-    await verificarPagamento(currentTxid);
-    // se não pagou e não expirou, volta o polling
-    if (currentTxid && !pollingTimer){
-      pollingTimer = setInterval(() => verificarPagamento(currentTxid), 5000);
-    }
-  } finally {
-    setButtonLoading("btnRecheck", false);
-  }
-}
-
-async function copiarPix(){
-  const txt = $("pixCopia")?.value || "";
-  if (!txt) return;
-
-  try {
-    await navigator.clipboard.writeText(txt);
-    if ($("payMsg")) $("payMsg").innerText = "✅ Código PIX copiado!";
-  } catch (e) {
-    // fallback
-    const input = $("pixCopia");
-    if (input){
-      input.focus();
-      input.select();
-      document.execCommand("copy");
-      if ($("payMsg")) $("payMsg").innerText = "✅ Código PIX copiado!";
-    }
-  }
-}
-
-function cancelarPix(){
-  cancelarPolling();
-  hideQrArea();
-  updatePaymentStatus("pending", "PIX cancelado.");
-  openModal("PIX cancelado", "Você pode gerar um novo PIX quando quiser.");
+  setMsg("");
 }
 
 /* =========================
   EVENTS
 ========================= */
-function on(id, evt, handler){
-  const el = $(id);
-  if (!el) return;
-  el.addEventListener(evt, handler);
-}
-
-on("btnEntrar", "click", entrar);
-on("btnOpenSignup", "click", openSignup);
-on("btnResetSenha", "click", recuperarSenha);
-
-on("btnCloseSignup", "click", closeSignup);
-on("btnSignupCancel", "click", closeSignup);
-on("btnSignupCreate", "click", criarContaModal);
-
-on("btnCloseModal", "click", closeModal);
-on("btnModalOk", "click", closeModal);
-on("modalOverlay", "click", (e)=>{ if (e.target?.id === "modalOverlay") closeModal(); });
-on("signupOverlay", "click", (e)=>{ if (e.target?.id === "signupOverlay") closeSignup(); });
-
-on("btnSair", "click", sair);
-on("btnTrocarConta", "click", sair);
-
-on("btnPlano6", "click", () => gerarPix("6m"));
-on("btnPlano12", "click", () => gerarPix("12m"));
-
-on("btnCopiar", "click", copiarPix);
-on("btnCancelarPix", "click", cancelarPix);
-on("btnRecheck", "click", verificarPagamentoManual);
-
-on("btnAcessarApp", "click", () => window.location.href = FRONT_URL);
-
-on("toggleSenha", "click", () => {
-  const input = $("senha");
-  if (!input) return;
-  const isPwd = input.type === "password";
-  input.type = isPwd ? "text" : "password";
-  const t = $("toggleSenha");
-  if (t) t.innerText = isPwd ? "🙈" : "👁️";
-});
+$("btnEntrar")?.addEventListener("click", entrar);
+$("btnOpenSignup")?.addEventListener("click", () => $("signupOverlay").classList.remove("hide"));
+$("btnSignupCancel")?.addEventListener("click", () => $("signupOverlay").classList.add("hide"));
+$("btnSignupCreate")?.addEventListener("click", criarContaModal);
+$("btnResetSenha")?.addEventListener("click", recuperarSenha);
+$("btnSair")?.addEventListener("click", sair);
+$("btnTrocarConta")?.addEventListener("click", sair);
+$("btnAcessarApp")?.addEventListener("click", () => window.location.href = FRONT_URL);
 
 /* =========================
   AUTH STATE
-  - NÃO chama backend no boot
 ========================= */
-
 onAuthStateChanged(auth, (user) => {
-  if (user) {
+  if (user){
     console.log("[AUTH] Usuário detectado:", user.uid);
-    // NÃO chama me() aqui
   } else {
     showOnly("login");
   }
-});
-
-// Opcional: mantém o onAuthStateChanged apenas para debug (sem chamar backend)
-onAuthStateChanged(auth, (user) => {
-  if (user) console.log("[AUTH] Usuário detectado:", user.uid);
 });
 
 /* =========================
@@ -1292,6 +846,7 @@ showOnly("login");
 
 </body>
 </html>
+
 
 
 
