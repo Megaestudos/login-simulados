@@ -669,7 +669,6 @@ import {
   onAuthStateChanged,
   onIdTokenChanged
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-functions.js";
 
 /* =========================
   CONFIG (SEU PROJETO)
@@ -687,7 +686,6 @@ const FUNCTIONS_REGION = "us-central1";
 ========================= */
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const fx = getFunctions(app, FUNCTIONS_REGION);
 
 // Persistência local (mantém login)
 try {
@@ -699,7 +697,6 @@ try {
 /* =========================
   CALLABLE FUNCTIONS
 ========================= */
-const meFunc = httpsCallable(fx, "me");
 const createPixChargeFunc = httpsCallable(fx, "createPixCharge");
 const pixStatusFunc = httpsCallable(fx, "pixStatus");
 
@@ -775,7 +772,7 @@ function setSignupMsg(text){
   TOKEN/SESSION SAFE CALL
   (reduz chance de 401 em edge cases)
 ========================= */
-async function callMeSafe() {
+ callMeSafe() {
   try {
     return await meFunc();
   } catch (e) {
@@ -789,6 +786,25 @@ async function callMeSafe() {
     }
     throw e;
   }
+}
+
+  async function checkPremiumSafe() {
+  const user = auth.currentUser;
+  if (!user) return { premium: false };
+
+  const token = await user.getIdToken(true);
+
+  const resp = await fetch(
+    "https://us-central1-simulados-concursos-22c91.cloudfunctions.net/checkPremium",
+    {
+      method: "GET",
+      headers: {
+        "Authorization": "Bearer " + token
+      }
+    }
+  );
+
+  return await resp.json();
 }
 
 /* =========================
@@ -1276,6 +1292,7 @@ showOnly("login");
 
 </body>
 </html>
+
 
 
 
