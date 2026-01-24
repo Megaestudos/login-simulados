@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Acesso | Plataforma de Simulados</title>
 
-<!-- Fonte -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -89,7 +88,7 @@ body{
   font-weight:900;
 }
 
-/* LOGIN CARD */
+/* CARD */
 .card{
   background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,0));
   border:1px solid var(--border);
@@ -112,29 +111,13 @@ body{
 }
 .brand span{font-weight:800}
 
-h2{
-  margin:0 0 6px;
-  font-size:22px;
-}
-.sub{
-  font-size:14px;
-  color:var(--muted);
-  margin-bottom:20px;
-}
+h2{margin:0 0 6px;font-size:22px}
+.sub{font-size:14px;color:var(--muted);margin-bottom:20px}
 
-label{
-  display:block;
-  font-size:13px;
-  font-weight:600;
-  margin-bottom:6px;
-}
-
+label{display:block;font-size:13px;font-weight:600;margin-bottom:6px}
 .field{margin-bottom:14px}
 
-.input-wrap{
-  position:relative;
-}
-
+.input-wrap{position:relative}
 input{
   width:100%;
   padding:13px 44px 13px 14px;
@@ -143,7 +126,6 @@ input{
   background:#020617;
   color:#e5e7eb;
   font-size:14px;
-  outline:none;
 }
 
 input:focus{
@@ -151,7 +133,6 @@ input:focus{
   box-shadow:0 0 0 4px rgba(59,130,246,.25);
 }
 
-/* BOTÃO OLHINHO (PROFISSIONAL) */
 .eye-btn{
   position:absolute;
   right:12px;
@@ -159,26 +140,21 @@ input:focus{
   transform:translateY(-50%);
   background:transparent;
   border:0;
-  padding:4px;
   color:#94a3b8;
   cursor:pointer;
-  display:flex;
 }
 .eye-btn:hover{color:#e5e7eb}
 
 button.primary{
   width:100%;
-  padding:13px 14px;
+  padding:13px;
   border-radius:14px;
   border:0;
-  font-size:15px;
-  font-weight:800;
-  cursor:pointer;
   background:linear-gradient(135deg,var(--primary),var(--primary-dark));
   color:#fff;
-  margin-top:6px;
+  font-weight:800;
+  cursor:pointer;
 }
-button.primary:disabled{opacity:.6}
 
 .links{
   display:flex;
@@ -188,13 +164,11 @@ button.primary:disabled{opacity:.6}
 .link{
   background:none;
   border:0;
-  padding:0;
   color:#93c5fd;
   font-size:13px;
   font-weight:700;
   cursor:pointer;
 }
-.link:hover{text-decoration:underline}
 
 .msg{
   margin-top:14px;
@@ -205,7 +179,7 @@ button.primary:disabled{opacity:.6}
   color:var(--danger);
 }
 
-/* MODAL */
+/* MODAIS */
 .overlay{
   position:fixed;
   inset:0;
@@ -216,6 +190,7 @@ button.primary:disabled{opacity:.6}
   padding:18px;
 }
 .overlay.show{display:flex}
+
 .modal{
   width:100%;
   max-width:420px;
@@ -234,22 +209,17 @@ button.primary:disabled{opacity:.6}
 <div class="page">
   <div class="shell">
 
-    <!-- MARKETING -->
     <div class="marketing">
       <h1>Estude com foco em aprovação</h1>
-      <p>
-        Plataforma completa de simulados para concursos públicos, com conteúdo
-        direcionado e acesso imediato.
-      </p>
+      <p>Simulados completos, atualizados e pensados para concursos públicos.</p>
       <ul class="bullets">
-        <li>Mais de <strong>3.000 questões</strong> atualizadas</li>
-        <li>Simulados no padrão real de prova</li>
-        <li>Correção e desempenho em tempo real</li>
-        <li>Liberação automática após pagamento</li>
+        <li>Mais de 3.000 questões</li>
+        <li>Simulados no padrão real</li>
+        <li>Acesso imediato após liberação</li>
+        <li>Plataforma segura e confiável</li>
       </ul>
     </div>
 
-    <!-- LOGIN -->
     <div class="card">
       <div class="brand">
         <div class="brand-dot"></div>
@@ -261,14 +231,14 @@ button.primary:disabled{opacity:.6}
 
       <div class="field">
         <label>E-mail</label>
-        <input id="email" type="email" autocomplete="email">
+        <input id="email" type="email">
       </div>
 
       <div class="field">
         <label>Senha</label>
         <div class="input-wrap">
-          <input id="senha" type="password" autocomplete="current-password">
-          <button type="button" id="toggleSenha" class="eye-btn" aria-label="Mostrar senha">
+          <input id="senha" type="password">
+          <button type="button" id="toggleSenha" class="eye-btn">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
                  viewBox="0 0 24 24" fill="none" stroke="currentColor"
                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -283,7 +253,7 @@ button.primary:disabled{opacity:.6}
 
       <div class="links">
         <button class="link" id="btnSignupOpen">Criar conta</button>
-        <button class="link" id="btnReset">Esqueci a senha</button>
+        <button class="link" id="btnResetOpen">Esqueci a senha</button>
       </div>
 
       <div id="msg" class="msg"></div>
@@ -296,20 +266,27 @@ button.primary:disabled{opacity:.6}
 <div id="signupModal" class="overlay">
   <div class="modal">
     <h3>Criar conta</h3>
-
     <label>E-mail</label>
     <input id="sEmail" type="email">
-
     <label style="margin-top:10px">Senha</label>
     <input id="sPass" type="password">
-
     <label style="margin-top:10px">Confirmar senha</label>
     <input id="sPass2" type="password">
-
     <button class="primary" id="btnSignup" style="margin-top:14px">Criar conta</button>
-    <button class="link" id="btnSignupClose" style="margin-top:10px">Cancelar</button>
-
+    <button class="link" id="btnSignupClose">Cancelar</button>
     <div id="sMsg" class="msg"></div>
+  </div>
+</div>
+
+<!-- MODAL RESET -->
+<div id="resetModal" class="overlay">
+  <div class="modal">
+    <h3>Recuperar senha</h3>
+    <label>E-mail</label>
+    <input id="rEmail" type="email">
+    <button class="primary" id="btnResetSend" style="margin-top:14px">Enviar link</button>
+    <button class="link" id="btnResetClose">Cancelar</button>
+    <div id="rMsg" class="msg"></div>
   </div>
 </div>
 
@@ -323,9 +300,8 @@ import {
   sendPasswordResetEmail
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
-/* CONFIG FIREBASE */
 const firebaseConfig = {
-  apiKey: "AIzaSyB36ZszS8v_DeOn3at7zEo_tFq86WU0sI4",
+  apiKey: "SUA_API_KEY_AQUI",
   authDomain: "simulados-concursos-22c91.firebaseapp.com",
   projectId: "simulados-concursos-22c91"
 };
@@ -335,8 +311,7 @@ const auth = getAuth(app);
 const $ = (id)=>document.getElementById(id);
 
 /* LOGIN */
-$("btnLogin").onclick = async ()=>{
-  $("msg").innerText="";
+$("btnLogin").onclick=async()=>{
   try{
     await signInWithEmailAndPassword(auth,$("email").value,$("senha").value);
     window.location.href="https://megaestudos.github.io/Quiz-Guarda-Civil-Premium/";
@@ -348,56 +323,32 @@ $("btnLogin").onclick = async ()=>{
 /* OLHINHO */
 $("toggleSenha").onclick=()=>{
   const i=$("senha");
-  const btn=$("toggleSenha");
-  const isPwd=i.type==="password";
-  i.type=isPwd?"text":"password";
-  btn.innerHTML=isPwd
-    ? `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-         viewBox="0 0 24 24" fill="none" stroke="currentColor"
-         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-         <path d="M17.94 17.94A10.94 10.94 0 0 1 12 20
-                  c-7 0-11-8-11-8"/>
-         <path d="M1 1l22 22"/>
-         <path d="M9.53 9.53A3.5 3.5 0 0 0 12 15.5
-                  a3.5 3.5 0 0 0 2.47-5.97"/>
-       </svg>`
-    : `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-         viewBox="0 0 24 24" fill="none" stroke="currentColor"
-         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-         <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-         <circle cx="12" cy="12" r="3"/>
-       </svg>`;
+  i.type=i.type==="password"?"text":"password";
 };
 
-/* RESET */
-$("btnReset").onclick=async()=>{
-  if(!$("email").value){
-    $("msg").innerText="Informe o e-mail para recuperar a senha.";
-    return;
-  }
-  await sendPasswordResetEmail(auth,$("email").value);
-  $("msg").style.color="#22c55e";
-  $("msg").innerText="E-mail de redefinição enviado.";
-};
-
-/* SIGNUP */
+/* MODAIS */
 $("btnSignupOpen").onclick=()=> $("signupModal").classList.add("show");
 $("btnSignupClose").onclick=()=> $("signupModal").classList.remove("show");
+$("btnResetOpen").onclick=()=> $("resetModal").classList.add("show");
+$("btnResetClose").onclick=()=> $("resetModal").classList.remove("show");
 
+/* SIGNUP */
 $("btnSignup").onclick=async()=>{
-  $("sMsg").innerText="";
   if($("sPass").value!==$("sPass2").value){
     $("sMsg").innerText="As senhas não conferem.";
     return;
   }
-  try{
-    const cred=await createUserWithEmailAndPassword(auth,$("sEmail").value,$("sPass").value);
-    await sendEmailVerification(cred.user);
-    $("sMsg").style.color="#22c55e";
-    $("sMsg").innerText="Conta criada. Verifique seu e-mail.";
-  }catch{
-    $("sMsg").innerText="Erro ao criar conta.";
-  }
+  const cred=await createUserWithEmailAndPassword(auth,$("sEmail").value,$("sPass").value);
+  await sendEmailVerification(cred.user);
+  $("sMsg").style.color="#22c55e";
+  $("sMsg").innerText="Conta criada. Verifique seu e-mail.";
+};
+
+/* RESET */
+$("btnResetSend").onclick=async()=>{
+  await sendPasswordResetEmail(auth,$("rEmail").value);
+  $("rMsg").style.color="#22c55e";
+  $("rMsg").innerText="Link enviado para o e-mail.";
 };
 </script>
 
