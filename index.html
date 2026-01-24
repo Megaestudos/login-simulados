@@ -874,8 +874,11 @@ async function carregarStatus(){
 async function entrar() {
   setMsg("");
 
-  const email = emailInput.value.trim();
-  const senha = senhaInput.value;
+  const emailEl = $("email");
+  const senhaEl = $("senha");
+
+  const email = emailEl?.value.trim();
+  const senha = senhaEl?.value;
 
   if (!email || !senha) {
     setMsg("Preencha e-mail e senha.");
@@ -885,13 +888,13 @@ async function entrar() {
   try {
     const cred = await signInWithEmailAndPassword(auth, email, senha);
 
-    // 🔒 força geração do ID TOKEN
+    // força geração do ID TOKEN
     await cred.user.getIdToken(true);
 
-    // ⏳ pequeno delay REAL (importantíssimo)
+    // pequeno delay real (evita race condition)
     await new Promise(r => setTimeout(r, 500));
 
-    // ✅ AGORA SIM pode chamar o backend
+    // chama backend
     const result = await meFunc();
     const data = result.data;
 
@@ -900,7 +903,7 @@ async function entrar() {
       return;
     }
 
-    // ✅ ACESSO LIBERADO
+    // acesso liberado
     window.location.href = FRONT_URL;
 
   } catch (err) {
@@ -1273,6 +1276,7 @@ showOnly("login");
 
 </body>
 </html>
+
 
 
 
