@@ -20,8 +20,10 @@
       max-width:360px;
       background:#111827;
       border-radius:16px;
-      padding:20px;
+      padding:22px;
+      box-shadow:0 20px 50px rgba(0,0,0,.4);
     }
+    h2{margin-top:0}
     label{font-size:13px;color:#cbd5e1}
     input{
       width:100%;
@@ -42,11 +44,13 @@
       color:#fff;
       cursor:pointer;
     }
+    button:disabled{opacity:.6}
     .msg{
-      margin-top:10px;
+      margin-top:12px;
       font-size:13px;
       color:#f87171;
       text-align:center;
+      min-height:18px;
     }
   </style>
 </head>
@@ -56,10 +60,10 @@
     <h2>Entrar</h2>
 
     <label>E-mail</label>
-    <input id="email" type="email" />
+    <input id="email" type="email" autocomplete="email" />
 
     <label>Senha</label>
-    <input id="senha" type="password" />
+    <input id="senha" type="password" autocomplete="current-password" />
 
     <button id="btnLogin">Entrar</button>
 
@@ -68,8 +72,10 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+    import { getAuth, signInWithEmailAndPassword } from
+      "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
+    // 🔧 CONFIG DO SEU PROJETO
     const firebaseConfig = {
       apiKey: "AIzaSyB36ZszS8v_DeOn3at7zEo_tFq86WU0sI4",
       authDomain: "simulados-concursos-22c91.firebaseapp.com",
@@ -92,15 +98,20 @@
         return;
       }
 
+      $("btnLogin").disabled = true;
+
       try{
         await signInWithEmailAndPassword(auth, email, senha);
+        // LOGIN OK → vai para o app
         window.location.href = "./app.html";
       }catch(e){
-        $("msg").innerText = "Login inválido.";
+        console.error(e);
+        $("msg").innerText = "E-mail ou senha inválidos.";
+      }finally{
+        $("btnLogin").disabled = false;
       }
     };
   </script>
 
 </body>
 </html>
-
