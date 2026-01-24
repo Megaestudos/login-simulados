@@ -1260,27 +1260,6 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-  try {
-    // Garante token pronto (isso é o ponto crítico)
-    await user.getIdToken(true);
-
-    // Pequeno delay real para evitar primeira chamada 401 (race condition)
-    await new Promise(r => setTimeout(r, 400));
-
-    bootChecked = true;
-    await carregarStatus();
-
-  } catch (err) {
-    console.error("[AUTH] Falha ao obter token no boot:", err);
-
-    // Se token falhar, derruba sessão e volta limpo
-    try { await signOut(auth); } catch(_){}
-    bootChecked = true;
-    showOnly("login");
-    setMsg("Sessão inválida. Faça login novamente.");
-  }
-});
-
 // Opcional: mantém o onAuthStateChanged apenas para debug (sem chamar backend)
 onAuthStateChanged(auth, (user) => {
   if (user) console.log("[AUTH] Usuário detectado:", user.uid);
@@ -1294,6 +1273,7 @@ showOnly("login");
 
 </body>
 </html>
+
 
 
 
