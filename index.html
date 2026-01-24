@@ -297,7 +297,8 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   sendEmailVerification,
-  sendPasswordResetEmail
+  sendPasswordResetEmail,
+  signOut
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
 const firebaseConfig = {
@@ -310,13 +311,24 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const $ = (id)=>document.getElementById(id);
 
+  // Se vier do APP pedindo "escolher conta", desloga e mostra login limpo
+const params = new URLSearchParams(window.location.search);
+if (params.get("choose") === "1") {
+  try { await signOut(auth); } catch(e) {}
+  sessionStorage.removeItem("login_ok");
+}
+
 /* LOGIN */
-$("btnLogin").onclick=async()=>{
-  try{
-    await signInWithEmailAndPassword(auth,$("email").value,$("senha").value);
-    window.location.href="https://megaestudos.github.io/Quiz-Guarda-Civil-Premium/";
-  }catch{
-    $("msg").innerText="E-mail ou senha inválidos.";
+$("btnLogin").onclick = async () => {
+  try {
+    await signInWithEmailAndPassword(auth, $("email").value, $("senha").value);
+
+    // marca que o usuário escolheu entrar (login consciente)
+    sessionStorage.setItem("login_ok", "1");
+
+    window.location.href = "https://megaestudos.github.io/Quiz-Guarda-Civil-Premium/";
+  } catch {
+    $("msg").innerText = "E-mail ou senha inválidos.";
   }
 };
 
@@ -354,4 +366,5 @@ $("btnResetSend").onclick=async()=>{
 
 </body>
 </html>
+
 
