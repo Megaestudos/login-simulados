@@ -226,6 +226,36 @@ button.primary{
         <span>Plataforma de Simulados</span>
       </div>
 
+      <div
+ id="resumeBox"
+  style="
+    display:none;
+    background:#020617;
+    border:1px solid #1e293b;
+    border-radius:16px;
+    padding:16px;
+    margin-bottom:16px;
+  "
+>
+  <div style="font-weight:800;font-size:14px">
+    Você já está logado
+  </div>
+
+  <div
+    id="resumeEmail"
+    style="margin-top:6px;font-size:13px;opacity:.85"
+  ></div>
+
+  <div style="margin-top:12px;display:flex;gap:10px">
+    <button class="primary" id="btnResume">
+      Voltar ao app
+    </button>
+    <button class="link" id="btnLogout">
+      Entrar com outra conta
+    </button>
+  </div>
+</div>
+
       <h2>Acesso à conta</h2>
       <div class="sub">Entre para continuar seus estudos.</div>
 
@@ -311,13 +341,21 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const $ = (id)=>document.getElementById(id);
 
-  // Se vier do APP pedindo "escolher conta", desloga e mostra login limpo
+// ==========================
+// RESUME LOGIN (UX PROFISSIONAL)
+// ==========================
+const savedUser = localStorage.getItem("auth_user");
 const params = new URLSearchParams(window.location.search);
-if (params.get("choose") === "1") {
-  try { await signOut(auth); } catch(e) {}
-  sessionStorage.removeItem("login_ok");
-}
 
+if (params.get("choose") === "1") {
+  // força escolha de conta
+  localStorage.removeItem("auth_user");
+  sessionStorage.clear();
+} else if (savedUser) {
+  $("resumeBox").style.display = "block";
+  $("resumeEmail").innerText = savedUser;
+}
+  
 /* LOGIN */
 $("btnLogin").onclick = async () => {
   try {
@@ -370,10 +408,26 @@ $("btnResetSend").onclick=async()=>{
   $("rMsg").style.color="#22c55e";
   $("rMsg").innerText="Link enviado para o e-mail.";
 };
+
+  // Voltar direto ao app
+$("btnResume").onclick = () => {
+  sessionStorage.setItem("login_redirect", "1");
+  window.location.href =
+    "https://megaestudos.github.io/Quiz-Guarda-Civil-Premium/";
+};
+
+// Deslogar e escolher outra conta
+$("btnLogout").onclick = async () => {
+  localStorage.removeItem("auth_user");
+  sessionStorage.clear();
+  await signOut(auth);
+  location.reload();
+};
 </script>
 
 </body>
 </html>
+
 
 
 
