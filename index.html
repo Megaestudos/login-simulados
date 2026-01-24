@@ -776,7 +776,6 @@ el.classList.toggle("hide", !text);
  (reduz chance de 401 em edge cases)
 ========================= */
 async function callMeSafe() {
- callMeSafe() {
 try {
 return await meFunc();
 } catch (e) {
@@ -790,25 +789,6 @@ return await meFunc();
 }
 throw e;
 }
-}
-
-  async function checkPremiumSafe() {
-  const user = auth.currentUser;
-  if (!user) return { premium: false };
-
-  const token = await user.getIdToken(true);
-
-  const resp = await fetch(
-    "https://us-central1-simulados-concursos-22c91.cloudfunctions.net/checkPremium",
-    {
-      method: "GET",
-      headers: {
-        "Authorization": "Bearer " + token
-      }
-    }
-  );
-
-  return await resp.json();
 }
 
 /* =========================
@@ -894,11 +874,13 @@ setMsg("Erro ao validar sessão. Faça login novamente.");
 async function entrar() {
 setMsg("");
 
-const emailEl = $("email");
-const senhaEl = $("senha");
+  const email = emailInput.value.trim();
+  const senha = senhaInput.value;
+  const emailEl = $("email");
+  const senhaEl = $("senha");
 
-const email = emailEl?.value.trim();
-const senha = senhaEl?.value;
+  const email = emailEl?.value.trim();
+  const senha = senhaEl?.value;
 
 if (!email || !senha) {
 setMsg("Preencha e-mail e senha.");
@@ -908,13 +890,16 @@ return;
 try {
 const cred = await signInWithEmailAndPassword(auth, email, senha);
 
-// força geração do ID TOKEN
+    // 🔒 força geração do ID TOKEN
+    // força geração do ID TOKEN
 await cred.user.getIdToken(true);
 
-// pequeno delay real (evita race condition)
+    // ⏳ pequeno delay REAL (importantíssimo)
+    // pequeno delay real (evita race condition)
 await new Promise(r => setTimeout(r, 500));
 
-// chama backend
+    // ✅ AGORA SIM pode chamar o backend
+    // chama backend
 const result = await meFunc();
 const data = result.data;
 
@@ -923,7 +908,8 @@ showOnly("pay");
 return;
 }
 
-// acesso liberado
+    // ✅ ACESSO LIBERADO
+    // acesso liberado
 window.location.href = FRONT_URL;
 
 } catch (err) {
@@ -1296,7 +1282,6 @@ showOnly("login");
 
 </body>
 </html>
-
 
 
 
