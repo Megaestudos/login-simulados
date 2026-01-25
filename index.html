@@ -22,6 +22,14 @@
   --success:#22c55e;
   --radius:20px;
 }
+/* Estado resumido: apenas retomar sessão */
+body.resume-only #loginForm {
+  display: none;
+}
+
+body.resume-only .marketing {
+  display: none;
+}
 
 *{box-sizing:border-box}
 html,body{height:100%}
@@ -255,7 +263,7 @@ button.primary{
     </button>
   </div>
 </div>
-
+<div id="loginForm">
       <h2>Acesso à conta</h2>
       <div class="sub">Entre para continuar seus estudos.</div>
 
@@ -351,9 +359,15 @@ if (params.get("choose") === "1") {
   // força escolha de conta
   localStorage.removeItem("auth_user");
   sessionStorage.clear();
-} else if (savedUser) {
+  document.body.classList.remove("resume-only");
+} 
+else if (savedUser) {
+  // 🔥 AQUI É O PONTO-CHAVE
+  document.body.classList.add("resume-only");
+
   $("resumeBox").style.display = "block";
   $("resumeEmail").innerText = savedUser;
+  $("loginForm").style.display = "none";
 }
   
 /* LOGIN */
@@ -427,6 +441,7 @@ $("btnLogout").onclick = async () => {
 
 </body>
 </html>
+
 
 
 
