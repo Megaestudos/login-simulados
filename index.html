@@ -418,9 +418,13 @@ $("btnSignup").onclick=async()=>{
 
 /* RESET */
 $("btnResetSend").onclick=async()=>{
-  await sendPasswordResetEmail(auth,$("rEmail").value);
+ try {
+  await sendPasswordResetEmail(auth, $("rEmail").value);
   $("rMsg").style.color="#22c55e";
   $("rMsg").innerText="Link enviado para o e-mail.";
+} catch {
+  $("rMsg").innerText="Não foi possível enviar o e-mail.";
+}
 };
 
   // Voltar direto ao app
@@ -441,6 +445,7 @@ $("btnLogout").onclick = async () => {
 
 </body>
 </html>
+
 
 
 
