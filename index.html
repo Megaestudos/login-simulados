@@ -22,433 +22,147 @@
   --success:#22c55e;
   --radius:20px;
 }
-/* Estado resumido: apenas retomar sessão */
-body.resume-only #loginForm {
-  display: none;
-}
-
-/*body.resume-only .marketing {
-  display: none;
-}*/
-
+body.resume-only #loginForm {display:none}
 *{box-sizing:border-box}
 html,body{height:100%}
-
 body{
-  margin:0;
-  font-family:Inter,system-ui,-apple-system,Arial,sans-serif;
-  background:
-    radial-gradient(900px 600px at 15% 15%, rgba(37,99,235,.18), transparent 60%),
-    radial-gradient(800px 600px at 85% 20%, rgba(16,185,129,.12), transparent 60%),
-    var(--bg);
-  color:var(--text);
-}
-
-.page{
-  min-height:100%;
-  display:grid;
-  place-items:center;
-  padding:24px;
-}
-
-.shell{
-  width:100%;
-  max-width:1100px;
-  display:grid;
-  grid-template-columns: 1.1fr .9fr;
-  gap:28px;
-}
-
-@media (max-width: 900px){
-  .shell{grid-template-columns:1fr}
-  .marketing{display:none}
-}
-
-/* MARKETING */
-.marketing{
-  padding:26px;
-}
-.marketing h1{
-  font-size:40px;
-  margin:0 0 12px;
-  letter-spacing:-.02em;
-}
-.marketing p{
-  font-size:17px;
-  color:#cbd5f5;
-  max-width:46ch;
-}
-.bullets{
-  list-style:none;
-  padding:0;
-  margin:24px 0 0;
-  display:grid;
-  gap:12px;
-}
-.bullets li{
-  display:flex;
-  gap:10px;
-  align-items:flex-start;
-}
-.bullets li::before{
-  content:"✓";
-  color:var(--success);
-  font-weight:900;
-}
-
-/* CARD */
-.card{
-  background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,0));
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  padding:26px;
-  box-shadow:0 40px 90px rgba(0,0,0,.45);
-  backdrop-filter: blur(10px);
-}
-
-.brand{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  margin-bottom:16px;
-}
-.brand-dot{
-  width:12px;height:12px;border-radius:999px;
-  background:linear-gradient(135deg,#60a5fa,#2563eb);
-  box-shadow:0 0 0 6px rgba(37,99,235,.18);
-}
-.brand span{font-weight:800}
-
-h2{margin:0 0 6px;font-size:22px}
-.sub{font-size:14px;color:var(--muted);margin-bottom:20px}
-
-label{display:block;font-size:13px;font-weight:600;margin-bottom:6px}
-.field{margin-bottom:14px}
-
-.input-wrap{position:relative}
-input{
-  width:100%;
-  padding:13px 44px 13px 14px;
-  border-radius:14px;
-  border:1px solid var(--border);
-  background:#020617;
-  color:#e5e7eb;
-  font-size:14px;
-}
-
-input:focus{
-  border-color:#60a5fa;
-  box-shadow:0 0 0 4px rgba(59,130,246,.25);
-}
-
-.eye-btn{
-  position:absolute;
-  right:12px;
-  top:50%;
-  transform:translateY(-50%);
-  background:transparent;
-  border:0;
-  color:#94a3b8;
-  cursor:pointer;
-}
-.eye-btn:hover{color:#e5e7eb}
-
-button.primary{
-  width:100%;
-  padding:13px;
-  border-radius:14px;
-  border:0;
-  background:linear-gradient(135deg,var(--primary),var(--primary-dark));
-  color:#fff;
-  font-weight:800;
-  cursor:pointer;
-}
-
-.links{
-  display:flex;
-  justify-content:space-between;
-  margin-top:10px;
-}
-.link{
-  background:none;
-  border:0;
-  color:#93c5fd;
-  font-size:13px;
-  font-weight:700;
-  cursor:pointer;
-}
-
-.msg{
-  margin-top:14px;
-  min-height:18px;
-  text-align:center;
-  font-size:13px;
-  font-weight:600;
-  color:var(--danger);
-}
-
-/* MODAIS */
-.overlay{
-  position:fixed;
-  inset:0;
-  background:rgba(2,6,23,.75);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:18px;
-}
+margin:0;font-family:Inter;background:radial-gradient(900px 600px at 15% 15%, rgba(37,99,235,.18), transparent 60%),radial-gradient(800px 600px at 85% 20%, rgba(16,185,129,.12), transparent 60%),var(--bg);color:var(--text)}
+.page{min-height:100%;display:grid;place-items:center;padding:24px}
+.shell{width:100%;max-width:1100px;display:grid;grid-template-columns:1.1fr .9fr;gap:28px}
+@media(max-width:900px){.shell{grid-template-columns:1fr}.marketing{display:none}}
+.marketing{padding:26px}
+.marketing h1{font-size:40px;margin:0 0 12px}
+.marketing p{font-size:17px;color:#cbd5f5}
+.bullets{list-style:none;padding:0;margin:24px 0;display:grid;gap:12px}
+.bullets li::before{content:"✓";color:var(--success);margin-right:8px}
+.card{background:linear-gradient(180deg,rgba(255,255,255,.04),transparent);border:1px solid var(--border);border-radius:20px;padding:26px}
+.brand{display:flex;gap:10px;margin-bottom:16px}
+.brand-dot{width:12px;height:12px;border-radius:999px;background:#2563eb}
+input{width:100%;padding:13px;border-radius:14px;border:1px solid var(--border);background:#020617;color:white}
+button.primary{width:100%;padding:13px;border-radius:14px;border:0;background:#2563eb;color:white;font-weight:800}
+.link{background:none;border:0;color:#93c5fd;font-weight:700}
+.msg{margin-top:10px;font-size:13px;color:#f87171;text-align:center}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center}
 .overlay.show{display:flex}
-
-.modal{
-  width:100%;
-  max-width:420px;
-  background:#020617;
-  border:1px solid var(--border);
-  border-radius:18px;
-  padding:22px;
-}
-.modal h3{margin:0 0 10px}
-.modal .msg{margin-top:10px}
+.modal{background:#020617;padding:22px;border-radius:18px;width:100%;max-width:420px}
 </style>
 </head>
 
 <body>
 
 <div class="page">
-  <div class="shell">
+<div class="shell">
 
-    <div class="marketing">
-      <h1>Estude com foco em aprovação</h1>
-      <p>Simulados completos, atualizados e pensados para concursos públicos.</p>
-      <ul class="bullets">
-        <li>Mais de 3.000 questões</li>
-        <li>Simulados no padrão real</li>
-        <li>Acesso imediato após liberação</li>
-        <li>Plataforma segura e confiável</li>
-      </ul>
-    </div>
-
-    <div class="card">
-      <div class="brand">
-        <div class="brand-dot"></div>
-        <span>Plataforma de Simulados</span>
-      </div>
-
-      <div
- id="resumeBox"
-  style="
-    display:none;
-    background:#020617;
-    border:1px solid #1e293b;
-    border-radius:16px;
-    padding:16px;
-    margin-bottom:16px;
-  "
->
-  <div style="font-weight:800;font-size:14px">
-    Você já está logado
-  </div>
-
-  <div
-    id="resumeEmail"
-    style="margin-top:6px;font-size:13px;opacity:.85"
-  ></div>
-
-  <div style="margin-top:12px;display:flex;gap:10px">
-    <button class="primary" id="btnResume">
-      Voltar ao app
-    </button>
-    <button class="link" id="btnLogout">
-      Entrar com outra conta
-    </button>
-  </div>
+<div class="marketing">
+<h1>Estude com foco em aprovação</h1>
+<p>Simulados completos e atualizados.</p>
+<ul class="bullets">
+<li>Mais de 3.000 questões</li>
+<li>Simulados reais</li>
+<li>Acesso imediato</li>
+<li>Plataforma segura</li>
+</ul>
 </div>
+
+<div class="card">
+
+<div id="resumeBox" style="display:none">
+<div>Você já está logado</div>
+<div id="resumeEmail"></div>
+<button class="primary" id="btnResume">Voltar</button>
+<button class="link" id="btnLogout">Trocar conta</button>
+</div>
+
 <div id="loginForm">
-      <h2>Acesso à conta</h2>
-      <div class="sub">Entre para continuar seus estudos.</div>
-
-      <div class="field">
-        <label>E-mail</label>
-        <input id="email" type="email">
-      </div>
-
-      <div class="field">
-        <label>Senha</label>
-        <div class="input-wrap">
-          <input id="senha" type="password">
-          <button type="button" id="toggleSenha" class="eye-btn">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-              <circle cx="12" cy="12" r="3"/>
-            </svg>
-          </button>
-        </div>
-      </div>
-
-      <button class="primary" id="btnLogin">Entrar</button>
-
-      <div class="links">
-        <button class="link" id="btnSignupOpen">Criar conta</button>
-        <button class="link" id="btnResetOpen">Esqueci a senha</button>
-      </div>
-
-      <div id="msg" class="msg"></div>
-    </div>
-
-  </div>
+<input id="email" placeholder="E-mail">
+<input id="senha" type="password" placeholder="Senha">
+<button class="primary" id="btnLogin">Entrar</button>
+<button class="link" id="btnSignupOpen">Criar conta</button>
+<button class="link" id="btnResetOpen">Esqueci senha</button>
+<div id="msg" class="msg"></div>
 </div>
 
-<!-- MODAL CRIAR CONTA -->
+</div>
+</div>
+</div>
+
 <div id="signupModal" class="overlay">
-  <div class="modal">
-    <h3>Criar conta</h3>
-    <label>E-mail</label>
-    <input id="sEmail" type="email">
-    <label style="margin-top:10px">Senha</label>
-    <input id="sPass" type="password">
-    <label style="margin-top:10px">Confirmar senha</label>
-    <input id="sPass2" type="password">
-    <button class="primary" id="btnSignup" style="margin-top:14px">Criar conta</button>
-    <button class="link" id="btnSignupClose">Cancelar</button>
-    <div id="sMsg" class="msg"></div>
-  </div>
+<div class="modal">
+<input id="sEmail" placeholder="E-mail">
+<input id="sPass" type="password" placeholder="Senha">
+<input id="sPass2" type="password" placeholder="Confirmar senha">
+<button class="primary" id="btnSignup">Criar conta</button>
+<button class="link" id="btnSignupClose">Cancelar</button>
+<div id="sMsg" class="msg"></div>
+</div>
 </div>
 
-<!-- MODAL RESET -->
 <div id="resetModal" class="overlay">
-  <div class="modal">
-    <h3>Recuperar senha</h3>
-    <label>E-mail</label>
-    <input id="rEmail" type="email">
-    <button class="primary" id="btnResetSend" style="margin-top:14px">Enviar link</button>
-    <button class="link" id="btnResetClose">Cancelar</button>
-    <div id="rMsg" class="msg"></div>
-  </div>
+<div class="modal">
+<input id="rEmail" placeholder="E-mail">
+<button class="primary" id="btnResetSend">Enviar link</button>
+<button class="link" id="btnResetClose">Cancelar</button>
+<div id="rMsg" class="msg"></div>
+</div>
 </div>
 
 <script type="module">
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-import {
-  getAuth,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  sendEmailVerification,
-  sendPasswordResetEmail,
-  signOut
-} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import { getAuth,signInWithEmailAndPassword,createUserWithEmailAndPassword,sendEmailVerification,sendPasswordResetEmail,signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import { getFirestore,doc,setDoc,serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyB36ZszS8v_DeOn3at7zEo_tFq86WU0sI4",
-  authDomain: "simulados-concursos-22c91.firebaseapp.com",
-  projectId: "simulados-concursos-22c91"
+const firebaseConfig={
+apiKey:"AIzaSyB36ZszS8v_DeOn3at7zEo_tFq86WU0sI4",
+authDomain:"simulados-concursos-22c91.firebaseapp.com",
+projectId:"simulados-concursos-22c91"
 };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const $ = (id)=>document.getElementById(id);
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+const db=getFirestore(app);
+const $=id=>document.getElementById(id);
 
-// ==========================
-// RESUME LOGIN (UX PROFISSIONAL)
-// ==========================
-const savedUser = localStorage.getItem("auth_user");
-const params = new URLSearchParams(window.location.search);
+$("btnLogin").onclick=async()=>{
+try{
+const cred=await signInWithEmailAndPassword(auth,$("email").value,$("senha").value);
 
-if (params.get("choose") === "1") {
-  // força escolha de conta
-  localStorage.removeItem("auth_user");
-  sessionStorage.clear();
-  document.body.classList.remove("resume-only");
-} 
-else if (savedUser) {
-  // 🔥 AQUI É O PONTO-CHAVE
-  document.body.classList.add("resume-only");
+localStorage.setItem("auth_user",cred.user.email);
 
-  $("resumeBox").style.display = "block";
-  $("resumeEmail").innerText = savedUser;
-  $("loginForm").style.display = "none";
-}
-  
-/* LOGIN */
-$("btnLogin").onclick = async () => {
-  try {
-    const cred = await signInWithEmailAndPassword(
-      auth,
-      $("email").value,
-      $("senha").value
-    );
+await setDoc(doc(db,"users",cred.user.uid),{
+email:cred.user.email,
+ultimoLogin:serverTimestamp()
+},{merge:true});
 
-    // 🔐 salva usuário logado (persistente)
-    localStorage.setItem("auth_user", cred.user.email);
-
-    // evita loop imediato
-    sessionStorage.setItem("login_redirect", "1");
-
-    window.location.href =
-      "https://megaestudos.github.io/Quiz-Guarda-Civil-Premium/";
-  } catch {
-    $("msg").innerText = "E-mail ou senha inválidos.";
-  }
+location.href="https://megaestudos.github.io/Quiz-Guarda-Civil-Premium/";
+}catch{$("msg").innerText="Erro no login"}
 };
 
-/* OLHINHO */
-$("toggleSenha").onclick=()=>{
-  const i=$("senha");
-  i.type=i.type==="password"?"text":"password";
-};
-
-/* MODAIS */
-$("btnSignupOpen").onclick=()=> $("signupModal").classList.add("show");
-$("btnSignupClose").onclick=()=> $("signupModal").classList.remove("show");
-$("btnResetOpen").onclick=()=> $("resetModal").classList.add("show");
-$("btnResetClose").onclick=()=> $("resetModal").classList.remove("show");
-
-/* SIGNUP */
 $("btnSignup").onclick=async()=>{
-  if($("sPass").value!==$("sPass2").value){
-    $("sMsg").innerText="As senhas não conferem.";
-    return;
-  }
-  const cred=await createUserWithEmailAndPassword(auth,$("sEmail").value,$("sPass").value);
-  await sendEmailVerification(cred.user);
-  $("sMsg").style.color="#22c55e";
-  $("sMsg").innerText="Conta criada. Verifique seu e-mail.";
+if($("sPass").value!==$("sPass2").value)return;
+
+const cred=await createUserWithEmailAndPassword(auth,$("sEmail").value,$("sPass").value);
+await sendEmailVerification(cred.user);
+
+await setDoc(doc(db,"users",cred.user.uid),{
+email:cred.user.email,
+criadoEm:serverTimestamp(),
+ultimoLogin:serverTimestamp()
+});
+
+$("sMsg").innerText="Conta criada";
 };
 
-/* RESET */
 $("btnResetSend").onclick=async()=>{
- try {
-  await sendPasswordResetEmail(auth, $("rEmail").value);
-  $("rMsg").style.color="#22c55e";
-  $("rMsg").innerText="Link enviado para o e-mail.";
-} catch {
-  $("rMsg").innerText="Não foi possível enviar o e-mail.";
-}
+await sendPasswordResetEmail(auth,$("rEmail").value);
+$("rMsg").innerText="Link enviado";
 };
 
-  // Voltar direto ao app
-$("btnResume").onclick = () => {
-  sessionStorage.setItem("login_redirect", "1");
-  window.location.href =
-    "https://megaestudos.github.io/Quiz-Guarda-Civil-Premium/";
-};
+$("btnSignupOpen").onclick=()=>signupModal.classList.add("show");
+$("btnSignupClose").onclick=()=>signupModal.classList.remove("show");
+$("btnResetOpen").onclick=()=>resetModal.classList.add("show");
+$("btnResetClose").onclick=()=>resetModal.classList.remove("show");
 
-// Deslogar e escolher outra conta
-$("btnLogout").onclick = async () => {
-  localStorage.removeItem("auth_user");
-  sessionStorage.clear();
-  await signOut(auth);
-  location.reload();
-};
 </script>
-
 </body>
 </html>
-
-
-
-
-
-
-
